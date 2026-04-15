@@ -98,9 +98,18 @@ export default function ModalCrearCita({ onClose, onSuccess }) {
     setError('')
     if (!slotSeleccionado) return setError('Selecciona un horario disponible')
     setSaving(true)
+
     try {
-      const fechaCompleta = `${fecha}T${slotSeleccionado}:00`
-      await api.post('/citas', { ...form, fecha: fechaCompleta })
+      const [year, month, day] = fecha.split('-').map(Number)
+      const [hours, minutes] = slotSeleccionado.split(':').map(Number)
+
+      const fechaLocal = new Date(year, month - 1, day, hours, minutes, 0)
+
+      await api.post('/citas', {
+        ...form,
+        fecha: fechaLocal.toISOString()
+      })
+
       onSuccess()
       onClose()
     } catch (err) {

@@ -12,7 +12,8 @@ export default function ModalReprogramarCita({ cita, onClose, onSuccess }) {
   const [error, setError] = useState('')
   const [saving, setSaving] = useState(false)
 
-  const hoy = new Date().toISOString().split('T')[0]
+  const now = new Date()
+  const hoy = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`
   const inputClass = "w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400 bg-slate-50 transition-all"
 
   // Cargar slots cuando cambia la fecha
@@ -50,8 +51,15 @@ export default function ModalReprogramarCita({ cita, onClose, onSuccess }) {
 
     setSaving(true)
     try {
-      const fechaCompleta = `${fecha}T${slotSeleccionado}:00`
-      await api.patch(`/citas/${cita.id}/reprogramar`, { fecha: fechaCompleta })
+      const [year, month, day] = fecha.split('-').map(Number)
+      const [hours, minutes] = slotSeleccionado.split(':').map(Number)
+
+      const fechaLocal = new Date(year, month - 1, day, hours, minutes, 0)
+
+      await api.patch(`/citas/${cita.id}/reprogramar`, {
+        fecha: fechaLocal.toISOString()
+      })
+
       onSuccess()
       onClose()
     } catch (err) {

@@ -17,7 +17,8 @@ export default function ModalAgendarCita({ onClose, onSuccess }) {
   const [error, setError] = useState('')
   const [saving, setSaving] = useState(false)
 
-  const hoy = new Date().toISOString().split('T')[0]
+  const now = new Date()
+  const hoy = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`
 
   const inputClass = "w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400 bg-slate-50 transition-all"
 
@@ -89,7 +90,7 @@ export default function ModalAgendarCita({ onClose, onSuccess }) {
     }
   }
 
-    const mostrarFecha = form.doctorId && form.servicioId
+  const mostrarFecha = form.doctorId && form.servicioId
   const doctorSeleccionado = doctores.find(d => d.id === parseInt(form.doctorId))
   const servicioSeleccionado = servicios.find(s => s.id === parseInt(form.servicioId))
 
@@ -98,9 +99,18 @@ export default function ModalAgendarCita({ onClose, onSuccess }) {
     setError('')
     if (!slotSeleccionado) return setError('Selecciona un horario disponible')
     setSaving(true)
+
     try {
-      const fechaCompleta = `${fecha}T${slotSeleccionado}:00`
-      await api.post('/citas', { ...form, fecha: fechaCompleta })
+      const [year, month, day] = fecha.split('-').map(Number)
+      const [hours, minutes] = slotSeleccionado.split(':').map(Number)
+
+      const fechaLocal = new Date(year, month - 1, day, hours, minutes, 0)
+
+      await api.post('/citas', {
+        ...form,
+        fecha: fechaLocal.toISOString()
+      })
+
       onSuccess()
       onClose()
     } catch (err) {
