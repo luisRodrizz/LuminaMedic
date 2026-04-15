@@ -2,10 +2,10 @@ const Redis = require('ioredis')
 
 const redis = process.env.REDIS_URL
   ? new Redis(process.env.REDIS_URL, {
+      retryStrategy: (times) => Math.min(times * 500, 30000),
       maxRetriesPerRequest: null,
       enableReadyCheck: false,
       tls: {},
-      retryStrategy: (times) => Math.min(times * 500, 30000),
     })
   : new Redis({
       host: process.env.REDIS_HOST || 'localhost',
@@ -27,8 +27,13 @@ redis.on('ready', () => {
 
 redis.on('error', (err) => {
   const logger = require('./logger')
-  logger.error(`Redis error: ${err?.message || err}`)
-  console.error('Redis full error:', err)
+  console.error('REDIS ERROR COMPLETO:', err)
+  logger.error(`Redis error completo: ${JSON.stringify({
+    message: err?.message,
+    name: err?.name,
+    code: err?.code,
+    stack: err?.stack,
+  })}`)
 })
 
 module.exports = redis
