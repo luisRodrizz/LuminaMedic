@@ -176,11 +176,11 @@ const consultarDniDoctor = async (req, res) => {
 
     const data = await response.json()
 
-    logger.info('PeruAPI response', {
+    console.log('PeruAPI response =>', JSON.stringify({
       dni,
       httpStatus: response.status,
       data
-    })
+    }, null, 2))
 
     if (data.code !== '200') {
       return res.status(404).json({ message: 'DNI no encontrado' })
