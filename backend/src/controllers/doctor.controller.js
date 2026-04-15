@@ -173,19 +173,27 @@ const consultarDniDoctor = async (req, res) => {
     const response = await fetch(
       `https://peruapi.com/api/dni/${dni}?api_token=${process.env.PERUAPI_KEY}`
     )
+
     const data = await response.json()
+
+    logger.info('PeruAPI response', {
+      dni,
+      httpStatus: response.status,
+      data
+    })
 
     if (data.code !== '200') {
       return res.status(404).json({ message: 'DNI no encontrado' })
     }
 
     res.json({
-      numeroDocumento:  data.dni,
-      nombres:          data.nombres,
+      numeroDocumento: data.dni,
+      nombres: data.nombres,
       apellido_paterno: data.apellido_paterno,
       apellido_materno: data.apellido_materno
     })
   } catch (error) {
+    logger.error('Error al consultar DNI', { error: error.message })
     res.status(500).json({ message: 'Error al consultar el DNI' })
   }
 }
