@@ -1,0 +1,237 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─── ROLES ───────────────────────────────────────────
+enum Role {
+  ADMIN
+  DOCTOR
+  PACIENTE
+}
+
+enum EstadoCita {
+  PENDIENTE
+  CONFIRMADA
+  CANCELADA
+  COMPLETADA
+}
+
+// ─── USUARIO (base para todos los roles) ─────────────
+model Usuario {
+  id        Int      @id @default(autoincrement())
+  nombre    String
+  apellido  String
+  email     String   @unique
+  password  String
+  telefono  String?
+  role      Role     @default(PACIENTE)
+  activo    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  doctor   Doctor?
+  paciente Paciente?
+  logs     Log[]
+  tokensRecuperacion TokenRecuperacion[]
+}
+
+// ─── CLÍNICA ─────────────────────────────────────────
+model Clinica {
+  id           Int      @id @default(autoincrement())
+  nombre       String
+  direccion    String
+  telefono     String
+  email        String
+  logo         String?
+  logoPublicId String?  // ← agregar
+  createdAt    DateTime @default(now())
+
+  doctores  Doctor[]
+  servicios Servicio[]
+}
+
+// ─── DOCTOR ──────────────────────────────────────────
+model Doctor {
+  id               Int      @id @default(autoincrement())
+  especialidad     String
+  descripcion      String?
+  foto             String?
+  fotoPublicId     String?
+  usuarioId        Int      @unique
+  clinicaId        Int
+  tipoDocumento    String   @default("DNI")
+  numeroDocumento  String?  @unique
+  fuenteNombre     String   @default("MANUAL")
+  validacionReniec String   @default("PENDIENTE")
+  createdAt        DateTime @default(now())
+
+  usuario  Usuario    @relation(fields: [usuarioId], references: [id])
+  clinica  Clinica    @relation(fields: [clinicaId], references: [id])
+  horarios Horario[]
+  citas    Cita[]
+  bloqueos  BloqueoHorario[]
+  notificaciones Notificacion[]
+
+}
+
+// ─── HORARIO DEL DOCTOR ───────────────────────────────
+model Horario {
+  id        Int     @id @default(autoincrement())
+  doctorId  Int
+  diaSemana Int     // 0=Lunes, 6=Domingo
+  horaInicio String // "08:00"
+  horaFin    String // "17:00"
+  activo    Boolean @default(true)
+  
+  doctor Doctor @relation(fields: [doctorId], references: [id])
+}
+
+// ─── BLOQUEAR HORARIO ───────────────────────────────
+model BloqueoHorario {
+  id        Int      @id @default(autoincrement())
+  doctorId  Int
+  fechaInicio DateTime
+  fechaFin    DateTime
+  motivo    String?
+  createdAt DateTime @default(now())
+
+  doctor Doctor @relation(fields: [doctorId], references: [id])
+
+  @@index([doctorId, fechaInicio])
+}
+
+// ─── PACIENTE — reemplaza el modelo actual ────────────────────────────────────
+model Paciente {
+  id               Int       @id @default(autoincrement())
+  fechaNac         DateTime?
+  genero           String?
+  direccion        String?
+  alergias         String?
+  foto             String?
+  fotoPublicId     String?
+  usuarioId        Int       @unique
+  tipoDocumento    String    @default("DNI")
+  numeroDocumento  String    @unique
+  fuenteNombre     String    @default("MANUAL")
+  validacionReniec String    @default("PENDIENTE")
+  createdAt        DateTime  @default(now())
+
+  // Datos de tutor — solo si esMenor = true
+  esMenor       Boolean @default(false)
+  tutorNombre   String?
+  tutorDni      String?
+  tutorTelefono String?
+
+  usuario        Usuario        @relation(fields: [usuarioId], references: [id])
+  citas          Cita[]
+  notificaciones Notificacion[]
+}
+
+// ─── SERVICIO ─────────────────────────────────────────
+model Servicio {
+  id        Int      @id @default(autoincrement())
+  nombre    String
+  precio    Float
+  duracion  Int      // en minutos
+  clinicaId Int
+  activo    Boolean  @default(true)
+
+  clinica Clinica @relation(fields: [clinicaId], references: [id])
+  citas   Cita[]
+}
+
+model Cita {
+  id          Int        @id @default(autoincrement())
+  fecha       DateTime
+  estado      EstadoCita @default(CONFIRMADA)
+  motivo      String?
+  doctorId    Int
+  pacienteId  Int
+  servicioId  Int
+  recordatorioEnviado  Boolean    @default(false)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt @default(now())
+
+  doctor    Doctor         @relation(fields: [doctorId], references: [id])
+  paciente  Paciente       @relation(fields: [pacienteId], references: [id])
+  servicio  Servicio       @relation(fields: [servicioId], references: [id])
+  nota      NotaClinica?
+  pago      Pago?
+
+  // Índices para mejorar rendimiento
+  @@index([doctorId, fecha])
+  @@index([pacienteId, fecha])
+  @@index([estado])
+  @@unique([doctorId, fecha], name: "cita_doctor_fecha_unique")
+}
+
+// ─── NOTA CLÍNICA ─────────────────────────────────────
+model NotaClinica {
+  id          Int      @id @default(autoincrement())
+  diagnostico String
+  tratamiento String?
+  receta      String?
+  observacion String?
+  citaId      Int      @unique
+  createdAt   DateTime @default(now())
+
+  cita Cita @relation(fields: [citaId], references: [id])
+}
+
+// ─── PAGO ─────────────────────────────────────────────
+model Pago {
+  id        Int      @id @default(autoincrement())
+  monto     Float
+  metodo    String   // "efectivo", "tarjeta", "transferencia"
+  citaId    Int      @unique
+  createdAt DateTime @default(now())
+
+  cita Cita @relation(fields: [citaId], references: [id])
+}
+
+model Log {
+  id        Int      @id @default(autoincrement())
+  usuarioId Int
+  accion    String
+  detalle   String?
+  createdAt DateTime @default(now())
+
+  usuario Usuario @relation(fields: [usuarioId], references: [id])
+
+  @@index([usuarioId, createdAt])
+}
+
+model TokenRecuperacion {
+  id        Int      @id @default(autoincrement())
+  token     String   @unique
+  usuarioId Int
+  expiresAt DateTime
+  usado     Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  usuario Usuario @relation(fields: [usuarioId], references: [id])
+}
+
+// ─── NOTIFICACIÓN ─────────────────────────────────────
+model Notificacion {
+  id         Int      @id @default(autoincrement())
+  doctorId   Int?
+  pacienteId Int?
+  titulo     String
+  mensaje    String
+  tipo       String
+  leida      Boolean  @default(false)
+  citaId     Int?
+  createdAt  DateTime @default(now())
+
+  doctor   Doctor?   @relation(fields: [doctorId], references: [id])
+  paciente Paciente? @relation(fields: [pacienteId], references: [id])
+
+  @@index([doctorId, leida])
+  @@index([pacienteId, leida])
+}

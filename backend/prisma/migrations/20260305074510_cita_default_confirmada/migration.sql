@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "Cita" ALTER COLUMN "estado" SET DEFAULT 'CONFIRMADA';
