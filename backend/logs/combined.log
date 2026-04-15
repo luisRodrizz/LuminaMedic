@@ -1,0 +1,375 @@
+{"level":"info","message":"Servidor corriendo en http://localhost:4000","timestamp":"2026-03-23T01:18:47.427Z"}
+{"level":"info","message":"Entorno: production","timestamp":"2026-03-23T01:18:47.428Z"}
+{"level":"info","message":"CORS permitido para: http://localhost:5173","timestamp":"2026-03-23T01:18:47.428Z"}
+{"level":"info","message":"Servidor corriendo en http://localhost:4000","timestamp":"2026-03-23T01:19:13.441Z"}
+{"level":"info","message":"Entorno: production","timestamp":"2026-03-23T01:19:13.441Z"}
+{"level":"info","message":"CORS permitido para: http://localhost:5173","timestamp":"2026-03-23T01:19:13.442Z"}
+{"level":"info","message":"Servidor corriendo en http://localhost:4000","timestamp":"2026-03-23T01:21:00.385Z"}
+{"level":"info","message":"Entorno: production","timestamp":"2026-03-23T01:21:00.386Z"}
+{"level":"info","message":"CORS permitido para: http://localhost:5173","timestamp":"2026-03-23T01:21:00.386Z"}
+{"level":"info","message":"Servidor corriendo en http://localhost:4000","timestamp":"2026-03-23T01:26:49.207Z"}
+{"level":"info","message":"Entorno: production","timestamp":"2026-03-23T01:26:49.208Z"}
+{"level":"info","message":"CORS permitido para: http://localhost:5173","timestamp":"2026-03-23T01:26:49.208Z"}
+{"level":"info","message":"Servidor corriendo en http://localhost:4000","timestamp":"2026-03-23T01:27:52.084Z"}
+{"level":"info","message":"Entorno: production","timestamp":"2026-03-23T01:27:52.086Z"}
+{"level":"info","message":"CORS permitido para: http://localhost:5173","timestamp":"2026-03-23T01:27:52.086Z"}
+{"level":"info","message":"Servidor corriendo en http://localhost:4000","timestamp":"2026-03-23T01:28:00.072Z"}
+{"level":"info","message":"Entorno: production","timestamp":"2026-03-23T01:28:00.073Z"}
+{"level":"info","message":"CORS permitido para: http://localhost:5173","timestamp":"2026-03-23T01:28:00.073Z"}
+{"level":"info","message":"Servidor corriendo en http://localhost:4000","timestamp":"2026-03-23T01:30:21.490Z"}
+{"level":"info","message":"Entorno: production","timestamp":"2026-03-23T01:30:21.491Z"}
+{"level":"info","message":"CORS permitido para: http://localhost:5173","timestamp":"2026-03-23T01:30:21.491Z"}
+{"level":"info","message":"Servidor corriendo en http://localhost:4000","timestamp":"2026-03-23T01:30:48.166Z"}
+{"level":"info","message":"Entorno: production","timestamp":"2026-03-23T01:30:48.167Z"}
+{"level":"info","message":"CORS permitido para: http://localhost:5173","timestamp":"2026-03-23T01:30:48.167Z"}
+{"level":"info","message":"Servidor corriendo en http://localhost:4000","timestamp":"2026-03-23T01:32:34.244Z"}
+{"level":"info","message":"Entorno: production","timestamp":"2026-03-23T01:32:34.245Z"}
+{"level":"info","message":"CORS permitido para: http://localhost:5173","timestamp":"2026-03-23T01:32:34.245Z"}
+{"level":"info","message":"Servidor corriendo en http://localhost:4000","timestamp":"2026-03-23T01:34:06.849Z"}
+{"level":"info","message":"Entorno: production","timestamp":"2026-03-23T01:34:06.850Z"}
+{"level":"info","message":"CORS permitido para: http://localhost:5173","timestamp":"2026-03-23T01:34:06.850Z"}
+{"level":"info","message":"Servidor corriendo en http://localhost:4000","timestamp":"2026-03-23T01:34:12.702Z"}
+{"level":"info","message":"Entorno: production","timestamp":"2026-03-23T01:34:12.703Z"}
+{"level":"info","message":"CORS permitido para: http://localhost:5173","timestamp":"2026-03-23T01:34:12.703Z"}
+{"level":"info","message":"Servidor corriendo en http://localhost:4000","timestamp":"2026-03-23T01:34:20.736Z"}
+{"level":"info","message":"Entorno: production","timestamp":"2026-03-23T01:34:20.737Z"}
+{"level":"info","message":"CORS permitido para: http://localhost:5173","timestamp":"2026-03-23T01:34:20.737Z"}
+{"level":"info","message":"Servidor corriendo en http://localhost:4000","timestamp":"2026-03-23T01:34:39.858Z"}
+{"level":"info","message":"Entorno: production","timestamp":"2026-03-23T01:34:39.858Z"}
+{"level":"info","message":"CORS permitido para: http://localhost:5173","timestamp":"2026-03-23T01:34:39.859Z"}
+{"level":"info","message":"Servidor corriendo en http://localhost:4000","timestamp":"2026-03-23T01:34:51.319Z"}
+{"level":"info","message":"Entorno: production","timestamp":"2026-03-23T01:34:51.320Z"}
+{"level":"info","message":"CORS permitido para: http://localhost:5173","timestamp":"2026-03-23T01:34:51.320Z"}
+{"level":"info","message":"Servidor corriendo en http://localhost:4000","timestamp":"2026-03-23T01:34:58.588Z"}
+{"level":"info","message":"Entorno: production","timestamp":"2026-03-23T01:34:58.589Z"}
+{"level":"info","message":"CORS permitido para: http://localhost:5173","timestamp":"2026-03-23T01:34:58.589Z"}
+{"level":"info","message":"Servidor corriendo en http://localhost:4000","timestamp":"2026-03-23T01:58:19.629Z"}
+{"level":"info","message":"Entorno: production","timestamp":"2026-03-23T01:58:19.630Z"}
+{"level":"info","message":"CORS permitido para: http://localhost:5173","timestamp":"2026-03-23T01:58:19.630Z"}
+{"level":"info","message":"Servidor corriendo en http://localhost:4000","timestamp":"2026-03-23T04:07:48.911Z"}
+{"level":"info","message":"Entorno: production","timestamp":"2026-03-23T04:07:48.912Z"}
+{"level":"info","message":"CORS permitido para: http://localhost:5173","timestamp":"2026-03-23T04:07:48.912Z"}
+{"level":"info","message":"Servidor corriendo en http://localhost:4000","timestamp":"2026-03-25T04:39:50.187Z"}
+{"level":"info","message":"Entorno: production","timestamp":"2026-03-25T04:39:50.187Z"}
+{"level":"info","message":"CORS permitido para: http://localhost:5173","timestamp":"2026-03-25T04:39:50.188Z"}
+{"level":"info","message":"Servidor corriendo en http://localhost:4000","timestamp":"2026-03-25T04:41:16.486Z"}
+{"level":"info","message":"Entorno: production","timestamp":"2026-03-25T04:41:16.487Z"}
+{"level":"info","message":"CORS permitido para: http://localhost:5173","timestamp":"2026-03-25T04:41:16.487Z"}
+{"level":"info","message":"Servidor corriendo en http://localhost:4000","timestamp":"2026-03-25T04:41:23.931Z"}
+{"level":"info","message":"Entorno: production","timestamp":"2026-03-25T04:41:23.931Z"}
+{"level":"info","message":"CORS permitido para: http://localhost:5173","timestamp":"2026-03-25T04:41:23.932Z"}
+{"level":"info","message":"Servidor corriendo en http://localhost:4000","timestamp":"2026-03-25T04:41:58.484Z"}
+{"level":"info","message":"Entorno: production","timestamp":"2026-03-25T04:41:58.484Z"}
+{"level":"info","message":"CORS permitido para: http://localhost:5173","timestamp":"2026-03-25T04:41:58.485Z"}
+{"level":"info","message":"Servidor corriendo en http://localhost:4000","timestamp":"2026-03-25T04:42:51.971Z"}
+{"level":"info","message":"Entorno: production","timestamp":"2026-03-25T04:42:51.972Z"}
+{"level":"info","message":"CORS permitido para: http://localhost:5173","timestamp":"2026-03-25T04:42:51.972Z"}
+{"level":"info","message":"Servidor corriendo en http://localhost:4000","timestamp":"2026-03-25T04:43:53.914Z"}
+{"level":"info","message":"Entorno: production","timestamp":"2026-03-25T04:43:53.915Z"}
+{"level":"info","message":"CORS permitido para: http://localhost:5173","timestamp":"2026-03-25T04:43:53.915Z"}
+{"level":"info","message":"Servidor corriendo en http://localhost:4000","timestamp":"2026-03-27T04:58:37.874Z"}
+{"level":"info","message":"Entorno: production","timestamp":"2026-03-27T04:58:37.876Z"}
+{"level":"info","message":"CORS permitido para: http://localhost:5173","timestamp":"2026-03-27T04:58:37.876Z"}
+{"level":"info","message":"Redis conectado correctamente","timestamp":"2026-03-27T04:58:37.924Z"}
+{"level":"info","message":"Servidor corriendo en http://localhost:4000","timestamp":"2026-03-27T05:04:00.179Z"}
+{"level":"info","message":"Entorno: production","timestamp":"2026-03-27T05:04:00.179Z"}
+{"level":"info","message":"CORS permitido para: http://localhost:5173","timestamp":"2026-03-27T05:04:00.180Z"}
+{"level":"info","message":"Redis conectado correctamente","timestamp":"2026-03-27T05:04:00.197Z"}
+{"level":"info","message":"Servidor corriendo en http://localhost:4000","timestamp":"2026-03-27T21:10:24.459Z"}
+{"level":"info","message":"Entorno: production","timestamp":"2026-03-27T21:10:24.460Z"}
+{"level":"info","message":"CORS permitido para: http://localhost:5173","timestamp":"2026-03-27T21:10:24.460Z"}
+{"level":"error","message":"Redis error: ","timestamp":"2026-03-27T21:10:24.498Z"}
+{"level":"error","message":"Redis error: ","timestamp":"2026-03-27T21:10:25.000Z"}
+{"level":"error","message":"Redis error: ","timestamp":"2026-03-27T21:10:26.013Z"}
+{"level":"error","message":"Redis error: ","timestamp":"2026-03-27T21:10:27.524Z"}
+{"level":"error","message":"Redis error: ","timestamp":"2026-03-27T21:10:29.530Z"}
+{"level":"error","message":"Redis error: ","timestamp":"2026-03-27T21:10:32.046Z"}
+{"level":"error","message":"Redis error: ","timestamp":"2026-03-27T21:10:35.054Z"}
+{"level":"error","message":"Redis error: ","timestamp":"2026-03-27T21:10:38.562Z"}
+{"level":"error","message":"Redis error: ","timestamp":"2026-03-27T21:10:42.573Z"}
+{"level":"info","message":"Servidor corriendo en http://localhost:4000","timestamp":"2026-03-27T21:11:04.949Z"}
+{"level":"info","message":"Entorno: production","timestamp":"2026-03-27T21:11:04.949Z"}
+{"level":"info","message":"CORS permitido para: http://localhost:5173","timestamp":"2026-03-27T21:11:04.950Z"}
+{"level":"error","message":"Redis error: ","timestamp":"2026-03-27T21:11:04.962Z"}
+{"level":"error","message":"Redis error: ","timestamp":"2026-03-27T21:11:05.478Z"}
+{"level":"error","message":"Redis error: ","timestamp":"2026-03-27T21:11:06.494Z"}
+{"level":"error","message":"Redis error: ","timestamp":"2026-03-27T21:11:08.012Z"}
+{"level":"error","message":"Redis error: ","timestamp":"2026-03-27T21:11:10.030Z"}
+{"level":"error","message":"Redis error: ","timestamp":"2026-03-27T21:11:12.546Z"}
+{"level":"error","message":"Redis error: ","timestamp":"2026-03-27T21:11:15.562Z"}
+{"level":"error","message":"Redis error: ","timestamp":"2026-03-27T21:11:19.075Z"}
+{"level":"info","message":"Servidor corriendo en http://localhost:4000","timestamp":"2026-03-27T21:11:49.175Z"}
+{"level":"info","message":"Entorno: production","timestamp":"2026-03-27T21:11:49.176Z"}
+{"level":"info","message":"CORS permitido para: http://localhost:5173","timestamp":"2026-03-27T21:11:49.177Z"}
+{"level":"error","message":"Redis error: ","timestamp":"2026-03-27T21:11:49.217Z"}
+{"level":"error","message":"Redis error: ","timestamp":"2026-03-27T21:11:49.730Z"}
+{"level":"info","message":"Servidor corriendo en http://localhost:4000","timestamp":"2026-03-27T21:11:59.976Z"}
+{"level":"info","message":"Entorno: production","timestamp":"2026-03-27T21:11:59.976Z"}
+{"level":"info","message":"CORS permitido para: http://localhost:5173","timestamp":"2026-03-27T21:11:59.977Z"}
+{"level":"error","message":"Redis error: ","timestamp":"2026-03-27T21:11:59.989Z"}
+{"level":"error","message":"Redis error: ","timestamp":"2026-03-27T21:12:00.501Z"}
+{"level":"error","message":"Redis error: ","timestamp":"2026-03-27T21:12:01.519Z"}
+{"level":"info","message":"Servidor corriendo en http://localhost:4000","timestamp":"2026-03-27T21:12:16.433Z"}
+{"level":"info","message":"Entorno: production","timestamp":"2026-03-27T21:12:16.433Z"}
+{"level":"info","message":"CORS permitido para: http://localhost:5173","timestamp":"2026-03-27T21:12:16.434Z"}
+{"level":"info","message":"Redis conectado correctamente","timestamp":"2026-03-27T21:12:16.447Z"}
+{"level":"info","message":"Servidor corriendo en http://localhost:4000","timestamp":"2026-03-27T21:17:50.582Z"}
+{"level":"info","message":"Entorno: production","timestamp":"2026-03-27T21:17:50.583Z"}
+{"level":"info","message":"CORS permitido para: http://localhost:5173","timestamp":"2026-03-27T21:17:50.583Z"}
+{"level":"info","message":"Redis conectado correctamente","timestamp":"2026-03-27T21:17:50.596Z"}
+{"level":"info","message":"Servidor corriendo en http://localhost:4000","timestamp":"2026-03-28T08:17:58.910Z"}
+{"level":"info","message":"Entorno: production","timestamp":"2026-03-28T08:17:58.911Z"}
+{"level":"info","message":"CORS permitido para: http://localhost:5173","timestamp":"2026-03-28T08:17:58.911Z"}
+{"level":"info","message":"Redis conectado correctamente","timestamp":"2026-03-28T08:17:58.960Z"}
+{"level":"info","message":"Servidor corriendo en http://localhost:4000","timestamp":"2026-03-28T08:40:03.671Z"}
+{"level":"info","message":"Entorno: production","timestamp":"2026-03-28T08:40:03.672Z"}
+{"level":"info","message":"CORS permitido para: http://localhost:5173","timestamp":"2026-03-28T08:40:03.672Z"}
+{"level":"info","message":"Redis conectado correctamente","timestamp":"2026-03-28T08:40:03.685Z"}
+{"level":"info","message":"Servidor corriendo en http://localhost:4000","timestamp":"2026-03-28T19:46:17.820Z"}
+{"level":"info","message":"Entorno: production","timestamp":"2026-03-28T19:46:17.821Z"}
+{"level":"info","message":"CORS permitido para: http://localhost:5173","timestamp":"2026-03-28T19:46:17.821Z"}
+{"level":"info","message":"Redis conectado correctamente","timestamp":"2026-03-28T19:46:17.864Z"}
+{"level":"info","message":"Servidor corriendo en http://localhost:4000","timestamp":"2026-03-28T19:53:17.499Z"}
+{"level":"info","message":"Entorno: production","timestamp":"2026-03-28T19:53:17.500Z"}
+{"level":"info","message":"CORS permitido para: http://localhost:5173","timestamp":"2026-03-28T19:53:17.500Z"}
+{"level":"info","message":"Redis conectado correctamente","timestamp":"2026-03-28T19:53:17.515Z"}
+{"level":"info","message":"Servidor corriendo en http://localhost:4000","timestamp":"2026-03-29T01:19:42.678Z"}
+{"level":"info","message":"Entorno: production","timestamp":"2026-03-29T01:19:42.679Z"}
+{"level":"info","message":"CORS permitido para: http://localhost:5173","timestamp":"2026-03-29T01:19:42.679Z"}
+{"level":"info","message":"Redis conectado correctamente","timestamp":"2026-03-29T01:19:42.723Z"}
+{"level":"info","message":"Servidor corriendo en http://localhost:4000","timestamp":"2026-03-29T01:23:28.014Z"}
+{"level":"info","message":"Entorno: production","timestamp":"2026-03-29T01:23:28.015Z"}
+{"level":"info","message":"CORS permitido para: http://localhost:5173","timestamp":"2026-03-29T01:23:28.015Z"}
+{"level":"info","message":"Redis conectado correctamente","timestamp":"2026-03-29T01:23:28.028Z"}
+{"level":"info","message":"Servidor corriendo en http://localhost:4000","timestamp":"2026-03-29T06:23:34.819Z"}
+{"level":"info","message":"Entorno: production","timestamp":"2026-03-29T06:23:34.820Z"}
+{"level":"info","message":"CORS permitido para: http://localhost:5173","timestamp":"2026-03-29T06:23:34.820Z"}
+{"level":"info","message":"Redis conectado correctamente","timestamp":"2026-03-29T06:23:34.866Z"}
+{"level":"info","message":"Servidor corriendo en http://localhost:4000","timestamp":"2026-03-29T06:28:49.688Z"}
+{"level":"info","message":"Entorno: production","timestamp":"2026-03-29T06:28:49.689Z"}
+{"level":"info","message":"CORS permitido para: http://localhost:5173","timestamp":"2026-03-29T06:28:49.689Z"}
+{"level":"info","message":"Redis conectado correctamente","timestamp":"2026-03-29T06:28:49.702Z"}
+{"level":"info","message":"Servidor corriendo en http://localhost:4000","timestamp":"2026-03-29T20:36:59.246Z"}
+{"level":"info","message":"Entorno: production","timestamp":"2026-03-29T20:36:59.247Z"}
+{"level":"info","message":"CORS permitido para: http://localhost:5173","timestamp":"2026-03-29T20:36:59.247Z"}
+{"level":"info","message":"Redis conectado correctamente","timestamp":"2026-03-29T20:36:59.295Z"}
+{"level":"info","message":"Servidor corriendo en http://localhost:4000","timestamp":"2026-03-29T20:38:32.179Z"}
+{"level":"info","message":"Entorno: production","timestamp":"2026-03-29T20:38:32.179Z"}
+{"level":"info","message":"CORS permitido para: http://localhost:5173","timestamp":"2026-03-29T20:38:32.180Z"}
+{"level":"info","message":"Redis conectado correctamente","timestamp":"2026-03-29T20:38:32.194Z"}
+{"level":"info","message":"Servidor corriendo en http://localhost:4000","timestamp":"2026-03-30T01:47:17.172Z"}
+{"level":"info","message":"Entorno: production","timestamp":"2026-03-30T01:47:17.173Z"}
+{"level":"info","message":"CORS permitido para: http://localhost:5173","timestamp":"2026-03-30T01:47:17.173Z"}
+{"level":"error","message":"Redis error: ","timestamp":"2026-03-30T01:47:17.217Z"}
+{"level":"error","message":"Redis error: ","timestamp":"2026-03-30T01:47:17.725Z"}
+{"level":"error","message":"Redis error: ","timestamp":"2026-03-30T01:47:18.739Z"}
+{"level":"error","message":"Redis error: ","timestamp":"2026-03-30T01:47:20.255Z"}
+{"level":"error","message":"Redis error: ","timestamp":"2026-03-30T01:47:22.257Z"}
+{"level":"error","message":"Redis error: ","timestamp":"2026-03-30T01:47:24.765Z"}
+{"level":"error","message":"Redis error: ","timestamp":"2026-03-30T01:47:27.798Z"}
+{"level":"info","message":"Redis conectado correctamente","timestamp":"2026-03-30T01:47:31.307Z"}
+{"level":"info","message":"Servidor corriendo en http://localhost:4000","timestamp":"2026-03-30T01:53:28.085Z"}
+{"level":"info","message":"Entorno: production","timestamp":"2026-03-30T01:53:28.086Z"}
+{"level":"info","message":"CORS permitido para: http://localhost:5173","timestamp":"2026-03-30T01:53:28.086Z"}
+{"level":"info","message":"Redis conectado correctamente","timestamp":"2026-03-30T01:53:28.097Z"}
+{"level":"info","message":"Servidor corriendo en http://localhost:4000","timestamp":"2026-03-31T06:30:29.934Z"}
+{"level":"info","message":"Entorno: production","timestamp":"2026-03-31T06:30:29.935Z"}
+{"level":"info","message":"CORS permitido para: http://localhost:5173","timestamp":"2026-03-31T06:30:29.935Z"}
+{"level":"info","message":"Redis conectado correctamente","timestamp":"2026-03-31T06:30:29.979Z"}
+{"level":"info","message":"Servidor corriendo en http://localhost:4000","timestamp":"2026-03-31T06:31:42.312Z"}
+{"level":"info","message":"Entorno: production","timestamp":"2026-03-31T06:31:42.313Z"}
+{"level":"info","message":"CORS permitido para: http://localhost:5173","timestamp":"2026-03-31T06:31:42.313Z"}
+{"level":"info","message":"Redis conectado correctamente","timestamp":"2026-03-31T06:31:42.327Z"}
+{"level":"info","message":"Servidor corriendo en http://localhost:4000","timestamp":"2026-03-31T17:26:41.983Z"}
+{"level":"info","message":"Entorno: production","timestamp":"2026-03-31T17:26:41.984Z"}
+{"level":"info","message":"CORS permitido para: http://localhost:5173","timestamp":"2026-03-31T17:26:41.984Z"}
+{"level":"info","message":"Redis conectado correctamente","timestamp":"2026-03-31T17:26:42.028Z"}
+{"level":"info","message":"Servidor corriendo en http://localhost:4000","timestamp":"2026-03-31T17:31:24.083Z"}
+{"level":"info","message":"Entorno: production","timestamp":"2026-03-31T17:31:24.084Z"}
+{"level":"info","message":"CORS permitido para: http://localhost:5173","timestamp":"2026-03-31T17:31:24.085Z"}
+{"level":"info","message":"Redis conectado correctamente","timestamp":"2026-03-31T17:31:24.098Z"}
+{"level":"info","message":"Servidor corriendo en http://localhost:4000","timestamp":"2026-04-01T01:49:26.092Z"}
+{"level":"info","message":"Entorno: production","timestamp":"2026-04-01T01:49:26.093Z"}
+{"level":"info","message":"CORS permitido para: http://localhost:5173","timestamp":"2026-04-01T01:49:26.093Z"}
+{"level":"info","message":"Redis conectado correctamente","timestamp":"2026-04-01T01:49:26.139Z"}
+{"level":"info","message":"Servidor corriendo en http://localhost:4000","timestamp":"2026-04-01T01:52:40.751Z"}
+{"level":"info","message":"Entorno: production","timestamp":"2026-04-01T01:52:40.752Z"}
+{"level":"info","message":"CORS permitido para: http://localhost:5173","timestamp":"2026-04-01T01:52:40.752Z"}
+{"level":"info","message":"Redis conectado correctamente","timestamp":"2026-04-01T01:52:40.767Z"}
+{"level":"info","message":"Servidor corriendo en http://localhost:4000","timestamp":"2026-04-01T06:28:05.281Z"}
+{"level":"info","message":"Entorno: production","timestamp":"2026-04-01T06:28:05.282Z"}
+{"level":"info","message":"CORS permitido para: http://localhost:5173","timestamp":"2026-04-01T06:28:05.283Z"}
+{"level":"info","message":"Redis conectado correctamente","timestamp":"2026-04-01T06:28:05.330Z"}
+{"level":"info","message":"Servidor corriendo en http://localhost:4000","timestamp":"2026-04-01T06:28:16.011Z"}
+{"level":"info","message":"Entorno: production","timestamp":"2026-04-01T06:28:16.012Z"}
+{"level":"info","message":"CORS permitido para: http://localhost:5173","timestamp":"2026-04-01T06:28:16.012Z"}
+{"level":"info","message":"Redis conectado correctamente","timestamp":"2026-04-01T06:28:16.027Z"}
+{"level":"info","message":"Servidor corriendo en http://localhost:4000","timestamp":"2026-04-01T06:32:11.323Z"}
+{"level":"info","message":"Entorno: production","timestamp":"2026-04-01T06:32:11.324Z"}
+{"level":"info","message":"CORS permitido para: http://localhost:5173","timestamp":"2026-04-01T06:32:11.324Z"}
+{"level":"info","message":"Redis conectado correctamente","timestamp":"2026-04-01T06:32:11.373Z"}
+{"level":"info","message":"Servidor corriendo en http://localhost:4000","timestamp":"2026-04-01T06:35:46.933Z"}
+{"level":"info","message":"Entorno: production","timestamp":"2026-04-01T06:35:46.933Z"}
+{"level":"info","message":"CORS permitido para: http://localhost:5173","timestamp":"2026-04-01T06:35:46.934Z"}
+{"level":"info","message":"Redis conectado correctamente","timestamp":"2026-04-01T06:35:46.948Z"}
+{"level":"info","message":"Servidor corriendo en http://localhost:4000","timestamp":"2026-04-02T04:53:39.305Z"}
+{"level":"info","message":"Entorno: production","timestamp":"2026-04-02T04:53:39.306Z"}
+{"level":"info","message":"CORS permitido para: http://localhost:5173","timestamp":"2026-04-02T04:53:39.306Z"}
+{"level":"info","message":"Redis conectado correctamente","timestamp":"2026-04-02T04:53:39.351Z"}
+{"level":"info","message":"Servidor corriendo en http://localhost:4000","timestamp":"2026-04-02T05:02:18.061Z"}
+{"level":"info","message":"Entorno: production","timestamp":"2026-04-02T05:02:18.062Z"}
+{"level":"info","message":"CORS permitido para: http://localhost:5173","timestamp":"2026-04-02T05:02:18.062Z"}
+{"level":"info","message":"Redis conectado correctamente","timestamp":"2026-04-02T05:02:18.074Z"}
+{"level":"info","message":"Servidor corriendo en http://localhost:4000","timestamp":"2026-04-02T21:57:12.712Z"}
+{"level":"info","message":"Entorno: production","timestamp":"2026-04-02T21:57:12.713Z"}
+{"level":"info","message":"CORS permitido para: http://localhost:5173","timestamp":"2026-04-02T21:57:12.713Z"}
+{"level":"info","message":"Redis conectado correctamente","timestamp":"2026-04-02T21:57:12.754Z"}
+{"level":"info","message":"Servidor corriendo en http://localhost:4000","timestamp":"2026-04-02T22:10:50.215Z"}
+{"level":"info","message":"Entorno: production","timestamp":"2026-04-02T22:10:50.216Z"}
+{"level":"info","message":"CORS permitido para: http://localhost:5173","timestamp":"2026-04-02T22:10:50.216Z"}
+{"level":"info","message":"Redis conectado correctamente","timestamp":"2026-04-02T22:10:50.227Z"}
+{"level":"info","message":"[Recordatorios] Cron job iniciado — corre diariamente a las 8:00 AM (Lima)","timestamp":"2026-04-03T21:17:06.834Z"}
+{"level":"info","message":"Servidor corriendo en http://localhost:4000","timestamp":"2026-04-03T21:17:06.840Z"}
+{"level":"info","message":"Entorno: production","timestamp":"2026-04-03T21:17:06.840Z"}
+{"level":"info","message":"CORS permitido para: http://localhost:5173","timestamp":"2026-04-03T21:17:06.840Z"}
+{"level":"info","message":"Redis conectado correctamente","timestamp":"2026-04-03T21:17:06.870Z"}
+{"level":"info","message":"[Recordatorios] Cron job iniciado — corre diariamente a las 8:00 AM (Lima)","timestamp":"2026-04-03T21:20:27.263Z"}
+{"level":"info","message":"Servidor corriendo en http://localhost:4000","timestamp":"2026-04-03T21:20:27.268Z"}
+{"level":"info","message":"Entorno: production","timestamp":"2026-04-03T21:20:27.268Z"}
+{"level":"info","message":"CORS permitido para: http://localhost:5173","timestamp":"2026-04-03T21:20:27.269Z"}
+{"level":"info","message":"Redis conectado correctamente","timestamp":"2026-04-03T21:20:27.281Z"}
+{"level":"info","message":"[Recordatorios] Cron job iniciado — corre diariamente a las 8:00 AM (Lima)","timestamp":"2026-04-03T21:24:03.723Z"}
+{"level":"info","message":"Servidor corriendo en http://localhost:4000","timestamp":"2026-04-03T21:24:03.727Z"}
+{"level":"info","message":"Entorno: production","timestamp":"2026-04-03T21:24:03.727Z"}
+{"level":"info","message":"CORS permitido para: http://localhost:5173","timestamp":"2026-04-03T21:24:03.727Z"}
+{"level":"info","message":"Redis conectado correctamente","timestamp":"2026-04-03T21:24:03.739Z"}
+{"level":"info","message":"[Recordatorios] Cron job iniciado — corre diariamente a las 8:00 AM (Lima)","timestamp":"2026-04-04T02:58:57.534Z"}
+{"level":"info","message":"Servidor corriendo en http://localhost:4000","timestamp":"2026-04-04T02:58:57.541Z"}
+{"level":"info","message":"Entorno: production","timestamp":"2026-04-04T02:58:57.542Z"}
+{"level":"info","message":"CORS permitido para: http://localhost:5173","timestamp":"2026-04-04T02:58:57.542Z"}
+{"level":"info","message":"Redis conectado correctamente","timestamp":"2026-04-04T02:58:57.583Z"}
+{"level":"info","message":"[Recordatorios] Cron job iniciado — corre diariamente a las 8:00 AM (Lima)","timestamp":"2026-04-04T03:02:24.190Z"}
+{"level":"info","message":"Servidor corriendo en http://localhost:4000","timestamp":"2026-04-04T03:02:24.194Z"}
+{"level":"info","message":"Entorno: production","timestamp":"2026-04-04T03:02:24.194Z"}
+{"level":"info","message":"CORS permitido para: http://localhost:5173","timestamp":"2026-04-04T03:02:24.194Z"}
+{"level":"info","message":"Redis conectado correctamente","timestamp":"2026-04-04T03:02:24.206Z"}
+{"level":"info","message":"[Recordatorios] Cron job iniciado — corre diariamente a las 8:00 AM (Lima)","timestamp":"2026-04-04T03:02:28.200Z"}
+{"level":"info","message":"Servidor corriendo en http://localhost:4000","timestamp":"2026-04-04T03:02:28.204Z"}
+{"level":"info","message":"Entorno: production","timestamp":"2026-04-04T03:02:28.204Z"}
+{"level":"info","message":"CORS permitido para: http://localhost:5173","timestamp":"2026-04-04T03:02:28.205Z"}
+{"level":"info","message":"Redis conectado correctamente","timestamp":"2026-04-04T03:02:28.217Z"}
+{"level":"info","message":"[Recordatorios] Cron job iniciado — corre diariamente a las 8:00 AM (Lima)","timestamp":"2026-04-04T03:08:43.722Z"}
+{"level":"info","message":"Servidor corriendo en http://localhost:4000","timestamp":"2026-04-04T03:08:43.727Z"}
+{"level":"info","message":"Entorno: production","timestamp":"2026-04-04T03:08:43.727Z"}
+{"level":"info","message":"CORS permitido para: http://localhost:5173","timestamp":"2026-04-04T03:08:43.727Z"}
+{"level":"info","message":"Redis conectado correctamente","timestamp":"2026-04-04T03:08:43.739Z"}
+{"level":"info","message":"[Recordatorios] Cron job iniciado — corre diariamente a las 8:00 AM (Lima)","timestamp":"2026-04-04T03:09:00.834Z"}
+{"level":"info","message":"Servidor corriendo en http://localhost:4000","timestamp":"2026-04-04T03:09:00.838Z"}
+{"level":"info","message":"Entorno: production","timestamp":"2026-04-04T03:09:00.838Z"}
+{"level":"info","message":"CORS permitido para: http://localhost:5173","timestamp":"2026-04-04T03:09:00.839Z"}
+{"level":"info","message":"Redis conectado correctamente","timestamp":"2026-04-04T03:09:00.851Z"}
+{"level":"info","message":"[Recordatorios] Cron job iniciado — corre diariamente a las 8:00 AM (Lima)","timestamp":"2026-04-04T03:10:01.222Z"}
+{"level":"info","message":"Servidor corriendo en http://localhost:4000","timestamp":"2026-04-04T03:10:01.225Z"}
+{"level":"info","message":"Entorno: production","timestamp":"2026-04-04T03:10:01.226Z"}
+{"level":"info","message":"CORS permitido para: http://localhost:5173","timestamp":"2026-04-04T03:10:01.226Z"}
+{"level":"info","message":"Redis conectado correctamente","timestamp":"2026-04-04T03:10:01.239Z"}
+{"level":"info","message":"[Recordatorios] Cron job iniciado — corre diariamente a las 8:00 AM (Lima)","timestamp":"2026-04-04T03:10:26.442Z"}
+{"level":"info","message":"Servidor corriendo en http://localhost:4000","timestamp":"2026-04-04T03:10:26.446Z"}
+{"level":"info","message":"Entorno: production","timestamp":"2026-04-04T03:10:26.447Z"}
+{"level":"info","message":"CORS permitido para: http://localhost:5173","timestamp":"2026-04-04T03:10:26.447Z"}
+{"level":"info","message":"Redis conectado correctamente","timestamp":"2026-04-04T03:10:26.458Z"}
+{"level":"info","message":"[Recordatorios] Cron job iniciado — corre diariamente a las 8:00 AM (Lima)","timestamp":"2026-04-04T03:10:35.266Z"}
+{"level":"info","message":"Servidor corriendo en http://localhost:4000","timestamp":"2026-04-04T03:10:35.270Z"}
+{"level":"info","message":"Entorno: production","timestamp":"2026-04-04T03:10:35.270Z"}
+{"level":"info","message":"CORS permitido para: http://localhost:5173","timestamp":"2026-04-04T03:10:35.270Z"}
+{"level":"info","message":"Redis conectado correctamente","timestamp":"2026-04-04T03:10:35.282Z"}
+{"level":"info","message":"[Recordatorios] Cron job iniciado — corre diariamente a las 8:00 AM (Lima)","timestamp":"2026-04-04T03:10:51.391Z"}
+{"level":"info","message":"Servidor corriendo en http://localhost:4000","timestamp":"2026-04-04T03:10:51.397Z"}
+{"level":"info","message":"Entorno: production","timestamp":"2026-04-04T03:10:51.398Z"}
+{"level":"info","message":"CORS permitido para: http://localhost:5173","timestamp":"2026-04-04T03:10:51.398Z"}
+{"level":"info","message":"Redis conectado correctamente","timestamp":"2026-04-04T03:10:51.411Z"}
+{"level":"info","message":"[Recordatorios] Cron job iniciado — corre diariamente a las 8:00 AM (Lima)","timestamp":"2026-04-04T03:11:02.337Z"}
+{"level":"info","message":"Servidor corriendo en http://localhost:4000","timestamp":"2026-04-04T03:11:02.343Z"}
+{"level":"info","message":"Entorno: production","timestamp":"2026-04-04T03:11:02.343Z"}
+{"level":"info","message":"CORS permitido para: http://localhost:5173","timestamp":"2026-04-04T03:11:02.344Z"}
+{"level":"info","message":"Redis conectado correctamente","timestamp":"2026-04-04T03:11:02.360Z"}
+{"level":"info","message":"[Recordatorios] Cron job iniciado — corre diariamente a las 8:00 AM (Lima)","timestamp":"2026-04-04T03:11:16.006Z"}
+{"level":"info","message":"Servidor corriendo en http://localhost:4000","timestamp":"2026-04-04T03:11:16.009Z"}
+{"level":"info","message":"Entorno: production","timestamp":"2026-04-04T03:11:16.010Z"}
+{"level":"info","message":"CORS permitido para: http://localhost:5173","timestamp":"2026-04-04T03:11:16.010Z"}
+{"level":"info","message":"Redis conectado correctamente","timestamp":"2026-04-04T03:11:16.021Z"}
+{"level":"info","message":"[Recordatorios] Cron job iniciado — corre diariamente a las 8:00 AM (Lima)","timestamp":"2026-04-04T03:11:28.289Z"}
+{"level":"info","message":"Servidor corriendo en http://localhost:4000","timestamp":"2026-04-04T03:11:28.294Z"}
+{"level":"info","message":"Entorno: production","timestamp":"2026-04-04T03:11:28.295Z"}
+{"level":"info","message":"CORS permitido para: http://localhost:5173","timestamp":"2026-04-04T03:11:28.295Z"}
+{"level":"info","message":"Redis conectado correctamente","timestamp":"2026-04-04T03:11:28.308Z"}
+{"level":"info","message":"[Recordatorios] Cron job iniciado — corre diariamente a las 8:00 AM (Lima)","timestamp":"2026-04-04T03:12:00.959Z"}
+{"level":"info","message":"Servidor corriendo en http://localhost:4000","timestamp":"2026-04-04T03:12:00.963Z"}
+{"level":"info","message":"Entorno: production","timestamp":"2026-04-04T03:12:00.963Z"}
+{"level":"info","message":"CORS permitido para: http://localhost:5173","timestamp":"2026-04-04T03:12:00.963Z"}
+{"level":"info","message":"Redis conectado correctamente","timestamp":"2026-04-04T03:12:00.976Z"}
+{"level":"info","message":"[Recordatorios] Cron job iniciado — corre diariamente a las 8:00 AM (Lima)","timestamp":"2026-04-04T03:12:16.457Z"}
+{"level":"info","message":"Servidor corriendo en http://localhost:4000","timestamp":"2026-04-04T03:12:16.460Z"}
+{"level":"info","message":"Entorno: production","timestamp":"2026-04-04T03:12:16.461Z"}
+{"level":"info","message":"CORS permitido para: http://localhost:5173","timestamp":"2026-04-04T03:12:16.461Z"}
+{"level":"info","message":"Redis conectado correctamente","timestamp":"2026-04-04T03:12:16.472Z"}
+{"level":"info","message":"[Recordatorios] Cron job iniciado — corre diariamente a las 8:00 AM (Lima)","timestamp":"2026-04-04T03:14:21.933Z"}
+{"level":"info","message":"Servidor corriendo en http://localhost:4000","timestamp":"2026-04-04T03:14:21.937Z"}
+{"level":"info","message":"Entorno: production","timestamp":"2026-04-04T03:14:21.937Z"}
+{"level":"info","message":"CORS permitido para: http://localhost:5173","timestamp":"2026-04-04T03:14:21.937Z"}
+{"level":"info","message":"Redis conectado correctamente","timestamp":"2026-04-04T03:14:21.949Z"}
+{"level":"info","message":"[Recordatorios] Cron job iniciado — corre diariamente a las 8:00 AM (Lima)","timestamp":"2026-04-04T03:14:47.860Z"}
+{"level":"info","message":"Servidor corriendo en http://localhost:4000","timestamp":"2026-04-04T03:14:47.864Z"}
+{"level":"info","message":"Entorno: production","timestamp":"2026-04-04T03:14:47.864Z"}
+{"level":"info","message":"CORS permitido para: http://localhost:5173","timestamp":"2026-04-04T03:14:47.865Z"}
+{"level":"info","message":"Redis conectado correctamente","timestamp":"2026-04-04T03:14:47.875Z"}
+{"level":"info","message":"[Recordatorios] Cron job iniciado — corre diariamente a las 8:00 AM (Lima)","timestamp":"2026-04-04T03:15:15.766Z"}
+{"level":"info","message":"Servidor corriendo en http://localhost:4000","timestamp":"2026-04-04T03:15:15.770Z"}
+{"level":"info","message":"Entorno: production","timestamp":"2026-04-04T03:15:15.770Z"}
+{"level":"info","message":"CORS permitido para: http://localhost:5173","timestamp":"2026-04-04T03:15:15.770Z"}
+{"level":"info","message":"Redis conectado correctamente","timestamp":"2026-04-04T03:15:15.783Z"}
+{"level":"info","message":"[Recordatorios] Cron job iniciado — corre diariamente a las 8:00 AM (Lima)","timestamp":"2026-04-04T03:20:45.388Z"}
+{"level":"info","message":"Servidor corriendo en http://localhost:4000","timestamp":"2026-04-04T03:20:45.392Z"}
+{"level":"info","message":"Entorno: production","timestamp":"2026-04-04T03:20:45.392Z"}
+{"level":"info","message":"CORS permitido para: http://localhost:5173","timestamp":"2026-04-04T03:20:45.392Z"}
+{"level":"info","message":"Redis conectado correctamente","timestamp":"2026-04-04T03:20:45.405Z"}
+{"level":"info","message":"[Recordatorios] Cron job iniciado — corre diariamente a las 8:00 AM (Lima)","timestamp":"2026-04-05T23:18:58.880Z"}
+{"level":"info","message":"Servidor corriendo en http://localhost:4000","timestamp":"2026-04-05T23:18:58.885Z"}
+{"level":"info","message":"Entorno: production","timestamp":"2026-04-05T23:18:58.886Z"}
+{"level":"info","message":"CORS permitido para: http://localhost:5173","timestamp":"2026-04-05T23:18:58.886Z"}
+{"level":"info","message":"Redis conectado correctamente","timestamp":"2026-04-05T23:18:58.898Z"}
+{"level":"info","message":"[Recordatorios] Cron job iniciado — corre diariamente a las 8:00 AM (Lima)","timestamp":"2026-04-05T23:26:48.102Z"}
+{"level":"info","message":"Servidor corriendo en http://localhost:4000","timestamp":"2026-04-05T23:26:48.106Z"}
+{"level":"info","message":"Entorno: production","timestamp":"2026-04-05T23:26:48.106Z"}
+{"level":"info","message":"CORS permitido para: http://localhost:5173","timestamp":"2026-04-05T23:26:48.106Z"}
+{"level":"info","message":"Redis conectado correctamente","timestamp":"2026-04-05T23:26:48.117Z"}
+{"level":"info","message":"[Recordatorios] Cron job iniciado — corre diariamente a las 8:00 AM (Lima)","timestamp":"2026-04-05T23:29:17.660Z"}
+{"level":"info","message":"Servidor corriendo en http://localhost:4000","timestamp":"2026-04-05T23:29:17.664Z"}
+{"level":"info","message":"Entorno: production","timestamp":"2026-04-05T23:29:17.664Z"}
+{"level":"info","message":"CORS permitido para: http://localhost:5173","timestamp":"2026-04-05T23:29:17.664Z"}
+{"level":"info","message":"Redis conectado correctamente","timestamp":"2026-04-05T23:29:17.679Z"}
+{"level":"info","message":"[Recordatorios] Cron job iniciado — corre diariamente a las 8:00 AM (Lima)","timestamp":"2026-04-05T23:30:27.267Z"}
+{"level":"info","message":"Servidor corriendo en http://localhost:4000","timestamp":"2026-04-05T23:30:27.270Z"}
+{"level":"info","message":"Entorno: production","timestamp":"2026-04-05T23:30:27.270Z"}
+{"level":"info","message":"CORS permitido para: http://localhost:5173","timestamp":"2026-04-05T23:30:27.271Z"}
+{"level":"info","message":"Redis conectado correctamente","timestamp":"2026-04-05T23:30:27.281Z"}
+{"level":"info","message":"[Recordatorios] Cron job iniciado — corre diariamente a las 8:00 AM (Lima)","timestamp":"2026-04-05T23:36:47.847Z"}
+{"level":"info","message":"Servidor corriendo en http://localhost:4000","timestamp":"2026-04-05T23:36:47.852Z"}
+{"level":"info","message":"Entorno: production","timestamp":"2026-04-05T23:36:47.852Z"}
+{"level":"info","message":"CORS permitido para: http://localhost:5173","timestamp":"2026-04-05T23:36:47.853Z"}
+{"level":"info","message":"Redis conectado correctamente","timestamp":"2026-04-05T23:36:47.865Z"}
+{"level":"info","message":"[Recordatorios] Cron job iniciado — corre diariamente a las 8:00 AM (Lima)","timestamp":"2026-04-05T23:40:38.236Z"}
+{"level":"info","message":"Servidor corriendo en http://localhost:4000","timestamp":"2026-04-05T23:40:38.240Z"}
+{"level":"info","message":"Entorno: production","timestamp":"2026-04-05T23:40:38.240Z"}
+{"level":"info","message":"CORS permitido para: http://localhost:5173","timestamp":"2026-04-05T23:40:38.241Z"}
+{"level":"info","message":"Redis conectado correctamente","timestamp":"2026-04-05T23:40:38.251Z"}
+{"level":"info","message":"[Recordatorios] Cron job iniciado — corre diariamente a las 8:00 AM (Lima)","timestamp":"2026-04-07T03:50:02.544Z"}
+{"level":"info","message":"Servidor corriendo en http://localhost:4000","timestamp":"2026-04-07T03:50:02.550Z"}
+{"level":"info","message":"Entorno: production","timestamp":"2026-04-07T03:50:02.550Z"}
+{"level":"info","message":"CORS permitido para: http://localhost:5173","timestamp":"2026-04-07T03:50:02.551Z"}
+{"level":"info","message":"Redis conectado correctamente","timestamp":"2026-04-07T03:50:02.594Z"}
+{"level":"info","message":"[Recordatorios] Cron job iniciado — corre diariamente a las 8:00 AM (Lima)","timestamp":"2026-04-07T04:03:01.505Z"}
+{"level":"info","message":"Servidor corriendo en http://localhost:4000","timestamp":"2026-04-07T04:03:01.509Z"}
+{"level":"info","message":"Entorno: production","timestamp":"2026-04-07T04:03:01.509Z"}
+{"level":"info","message":"CORS permitido para: http://localhost:5173","timestamp":"2026-04-07T04:03:01.510Z"}
+{"level":"info","message":"Redis conectado correctamente","timestamp":"2026-04-07T04:03:01.522Z"}
