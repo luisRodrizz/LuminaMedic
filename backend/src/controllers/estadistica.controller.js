@@ -52,7 +52,11 @@ const getEstadisticas = async (req, res) => {
       citasMensuales,
     })
   } catch (error) {
-    res.status(500).json({ message: 'Error en el servidor' })
+    console.error('ERROR getEstadisticas:', error)
+    res.status(500).json({
+      message: 'Error en el servidor',
+      error: error.message
+    })
   }
 }
 
@@ -216,8 +220,11 @@ const getEstadisticasDoctor = async (req, res) => {
       citasPorEstado: citasPorEstado.map(c => ({ estado: c.estado, total: c._count.estado }))
     })
   } catch (error) {
-    
-    res.status(500).json({ message: 'Error en el servidor' })
+    console.error('ERROR getEstadisticasDoctor:', error)
+    res.status(500).json({
+      message: 'Error en el servidor',
+      error: error.message
+    })
   }
 }
 
@@ -328,7 +335,11 @@ const getEstadisticasPaciente = async (req, res) => {
       citasPorEstado: citasPorEstado.map(c => ({ estado: c.estado, total: c._count.estado }))
     })
   } catch (error) {
-    res.status(500).json({ message: 'Error en el servidor' })
+    console.error('ERROR getEstadisticasPaciente:', error)
+    res.status(500).json({
+      message: 'Error en el servidor',
+      error: error.message
+    })
   }
 }
 

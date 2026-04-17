@@ -373,3 +373,27 @@
 {"level":"info","message":"Entorno: production","timestamp":"2026-04-07T04:03:01.509Z"}
 {"level":"info","message":"CORS permitido para: http://localhost:5173","timestamp":"2026-04-07T04:03:01.510Z"}
 {"level":"info","message":"Redis conectado correctamente","timestamp":"2026-04-07T04:03:01.522Z"}
+{"level":"info","message":"[Recordatorios] Cron job iniciado — corre diariamente a las 8:00 AM (Lima)","timestamp":"2026-04-17T20:31:58.866Z"}
+{"level":"info","message":"Servidor corriendo en http://localhost:4000","timestamp":"2026-04-17T20:31:58.873Z"}
+{"level":"info","message":"Entorno: production","timestamp":"2026-04-17T20:31:58.873Z"}
+{"level":"info","message":"CORS permitido para: http://localhost:5173, https://tu-frontend.vercel.app","timestamp":"2026-04-17T20:31:58.873Z"}
+{"level":"info","message":"Redis conectado correctamente","timestamp":"2026-04-17T20:31:59.120Z"}
+{"level":"info","message":"Redis listo para usarse","timestamp":"2026-04-17T20:31:59.557Z"}
+{"level":"info","message":"[Recordatorios] Cron job iniciado — corre diariamente a las 8:00 AM (Lima)","timestamp":"2026-04-17T20:33:13.983Z"}
+{"level":"info","message":"Servidor corriendo en http://localhost:4000","timestamp":"2026-04-17T20:33:13.988Z"}
+{"level":"info","message":"Entorno: production","timestamp":"2026-04-17T20:33:13.988Z"}
+{"level":"info","message":"CORS permitido para: http://localhost:5173, https://tu-frontend.vercel.app","timestamp":"2026-04-17T20:33:13.988Z"}
+{"level":"info","message":"Redis conectado correctamente","timestamp":"2026-04-17T20:33:14.229Z"}
+{"level":"info","message":"Redis listo para usarse","timestamp":"2026-04-17T20:33:14.666Z"}
+{"level":"info","message":"[Recordatorios] Cron job iniciado — corre diariamente a las 8:00 AM (Lima)","timestamp":"2026-04-17T20:34:42.198Z"}
+{"level":"info","message":"Servidor corriendo en http://localhost:4000","timestamp":"2026-04-17T20:34:42.203Z"}
+{"level":"info","message":"Entorno: production","timestamp":"2026-04-17T20:34:42.203Z"}
+{"level":"info","message":"CORS permitido para: http://localhost:5173, https://tu-frontend.vercel.app","timestamp":"2026-04-17T20:34:42.203Z"}
+{"level":"info","message":"Redis conectado correctamente","timestamp":"2026-04-17T20:34:42.502Z"}
+{"level":"info","message":"Redis listo para usarse","timestamp":"2026-04-17T20:34:42.931Z"}
+{"level":"info","message":"[Recordatorios] Cron job iniciado — corre diariamente a las 8:00 AM (Lima)","timestamp":"2026-04-17T21:23:24.802Z"}
+{"level":"info","message":"Servidor corriendo en http://localhost:4000","timestamp":"2026-04-17T21:23:24.808Z"}
+{"level":"info","message":"Entorno: production","timestamp":"2026-04-17T21:23:24.808Z"}
+{"level":"info","message":"CORS permitido para: http://localhost:5173, https://tu-frontend.vercel.app","timestamp":"2026-04-17T21:23:24.808Z"}
+{"level":"info","message":"Redis conectado correctamente","timestamp":"2026-04-17T21:23:25.052Z"}
+{"level":"info","message":"Redis listo para usarse","timestamp":"2026-04-17T21:23:25.483Z"}

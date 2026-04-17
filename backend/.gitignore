@@ -1,6 +1,20 @@
-node_modules
-# Keep environment variables out of version control
-.env.test
+# Env files
+.env
+.env.*
+backend/.env
+backend/.env.*
+frontend/.env
+frontend/.env.*
+
+# Logs
+logs
+*.log
 backend/logs/
 
-/generated/prisma
+# Dependencies
+node_modules/
+
+# Build
+dist
+dist-ssr
+build

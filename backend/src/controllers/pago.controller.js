@@ -59,7 +59,11 @@ const obtenerPagos = async (req, res) => {
       meta: { total, page, limit, totalPages: Math.ceil(total / limit) }
     })
   } catch (error) {
-    res.status(500).json({ message: 'Error en el servidor' })
+    console.error('ERROR obtenerPagos:', error)
+    res.status(500).json({
+      message: 'Error en el servidor',
+      error: error.message
+    })
   }
 }
 
@@ -91,7 +95,11 @@ const obtenerResumenPagos = async (req, res) => {
       }))
     })
   } catch (error) {
-    res.status(500).json({ message: 'Error en el servidor' })
+    console.error('ERROR obtenerResumenPagos:', error)
+    res.status(500).json({
+      message: 'Error en el servidor',
+      error: error.message
+    })
   }
 }
 
