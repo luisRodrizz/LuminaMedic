@@ -87,6 +87,7 @@ function App() {
       <Route path="/paciente/notificaciones" element={<PrivateRoute roles={['PACIENTE']}><NotificacionesPaciente /></PrivateRoute>} />
       <Route path="/paciente/estadisticas" element={<PrivateRoute roles={['PACIENTE']}><MisEstadisticasPaciente /></PrivateRoute>} />
 
+      <Route path="/" element={<Navigate to="/login" replace />} />
 
       {/* Fallback */}
       <Route path="*" element={<NotFound />} />
