@@ -24,17 +24,24 @@ const MENU = [
   { path: '/admin/perfil',      icon: Building2,       label: 'Perfil Clínica' },
 ]
 
-function SidebarContent({ collapsed, isOverlay, citasPendientes, onToggle, onClose, onNavClick, user, onLogout }) {
+function SidebarContent({ collapsed, isOverlay, citasPendientes, onToggle, onClose, onNavClick, user, clinica, onLogout }) {
   return (
     <>
       <div className="flex items-center justify-between px-3 py-4 border-b border-white/10">
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center flex-shrink-0">
-            <Stethoscope size={16} className="text-white" />
+          <div className="w-8 h-8 rounded-lg overflow-hidden bg-blue-500 flex items-center justify-center flex-shrink-0">
+            {clinica?.logo ? (
+              <img src={clinica.logo} alt={clinica.nombre || 'Clínica'} className="w-full h-full object-cover" />
+            ) : (
+              <Stethoscope size={16} className="text-white" />
+            )}
           </div>
+
           {(!collapsed || isOverlay) && (
             <div>
-              <p className="text-white font-semibold text-sm leading-none">MediCare</p>
+              <p className="text-white font-semibold text-sm leading-none">
+                {clinica?.nombre || 'MediCare'}
+              </p>
               <p className="text-slate-400 text-xs mt-0.5">Sistema Clínico</p>
             </div>
           )}
@@ -129,6 +136,14 @@ export default function AdminLayout({ children }) {
   const [collapsed, setCollapsed] = useState(() => localStorage.getItem('sidebar-collapsed') === 'true')
   const [mobileOpen, setMobileOpen] = useState(false)
   const [citasPendientes, setCitasPendientes] = useState(0)
+  const [clinica, setClinica] = useState(() => {
+    try {
+      const saved = localStorage.getItem('clinica-branding')
+      return saved ? JSON.parse(saved) : null
+    } catch {
+      return null
+    }
+  })
 
   useEffect(() => {
     const fetchPendientes = async () => {
@@ -139,7 +154,24 @@ export default function AdminLayout({ children }) {
         console.error('Error cargando badge')
       }
     }
+
+    const fetchClinica = async () => {
+      try {
+        const res = await api.get('/clinica')
+        const branding = {
+          nombre: res.data?.nombre || '',
+          logo: res.data?.logo || ''
+        }
+        setClinica(branding)
+        localStorage.setItem('clinica-branding', JSON.stringify(branding))
+      } catch {
+        console.error('Error cargando clínica')
+      }
+    }
+
     fetchPendientes()
+    fetchClinica()
+
     const interval = setInterval(fetchPendientes, 60000)
     return () => clearInterval(interval)
   }, [])
@@ -158,6 +190,7 @@ export default function AdminLayout({ children }) {
     onClose: () => setMobileOpen(false),
     onNavClick: () => setMobileOpen(false),
     user,
+    clinica,
     onLogout: handleLogout,
   }
 

@@ -18,18 +18,25 @@ const MENU = [
   { path: '/paciente/notificaciones', icon: Bell,            label: 'Notificaciones', badge: true },
 ]
 
-function SidebarContent({ collapsed, isOverlay, noLeidas, onToggle, onClose, onNavClick, user, onLogout }) {
+function SidebarContent({ collapsed, isOverlay, noLeidas, onToggle, onClose, onNavClick, user, clinica, fotoPerfil, onLogout }) {
   return (
     <>
       {/* Logo */}
       <div className="flex items-center justify-between px-3 py-4 border-b border-white/10">
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center flex-shrink-0">
-            <Stethoscope size={16} className="text-white" />
+          <div className="w-8 h-8 rounded-lg overflow-hidden bg-blue-500 flex items-center justify-center flex-shrink-0">
+            {clinica?.logo ? (
+              <img src={clinica.logo} alt={clinica.nombre || 'Clínica'} className="w-full h-full object-cover" />
+            ) : (
+              <Stethoscope size={16} className="text-white" />
+            )}
           </div>
+
           {(!collapsed || isOverlay) && (
             <div>
-              <p className="text-white font-semibold text-sm leading-none">MediCare</p>
+              <p className="text-white font-semibold text-sm leading-none">
+                {clinica?.nombre || 'MediCare'}
+              </p>
               <p className="text-slate-400 text-xs mt-0.5">Mi Portal</p>
             </div>
           )}
@@ -99,8 +106,14 @@ function SidebarContent({ collapsed, isOverlay, noLeidas, onToggle, onClose, onN
       <div className={`p-3 border-t border-white/10 ${collapsed && !isOverlay ? 'flex justify-center' : ''}`}>
         {(!collapsed || isOverlay) ? (
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 bg-blue-500/20 border border-blue-500/30 rounded-lg flex items-center justify-center flex-shrink-0">
-              <span className="text-blue-400 text-xs font-bold">{user?.nombre?.[0]}{user?.apellido?.[0]}</span>
+            <div className="w-8 h-8 rounded-lg overflow-hidden bg-blue-500/20 border border-blue-500/30 flex items-center justify-center flex-shrink-0">
+              {fotoPerfil ? (
+                <img src={fotoPerfil} alt={`${user?.nombre} ${user?.apellido}`} className="w-full h-full object-cover" />
+              ) : (
+                <span className="text-blue-400 text-xs font-bold">
+                  {user?.nombre?.[0]}{user?.apellido?.[0]}
+                </span>
+              )}
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-white text-xs font-semibold truncate">{user?.nombre} {user?.apellido}</p>
@@ -126,6 +139,22 @@ export default function PacienteLayout({ children }) {
   const [collapsed, setCollapsed] = useState(() => localStorage.getItem('paciente-sidebar-collapsed') === 'true')
   const [mobileOpen, setMobileOpen] = useState(false)
   const [noLeidas, setNoLeidas] = useState(0)
+  const [fotoPerfil, setFotoPerfil] = useState(() => {
+    try {
+      return localStorage.getItem('paciente-profile-photo') || null
+    } catch {
+      return null
+    }
+  })
+
+  const [clinica, setClinica] = useState(() => {
+    try {
+      const saved = localStorage.getItem('clinica-branding')
+      return saved ? JSON.parse(saved) : null
+    } catch {
+      return null
+    }
+  })
 
   useEffect(() => {
     const fetchPendientes = async () => {
@@ -136,7 +165,37 @@ export default function PacienteLayout({ children }) {
         console.error('Error cargando badge')
       }
     }
+
+    const fetchClinica = async () => {
+      try {
+        const res = await api.get('/clinica')
+        setClinica(res.data)
+        localStorage.setItem('clinica-branding', JSON.stringify(res.data))
+      } catch {
+        console.error('Error cargando clínica')
+      }
+    }
+
+    const fetchMiPerfil = async () => {
+      try {
+        const res = await api.get('/pacientes/perfil/me')
+        const foto = res.data?.foto || null
+        setFotoPerfil(foto)
+
+        if (foto) {
+          localStorage.setItem('paciente-profile-photo', foto)
+        } else {
+          localStorage.removeItem('paciente-profile-photo')
+        }
+      } catch {
+        console.error('Error cargando perfil del paciente')
+      }
+    }
+
     fetchPendientes()
+    fetchClinica()
+    fetchMiPerfil()
+
     const interval = setInterval(fetchPendientes, 60000)
     return () => clearInterval(interval)
   }, [])
@@ -155,6 +214,8 @@ export default function PacienteLayout({ children }) {
     onClose: () => setMobileOpen(false),
     onNavClick: () => setMobileOpen(false),
     user,
+    clinica,
+    fotoPerfil,
     onLogout: handleLogout,
   }
 
