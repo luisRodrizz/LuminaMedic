@@ -13,8 +13,11 @@ const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:5173'
 
 const EMAIL_FROM = process.env.EMAIL_FROM || `"${BRAND_NAME}" <${process.env.SMTP_USER}>`
 
-console.log('EMAIL_USER existe:', Boolean(process.env.EMAIL_USER))
-console.log('EMAIL_PASS existe:', Boolean(process.env.EMAIL_PASS))
+console.log('SMTP_HOST:', process.env.SMTP_HOST)
+console.log('SMTP_PORT:', process.env.SMTP_PORT)
+console.log('SMTP_USER existe:', Boolean(process.env.SMTP_USER))
+console.log('SMTP_PASS existe:', Boolean(process.env.SMTP_PASS))
+console.log('EMAIL_FROM:', EMAIL_FROM)
 console.log('FRONTEND_URL:', FRONTEND_URL)
 
 // ─── Transporter ─────────────────────────────────────────────────────────────
