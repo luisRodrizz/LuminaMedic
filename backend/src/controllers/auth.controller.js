@@ -137,7 +137,15 @@ const solicitarRecuperacion = async (req, res) => {
       email: usuario.email,
       nombre: usuario.nombre,
       token
-    }).catch(err => logger.error('Error enviando email recuperación', { error: err.message }))
+    }).catch(err => {
+      console.error('Error enviando email recuperación:', {
+        message: err.message,
+        code: err.code,
+        command: err.command,
+        response: err.response,
+        responseCode: err.responseCode
+      })
+    })
 
     res.json(respuestaGenerica)
   } catch (error) {

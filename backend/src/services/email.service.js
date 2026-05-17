@@ -17,19 +17,32 @@ console.log('FRONTEND_URL:', FRONTEND_URL)
 
 // ─── Transporter ─────────────────────────────────────────────────────────────
 const transporter = nodemailer.createTransport({
-  service: 'gmail',
+  host: 'smtp.gmail.com',
+  port: 465,
+  secure: true,
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS
-  }
+  },
+  connectionTimeout: 10000,
+  greetingTimeout: 10000,
+  socketTimeout: 15000
 })
 
 // ─── Exponential backoff helper ───────────────────────────────────────────────
 const enviarConReintentos = async (opciones, intentos = 3) => {
   for (let i = 0; i < intentos; i++) {
     try {
-      await transporter.sendMail(opciones)
+      const info = await transporter.sendMail(opciones)
+
+      console.log('Email enviado correctamente:', {
+        to: opciones.to,
+        messageId: info.messageId,
+        response: info.response
+      })
+
       return
+
     } catch (error) {
       const esUltimoIntento = i === intentos - 1
 
