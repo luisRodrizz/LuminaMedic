@@ -13,19 +13,12 @@ const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:5173'
 
 const EMAIL_FROM = process.env.EMAIL_FROM || `"${BRAND_NAME}" <${process.env.SMTP_USER}>`
 
-console.log('SMTP_HOST:', process.env.SMTP_HOST)
-console.log('SMTP_PORT:', process.env.SMTP_PORT)
-console.log('SMTP_USER existe:', Boolean(process.env.SMTP_USER))
-console.log('SMTP_PASS existe:', Boolean(process.env.SMTP_PASS))
-console.log('EMAIL_FROM:', EMAIL_FROM)
-console.log('FRONTEND_URL:', FRONTEND_URL)
-
 // ─── Transporter ─────────────────────────────────────────────────────────────
 const transporter = nodemailer.createTransport({
   host: process.env.SMTP_HOST,
   port: Number(process.env.SMTP_PORT || 587),
   secure: false,
-  requireTLS: true,
+  requireTLS: false,
   auth: {
     user: process.env.SMTP_USER,
     pass: process.env.SMTP_PASS
@@ -43,8 +36,7 @@ const enviarConReintentos = async (opciones, intentos = 3) => {
 
       console.log('Email enviado correctamente:', {
         to: opciones.to,
-        messageId: info.messageId,
-        response: info.response
+        messageId: info.messageId
       })
 
       return
