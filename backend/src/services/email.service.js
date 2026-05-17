@@ -11,6 +11,10 @@ const BRAND_BG = '#f8fbfc'
 // En producción Render debe tener FRONTEND_URL=https://sistema-clinico-cyan.vercel.app
 const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:5173'
 
+console.log('EMAIL_USER existe:', Boolean(process.env.EMAIL_USER))
+console.log('EMAIL_PASS existe:', Boolean(process.env.EMAIL_PASS))
+console.log('FRONTEND_URL:', FRONTEND_URL)
+
 // ─── Transporter ─────────────────────────────────────────────────────────────
 const transporter = nodemailer.createTransport({
   service: 'gmail',
@@ -30,7 +34,13 @@ const enviarConReintentos = async (opciones, intentos = 3) => {
       const esUltimoIntento = i === intentos - 1
 
       if (esUltimoIntento) {
-        console.error(`Email fallido tras ${intentos} intentos:`, error.message)
+        console.error(`Email fallido tras ${intentos} intentos:`, {
+          message: error.message,
+          code: error.code,
+          command: error.command,
+          response: error.response,
+          responseCode: error.responseCode
+        })
         throw error
       }
 
