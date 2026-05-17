@@ -8,10 +8,34 @@ import ModalNotaCita from '../citas/ModalNotaCita'
 import api from '../../../services/api'
 
 const estadoColors = {
-  PENDIENTE:  { bg: 'bg-yellow-50',  text: 'text-yellow-700',  border: 'border-yellow-200', dot: 'bg-yellow-400', pill: 'bg-yellow-100' },
-  CONFIRMADA: { bg: 'bg-blue-50',    text: 'text-blue-700',    border: 'border-blue-200',   dot: 'bg-blue-400',   pill: 'bg-blue-100'   },
-  COMPLETADA: { bg: 'bg-emerald-50', text: 'text-emerald-700', border: 'border-emerald-200',dot: 'bg-emerald-400',pill: 'bg-emerald-100' },
-  CANCELADA:  { bg: 'bg-red-50',     text: 'text-red-700',     border: 'border-red-200',    dot: 'bg-red-400',    pill: 'bg-red-100'    },
+  PENDIENTE: {
+    bg: 'bg-amber-50',
+    text: 'text-amber-700',
+    border: 'border-amber-200',
+    dot: 'bg-amber-400',
+    pill: 'bg-amber-100'
+  },
+  CONFIRMADA: {
+    bg: 'bg-[#000089]/10',
+    text: 'text-[#000089]',
+    border: 'border-[#000089]/20',
+    dot: 'bg-[#000089]',
+    pill: 'bg-[#000089]/10'
+  },
+  COMPLETADA: {
+    bg: 'bg-[#00CCA5]/10',
+    text: 'text-[#008f78]',
+    border: 'border-[#00CCA5]/25',
+    dot: 'bg-[#00CCA5]',
+    pill: 'bg-[#00CCA5]/10'
+  },
+  CANCELADA: {
+    bg: 'bg-red-50',
+    text: 'text-red-700',
+    border: 'border-red-200',
+    dot: 'bg-red-500',
+    pill: 'bg-red-100'
+  },
 }
 
 const DIAS = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom']
@@ -124,65 +148,108 @@ export default function Agenda() {
   const VistaDiaContenido = ({ dia }) => {
     const bloqueoDia = getBloqueoDelDia(dia)
     const citasDia = getCitasDia(dia)
+
     return (
       <>
         {/* Banner bloqueo */}
         {bloqueoDia && (
-          <div className="flex items-center gap-3 px-4 md:px-6 py-3 bg-red-50 border-b border-red-100">
-            <div className="w-6 h-6 bg-red-100 rounded-lg flex items-center justify-center flex-shrink-0">
-              <span className="text-red-500 text-xs font-bold">✕</span>
+          <div className="flex items-start gap-3 border-b border-red-100 bg-red-50 px-4 py-4 md:px-6">
+            <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-2xl bg-red-100">
+              <span className="text-xs font-black text-red-500">✕</span>
             </div>
+
             <div>
-              <p className="text-sm font-semibold text-red-600">Día bloqueado</p>
-              {bloqueoDia.motivo && <p className="text-xs text-red-400">{bloqueoDia.motivo}</p>}
+              <p className="text-sm font-black text-red-700">Día bloqueado</p>
+              {bloqueoDia.motivo && (
+                <p className="mt-0.5 text-xs font-medium text-red-500">
+                  {bloqueoDia.motivo}
+                </p>
+              )}
             </div>
           </div>
         )}
 
         {citasDia.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-10 gap-3">
-            <div className="w-12 h-12 bg-slate-100 rounded-2xl flex items-center justify-center">
-              <Calendar size={20} className="text-slate-400" />
+          <div className="flex flex-col items-center justify-center gap-3 px-6 py-14">
+            <div className="flex h-14 w-14 items-center justify-center rounded-3xl bg-slate-100">
+              <Calendar size={22} className="text-slate-400" />
             </div>
-            <p className="text-slate-500 font-medium text-sm">Sin citas este día</p>
+
+            <div className="text-center">
+              <p className="text-sm font-black text-slate-700">Sin citas este día</p>
+              <p className="mt-1 text-xs text-slate-400">
+                No hay atenciones programadas para esta fecha.
+              </p>
+            </div>
           </div>
         ) : (
-          <div className="divide-y divide-slate-50">
+          <div className="divide-y divide-slate-100">
             {citasDia.map((cita) => {
-              const cfg = estadoColors[cita.estado]
+              const cfg = estadoColors[cita.estado] || estadoColors.CONFIRMADA
+
               return (
-                <div key={cita.id} className="flex items-center gap-3 md:gap-4 px-4 md:px-6 py-4 hover:bg-slate-50/70 transition-colors">
-                  <div className="w-14 flex-shrink-0 text-center">
-                    <p className="text-sm font-bold text-slate-700">{formatHora(cita.fecha)}</p>
-                    <p className="text-xs text-slate-400">{cita.servicio.duracion} min</p>
+                <div
+                  key={cita.id}
+                  className="flex items-center gap-3 px-4 py-4 transition hover:bg-slate-50/70 md:gap-4 md:px-6"
+                >
+                  <div className="w-16 flex-shrink-0 text-center">
+                    <p className="font-mono text-sm font-black text-slate-800">
+                      {formatHora(cita.fecha)}
+                    </p>
+                    <p className="mt-0.5 text-xs font-bold text-slate-400">
+                      {cita.servicio.duracion} min
+                    </p>
                   </div>
-                  <div className={`w-1 h-12 rounded-full flex-shrink-0 ${cfg.dot}`} />
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-0.5">
-                      <User size={13} className="text-slate-400 flex-shrink-0" />
-                      <p className="text-sm font-semibold text-slate-800 truncate">
+
+                  <div className={`h-12 w-1 flex-shrink-0 rounded-full ${cfg.dot}`} />
+
+                  <div className="min-w-0 flex-1">
+                    <div className="mb-0.5 flex items-center gap-2">
+                      <User size={13} className="flex-shrink-0 text-slate-400" />
+                      <p className="truncate text-sm font-black text-slate-800">
                         {cita.paciente.usuario.nombre} {cita.paciente.usuario.apellido}
                       </p>
                     </div>
-                    <p className="text-xs text-slate-400 ml-5">{cita.servicio.nombre}</p>
+
+                    <p className="ml-5 truncate text-xs font-medium text-slate-400">
+                      {cita.servicio.nombre}
+                    </p>
+
                     {cita.motivo && (
-                      <p className="text-xs text-slate-400 ml-5 mt-0.5 truncate">"{cita.motivo}"</p>
+                      <p className="ml-5 mt-0.5 truncate text-xs text-slate-400">
+                        "{cita.motivo}"
+                      </p>
                     )}
                   </div>
-                  <span className={`hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-medium flex-shrink-0 ${cfg.bg} ${cfg.text}`}>
-                    <span className={`w-1.5 h-1.5 rounded-full ${cfg.dot}`} />
+
+                  <span
+                    className={`hidden flex-shrink-0 items-center gap-2 rounded-2xl px-3 py-1.5 text-xs font-black sm:inline-flex ${cfg.bg} ${cfg.text}`}
+                  >
+                    <span className={`h-2 w-2 rounded-full ${cfg.dot}`} />
                     {cita.estado}
                   </span>
-                  <div className="flex items-center gap-1 flex-shrink-0">
-                    <button onClick={() => { setCitaSeleccionada(cita); setModalVer(true) }}
-                      className="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all"
-                      title="Ver detalle">
+
+                  <div className="flex flex-shrink-0 items-center gap-1">
+                    <button
+                      onClick={() => {
+                        setCitaSeleccionada(cita)
+                        setModalVer(true)
+                      }}
+                      className="flex h-9 w-9 items-center justify-center rounded-xl text-slate-400 transition hover:bg-[#00CCA5]/10 hover:text-[#008f78]"
+                      title="Ver detalle"
+                    >
                       <Calendar size={15} />
                     </button>
+
                     {cita.estado !== 'COMPLETADA' && cita.estado !== 'CANCELADA' && !cita.nota && (
-                      <button onClick={() => { setCitaSeleccionada(cita); setModalNota(true) }}
-                        className="p-2 text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 rounded-lg transition-all"
-                        title="Agregar nota">
+                      <button
+                        onClick={() => {
+                          setCitaSeleccionada(cita)
+                          setModalNota(true)
+                        }}
+                        className="flex h-9 w-9 items-center justify-center rounded-xl text-slate-400 transition hover:bg-[#000089]/10 hover:text-[#000089]"
+                        title="Agregar nota"
+                      >
                         <FileText size={15} />
                       </button>
                     )}
@@ -199,35 +266,45 @@ export default function Agenda() {
   return (
     <DoctorLayout>
       <div className="page-enter">
-
         {/* Header */}
-        <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-emerald-50 rounded-xl flex items-center justify-center">
-              <Calendar size={20} className="text-emerald-600" />
-            </div>
-            <div>
-              <h1 className="text-2xl font-bold text-slate-800 tracking-tight">Agenda Semanal</h1>
-              <p className="text-slate-400 text-sm mt-0.5 hidden sm:block">Vista de tus citas por semana</p>
-            </div>
+        <div className="mb-6 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+          <div>
+            <h1 className="text-2xl font-black tracking-tight text-slate-950 md:text-3xl">
+              Agenda Semanal
+            </h1>
+
+            <p className="mt-2 text-sm text-slate-400">
+              Visualiza tus citas programadas, días bloqueados y atenciones por semana.
+            </p>
           </div>
 
           {/* Controles navegación */}
-          <div className="flex items-center gap-2">
-            <button onClick={irHoy}
-              className="px-3 py-2 text-sm font-medium text-slate-600 border border-slate-200 rounded-xl hover:bg-slate-50 transition-all">
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+            <button
+              onClick={irHoy}
+              className="flex h-11 items-center justify-center rounded-xl border border-slate-200 bg-white px-4 text-sm font-black text-slate-600 shadow-sm transition hover:border-[#00CCA5]/30 hover:bg-slate-50 hover:text-[#000089]"
+            >
               Hoy
             </button>
-            <div className="flex items-center border border-slate-200 rounded-xl overflow-hidden">
-              <button onClick={semanaAnterior}
-                className="p-2 text-slate-500 hover:bg-slate-50 hover:text-slate-800 transition-all">
+
+            <div className="flex h-11 items-center overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
+              <button
+                onClick={semanaAnterior}
+                className="flex h-full w-10 items-center justify-center text-slate-500 transition hover:bg-slate-50 hover:text-[#000089]"
+                title="Semana anterior"
+              >
                 <ChevronLeft size={18} />
               </button>
-              <span className="px-2 md:px-3 text-xs md:text-sm font-medium text-slate-700 min-w-[100px] md:min-w-[200px] text-center">
+
+              <span className="min-w-[160px] px-3 text-center text-xs font-black text-slate-700 md:min-w-[230px] md:text-sm">
                 {semanaLabel()}
               </span>
-              <button onClick={semanaSiguiente}
-                className="p-2 text-slate-500 hover:bg-slate-50 hover:text-slate-800 transition-all">
+
+              <button
+                onClick={semanaSiguiente}
+                className="flex h-full w-10 items-center justify-center text-slate-500 transition hover:bg-slate-50 hover:text-[#000089]"
+                title="Semana siguiente"
+              >
                 <ChevronRight size={18} />
               </button>
             </div>
@@ -235,19 +312,48 @@ export default function Agenda() {
         </div>
 
         {/* Stats — solo desktop */}
-        <div className="hidden md:grid grid-cols-3 gap-4 mb-5">
+        <div className="mb-5 hidden grid-cols-3 gap-4 md:grid">
           {[
-            { label: 'Esta semana', value: totalSemana,       color: 'bg-slate-800',   icon: Calendar },
-            { label: 'Pendientes',  value: pendientesSemana,  color: 'bg-yellow-500',  icon: Clock    },
-            { label: 'Completadas', value: completadasSemana, color: 'bg-emerald-500', icon: FileText },
+            {
+              label: 'Esta semana',
+              value: totalSemana,
+              color: 'bg-[#000089]',
+              softBg: 'bg-[#000089]/10',
+              iconText: 'text-[#000089]',
+              icon: Calendar
+            },
+            {
+              label: 'Pendientes',
+              value: pendientesSemana,
+              color: 'bg-amber-500',
+              softBg: 'bg-amber-50',
+              iconText: 'text-amber-600',
+              icon: Clock
+            },
+            {
+              label: 'Completadas',
+              value: completadasSemana,
+              color: 'bg-[#00A98A]',
+              softBg: 'bg-[#00CCA5]/10',
+              iconText: 'text-[#008f78]',
+              icon: FileText
+            },
           ].map((s, i) => (
-            <div key={i} className="bg-white rounded-2xl border border-slate-100 p-4 flex items-center gap-3 hover:shadow-sm transition-all">
-              <div className={`w-9 h-9 ${s.color} rounded-xl flex items-center justify-center flex-shrink-0`}>
-                <s.icon size={16} className="text-white" />
+            <div
+              key={i}
+              className="group flex items-center gap-4 rounded-3xl border border-slate-200/70 bg-white p-5 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_18px_50px_rgba(15,23,42,0.08)]"
+            >
+              <div className={`flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-2xl ${s.color} shadow-lg shadow-slate-200/80`}>
+                <s.icon size={20} className="text-white" />
               </div>
-              <div>
-                <p className="text-slate-400 text-xs">{s.label}</p>
-                <p className="text-xl font-bold text-slate-800">{s.value}</p>
+
+              <div className="min-w-0">
+                <p className="truncate text-xs font-bold text-slate-400">
+                  {s.label}
+                </p>
+                <p className="text-2xl font-black leading-tight text-slate-900">
+                  {s.value}
+                </p>
               </div>
             </div>
           ))}
@@ -256,28 +362,56 @@ export default function Agenda() {
         {/* ── MÓVIL: selector de día + vista día ── */}
         <div className="md:hidden">
           {/* Selector días */}
-          <div className="bg-white rounded-2xl border border-slate-100 overflow-hidden mb-4">
+          <div className="mb-4 overflow-hidden rounded-[2rem] border border-slate-200/80 bg-white shadow-sm">
             <div className="grid grid-cols-7">
               {diasSemana.map((dia, i) => {
                 const esHoyDia    = esMismaFecha(dia, hoy)
                 const bloqueoDia  = getBloqueoDelDia(dia)
                 const esDiaActivo = esMismaFecha(dia, diaActivo)
+
                 return (
-                  <button key={i}
+                  <button
+                    key={i}
                     onClick={() => setDiaActivo(dia)}
-                    className={`py-3 flex flex-col items-center gap-0.5 transition-all border-r last:border-r-0 border-slate-100
-                      ${esDiaActivo ? 'bg-emerald-500' : bloqueoDia ? 'bg-red-50/60' : esHoyDia ? 'bg-emerald-50' : ''}`}>
-                    <span className={`text-xs font-semibold uppercase ${esDiaActivo ? 'text-white' : bloqueoDia ? 'text-red-400' : esHoyDia ? 'text-emerald-600' : 'text-slate-400'}`}>
+                    className={`flex flex-col items-center gap-0.5 border-r border-slate-100 py-3 transition-all last:border-r-0
+                      ${esDiaActivo ? 'bg-[#00CCA5]' : bloqueoDia ? 'bg-red-50/70' : esHoyDia ? 'bg-[#00CCA5]/10' : 'bg-white hover:bg-slate-50'}`}
+                  >
+                    <span
+                      className={`text-xs font-black uppercase ${
+                        esDiaActivo
+                          ? 'text-white'
+                          : bloqueoDia
+                            ? 'text-red-500'
+                            : esHoyDia
+                              ? 'text-[#008f78]'
+                              : 'text-slate-400'
+                      }`}
+                    >
                       {DIAS[i]}
                     </span>
-                    <span className={`text-base font-bold ${esDiaActivo ? 'text-white' : bloqueoDia ? 'text-red-400' : esHoyDia ? 'text-emerald-600' : 'text-slate-700'}`}>
+
+                    <span
+                      className={`text-base font-black ${
+                        esDiaActivo
+                          ? 'text-white'
+                          : bloqueoDia
+                            ? 'text-red-500'
+                            : esHoyDia
+                              ? 'text-[#008f78]'
+                              : 'text-slate-700'
+                      }`}
+                    >
                       {dia.getDate()}
                     </span>
+
                     {getCitasDia(dia).length > 0 && !esDiaActivo && (
-                      <span className={`w-1.5 h-1.5 rounded-full ${bloqueoDia ? 'bg-red-400' : esHoyDia ? 'bg-emerald-400' : 'bg-slate-300'}`} />
+                      <span className={`h-1.5 w-1.5 rounded-full ${
+                        bloqueoDia ? 'bg-red-400' : esHoyDia ? 'bg-[#00CCA5]' : 'bg-slate-300'
+                      }`} />
                     )}
+
                     {bloqueoDia && !esDiaActivo && (
-                      <span className="w-1.5 h-1.5 rounded-full bg-red-400" />
+                      <span className="h-1.5 w-1.5 rounded-full bg-red-400" />
                     )}
                   </button>
                 )
@@ -286,25 +420,32 @@ export default function Agenda() {
           </div>
 
           {/* Vista día móvil */}
-          <div className="bg-white rounded-2xl border border-slate-100 overflow-hidden">
-            <div className="flex items-center justify-between px-4 py-3 border-b border-slate-100">
+          <div className="overflow-hidden rounded-[2rem] border border-slate-200/80 bg-white shadow-sm">
+            <div className="flex items-center justify-between border-b border-slate-100 px-4 py-4">
               <div className="flex items-center gap-2">
-                <Calendar size={15} className="text-emerald-500" />
-                <p className="text-sm font-semibold text-slate-700">
+                <div className="flex h-9 w-9 items-center justify-center rounded-2xl bg-[#00CCA5]/10">
+                  <Calendar size={15} className="text-[#008f78]" />
+                </div>
+
+                <p className="text-sm font-black text-slate-800">
                   {DIAS_FULL[diaActivo.getDay() === 0 ? 6 : diaActivo.getDay() - 1]},{' '}
                   {diaActivo.toLocaleDateString('es-PE', { day: 'numeric', month: 'long' })}
                 </p>
               </div>
-              <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${
-                getCitasDia(diaActivo).length > 0 ? 'bg-emerald-50 text-emerald-600' : 'bg-slate-100 text-slate-400'
+
+              <span className={`rounded-2xl px-3 py-1 text-xs font-black ${
+                getCitasDia(diaActivo).length > 0
+                  ? 'bg-[#00CCA5]/10 text-[#008f78]'
+                  : 'bg-slate-100 text-slate-400'
               }`}>
                 {getCitasDia(diaActivo).length} cita{getCitasDia(diaActivo).length !== 1 ? 's' : ''}
               </span>
             </div>
+
             {loading ? (
-              <div className="flex items-center justify-center py-10 gap-3">
-                <div className="w-6 h-6 border-2 border-emerald-500 border-t-transparent rounded-full animate-spin" />
-                <p className="text-slate-400 text-sm">Cargando...</p>
+              <div className="flex flex-col items-center justify-center gap-3 py-12">
+                <div className="h-8 w-8 animate-spin rounded-full border-2 border-[#00CCA5] border-t-transparent" />
+                <p className="text-sm text-slate-400">Cargando agenda...</p>
               </div>
             ) : (
               <VistaDiaContenido dia={diaActivo} />
@@ -313,37 +454,66 @@ export default function Agenda() {
         </div>
 
         {/* ── DESKTOP: calendario semanal ── */}
-        <div className="hidden md:block bg-white rounded-2xl border border-slate-100 overflow-hidden">
-
+        <div className="hidden overflow-hidden rounded-[2rem] border border-slate-200/80 bg-white shadow-sm md:block">
           {/* Cabecera días */}
           <div className="grid grid-cols-7 border-b border-slate-100">
             {diasSemana.map((dia, i) => {
               const esHoyDia   = esMismaFecha(dia, hoy)
               const citasDia   = getCitasDia(dia)
               const bloqueoDia = getBloqueoDelDia(dia)
+
               return (
-                <div key={i}
-                  className={`px-3 py-3 text-center border-r last:border-r-0 border-slate-100 cursor-pointer hover:bg-slate-50 transition-all
-                    ${bloqueoDia ? 'bg-red-50/60' : esHoyDia ? 'bg-emerald-50' : ''}`}
-                  onClick={() => { setDiaActivo(dia); setVistaActiva('dia') }}
+                <div
+                  key={i}
+                  className={`cursor-pointer border-r border-slate-100 px-3 py-4 text-center transition-all last:border-r-0 hover:bg-slate-50
+                    ${bloqueoDia ? 'bg-red-50/70' : esHoyDia ? 'bg-[#00CCA5]/10' : 'bg-white'}`}
+                  onClick={() => {
+                    setDiaActivo(dia)
+                    setVistaActiva('dia')
+                  }}
                 >
-                  <p className={`text-xs font-semibold uppercase tracking-wider mb-1
-                    ${esHoyDia ? 'text-emerald-600' : bloqueoDia ? 'text-red-400' : 'text-slate-400'}`}>
+                  <p
+                    className={`mb-1 text-xs font-black uppercase tracking-[0.14em] ${
+                      esHoyDia
+                        ? 'text-[#008f78]'
+                        : bloqueoDia
+                          ? 'text-red-500'
+                          : 'text-slate-400'
+                    }`}
+                  >
                     {DIAS[i]}
                   </p>
-                  <p className={`text-lg font-bold
-                    ${esHoyDia ? 'text-emerald-600' : bloqueoDia ? 'text-red-400' : 'text-slate-700'}`}>
+
+                  <p
+                    className={`text-2xl font-black ${
+                      esHoyDia
+                        ? 'text-[#008f78]'
+                        : bloqueoDia
+                          ? 'text-red-500'
+                          : 'text-slate-800'
+                    }`}
+                  >
                     {dia.getDate()}
                   </p>
-                  <p className="text-xs text-slate-400 mt-0.5">{formatFechaHeader(dia).split(' ')[1]}</p>
+
+                  <p className="mt-0.5 text-xs font-bold text-slate-400">
+                    {formatFechaHeader(dia).split(' ')[1]}
+                  </p>
+
                   {bloqueoDia ? (
-                    <div className="mt-1.5 flex justify-center">
-                      <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-red-100 text-red-500">Bloqueado</span>
+                    <div className="mt-2 flex justify-center">
+                      <span className="rounded-full bg-red-100 px-2.5 py-1 text-[10px] font-black text-red-600">
+                        Bloqueado
+                      </span>
                     </div>
                   ) : citasDia.length > 0 && (
-                    <div className="mt-1.5 flex justify-center">
-                      <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${esHoyDia ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-600'}`}>
-                        {citasDia.length}
+                    <div className="mt-2 flex justify-center">
+                      <span className={`rounded-full px-2.5 py-1 text-[10px] font-black ${
+                        esHoyDia
+                          ? 'bg-[#00CCA5]/15 text-[#008f78]'
+                          : 'bg-slate-100 text-slate-600'
+                      }`}>
+                        {citasDia.length} cita{citasDia.length !== 1 ? 's' : ''}
                       </span>
                     </div>
                   )}
@@ -354,66 +524,90 @@ export default function Agenda() {
 
           {/* Cuerpo citas por día */}
           {loading ? (
-            <div className="flex flex-col items-center justify-center py-16 gap-3">
-              <div className="w-8 h-8 border-2 border-emerald-500 border-t-transparent rounded-full animate-spin" />
-              <p className="text-slate-400 text-sm">Cargando agenda...</p>
+            <div className="flex flex-col items-center justify-center gap-3 py-16">
+              <div className="h-9 w-9 animate-spin rounded-full border-2 border-[#00CCA5] border-t-transparent" />
+              <p className="text-sm text-slate-400">Cargando agenda...</p>
             </div>
           ) : (
-            <div className="grid grid-cols-7 min-h-[400px]">
+            <div className="grid min-h-[420px] grid-cols-7">
               {diasSemana.map((dia, i) => {
                 const citasDia   = getCitasDia(dia)
                 const esHoyDia   = esMismaFecha(dia, hoy)
                 const bloqueoDia = getBloqueoDelDia(dia)
+
                 return (
-                  <div key={i}
-                    className={`border-r last:border-r-0 border-slate-100 p-2 min-h-[400px]
-                      ${esHoyDia ? 'bg-emerald-50/30' : ''}
-                      ${bloqueoDia ? 'bg-red-50/20' : ''}`}>
+                  <div
+                    key={i}
+                    className={`min-h-[420px] border-r border-slate-100 p-2.5 last:border-r-0
+                      ${esHoyDia ? 'bg-[#00CCA5]/5' : ''}
+                      ${bloqueoDia ? 'bg-red-50/20' : ''}`}
+                  >
                     {bloqueoDia ? (
-                      <div className="h-full flex flex-col items-center justify-center gap-2 px-1">
-                        <div className="w-8 h-8 bg-red-100 rounded-xl flex items-center justify-center">
-                          <span className="text-red-400 text-sm">✕</span>
+                      <div className="flex h-full flex-col items-center justify-center gap-2 px-1">
+                        <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-red-100">
+                          <span className="text-sm font-black text-red-500">✕</span>
                         </div>
-                        <p className="text-red-400 text-xs font-medium text-center leading-tight">
+
+                        <p className="text-center text-xs font-bold leading-tight text-red-500">
                           {bloqueoDia.motivo || 'No disponible'}
                         </p>
                       </div>
                     ) : citasDia.length === 0 ? (
-                      <div className="h-full flex items-center justify-center">
-                        <p className="text-slate-300 text-xs text-center">Sin citas</p>
+                      <div className="flex h-full items-center justify-center">
+                        <p className="text-center text-xs font-bold text-slate-300">
+                          Sin citas
+                        </p>
                       </div>
                     ) : (
-                      <div className="space-y-1.5">
+                      <div className="space-y-2">
                         {citasDia.map((cita) => {
-                          const cfg = estadoColors[cita.estado]
+                          const cfg = estadoColors[cita.estado] || estadoColors.CONFIRMADA
+
                           return (
                             <motion.button
                               key={cita.id}
                               initial={{ opacity: 0, y: 4 }}
                               animate={{ opacity: 1, y: 0 }}
-                              onClick={() => { setCitaSeleccionada(cita); setModalVer(true) }}
-                              className={`w-full text-left p-2 rounded-xl border ${cfg.bg} ${cfg.border} hover:shadow-sm transition-all group`}
+                              onClick={() => {
+                                setCitaSeleccionada(cita)
+                                setModalVer(true)
+                              }}
+                              className={`group w-full rounded-2xl border p-3 text-left transition-all hover:-translate-y-0.5 hover:shadow-sm ${cfg.bg} ${cfg.border}`}
                             >
-                              <div className="flex items-center gap-1 mb-1">
-                                <span className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${cfg.dot}`} />
-                                <span className={`text-xs font-bold ${cfg.text}`}>{formatHora(cita.fecha)}</span>
+                              <div className="mb-1.5 flex items-center gap-1.5">
+                                <span className={`h-2 w-2 flex-shrink-0 rounded-full ${cfg.dot}`} />
+                                <span className={`font-mono text-xs font-black ${cfg.text}`}>
+                                  {formatHora(cita.fecha)}
+                                </span>
                               </div>
-                              <p className="text-xs text-slate-700 font-medium leading-tight truncate">
+
+                              <p className="truncate text-xs font-black leading-tight text-slate-800">
                                 {cita.paciente.usuario.nombre} {cita.paciente.usuario.apellido}
                               </p>
-                              <p className="text-xs text-slate-400 truncate mt-0.5">{cita.servicio.nombre}</p>
+
+                              <p className="mt-0.5 truncate text-xs font-medium text-slate-500">
+                                {cita.servicio.nombre}
+                              </p>
+
                               {cita.estado !== 'COMPLETADA' && cita.estado !== 'CANCELADA' && !cita.nota && (
                                 <div
                                   role="button"
-                                  onClick={(e) => { e.stopPropagation(); setCitaSeleccionada(cita); setModalNota(true) }}
-                                  className="mt-1.5 flex items-center gap-1 text-xs text-slate-400 hover:text-emerald-600 transition-colors opacity-0 group-hover:opacity-100 cursor-pointer"
+                                  onClick={(e) => {
+                                    e.stopPropagation()
+                                    setCitaSeleccionada(cita)
+                                    setModalNota(true)
+                                  }}
+                                  className="mt-2 flex cursor-pointer items-center gap-1 text-xs font-bold text-slate-400 opacity-0 transition hover:text-[#008f78] group-hover:opacity-100"
                                 >
-                                  <FileText size={10} /> Nota
+                                  <FileText size={11} />
+                                  Nota
                                 </div>
                               )}
+
                               {cita.nota && (
-                                <span className="mt-1 inline-flex items-center gap-0.5 text-xs text-emerald-600">
-                                  <FileText size={10} /> ✓
+                                <span className="mt-2 inline-flex items-center gap-1 rounded-full bg-[#00CCA5]/10 px-2 py-1 text-[10px] font-black text-[#008f78]">
+                                  <FileText size={10} />
+                                  Nota
                                 </span>
                               )}
                             </motion.button>
@@ -436,21 +630,37 @@ export default function Agenda() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 16 }}
               transition={{ duration: 0.2 }}
-              className="hidden md:block mt-5 bg-white rounded-2xl border border-slate-100 overflow-hidden"
+              className="mt-5 hidden overflow-hidden rounded-[2rem] border border-slate-200/80 bg-white shadow-sm md:block"
             >
-              <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100">
-                <div className="flex items-center gap-2">
-                  <Calendar size={16} className="text-emerald-500" />
-                  <p className="text-sm font-semibold text-slate-700">
-                    {DIAS_FULL[diaActivo.getDay() === 0 ? 6 : diaActivo.getDay() - 1]},{' '}
-                    {diaActivo.toLocaleDateString('es-PE', { day: 'numeric', month: 'long', year: 'numeric' })}
-                  </p>
+              <div className="flex items-center justify-between border-b border-slate-100 px-6 py-5">
+                <div className="flex items-center gap-3">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-[#00CCA5]/10">
+                    <Calendar size={17} className="text-[#008f78]" />
+                  </div>
+
+                  <div>
+                    <p className="text-sm font-black text-slate-900">
+                      {DIAS_FULL[diaActivo.getDay() === 0 ? 6 : diaActivo.getDay() - 1]},{' '}
+                      {diaActivo.toLocaleDateString('es-PE', {
+                        day: 'numeric',
+                        month: 'long',
+                        year: 'numeric'
+                      })}
+                    </p>
+                    <p className="text-xs text-slate-400">
+                      Detalle de citas del día seleccionado.
+                    </p>
+                  </div>
                 </div>
-                <button onClick={() => setVistaActiva('semana')}
-                  className="text-xs text-slate-400 hover:text-slate-600 transition-colors px-3 py-1.5 rounded-lg hover:bg-slate-50">
+
+                <button
+                  onClick={() => setVistaActiva('semana')}
+                  className="rounded-xl px-3 py-1.5 text-xs font-black text-slate-400 transition hover:bg-slate-50 hover:text-slate-700"
+                >
                   Cerrar
                 </button>
               </div>
+
               <VistaDiaContenido dia={diaActivo} />
             </motion.div>
           )}
@@ -459,18 +669,25 @@ export default function Agenda() {
         {/* Modales */}
         <AnimatePresence>
           {modalVer && citaSeleccionada && (
-            <ModalVerCita citaId={citaSeleccionada.id} onClose={() => setModalVer(false)} />
-          )}
-        </AnimatePresence>
-        <AnimatePresence>
-          {modalNota && citaSeleccionada && (
-            <ModalNotaCita cita={citaSeleccionada} onClose={() => setModalNota(false)} onSuccess={() => {
-              fetchCitas()
-              toast.success('Nota clínica guardada correctamente')
-            }} />
+            <ModalVerCita
+              citaId={citaSeleccionada.id}
+              onClose={() => setModalVer(false)}
+            />
           )}
         </AnimatePresence>
 
+        <AnimatePresence>
+          {modalNota && citaSeleccionada && (
+            <ModalNotaCita
+              cita={citaSeleccionada}
+              onClose={() => setModalNota(false)}
+              onSuccess={() => {
+                fetchCitas()
+                toast.success('Nota clínica guardada correctamente')
+              }}
+            />
+          )}
+        </AnimatePresence>
       </div>
     </DoctorLayout>
   )

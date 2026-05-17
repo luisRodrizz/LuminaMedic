@@ -1,15 +1,48 @@
 import { useState, useEffect } from 'react'
 import { toast } from 'sonner'
-import { Calendar, Clock, CheckCircle, ArrowUpRight, Users, TrendingUp } from 'lucide-react'
+import {
+  Calendar,
+  Clock,
+  CheckCircle,
+  ArrowUpRight,
+  Users,
+  TrendingUp,
+  Activity,
+  Wallet,
+  Stethoscope
+} from 'lucide-react'
 import DoctorLayout from '../../../components/DoctorLayout'
 import api from '../../../services/api'
 import { useAuth } from '../../../context/AuthContext'
 
+const BRAND = {
+  primary: '#000089',
+  accent: '#00CCA5',
+  accentDark: '#008f78',
+  sky: '#0EA5E9'
+}
+
 const estadoColors = {
-  PENDIENTE:  { bg: 'bg-yellow-50',  text: 'text-yellow-700',  dot: 'bg-yellow-400' },
-  CONFIRMADA: { bg: 'bg-blue-50',    text: 'text-blue-700',    dot: 'bg-blue-400'   },
-  COMPLETADA: { bg: 'bg-emerald-50', text: 'text-emerald-700', dot: 'bg-emerald-400'},
-  CANCELADA:  { bg: 'bg-red-50',     text: 'text-red-700',     dot: 'bg-red-400'    },
+  PENDIENTE: {
+    bg: 'bg-amber-50',
+    text: 'text-amber-700',
+    dot: 'bg-amber-400'
+  },
+  CONFIRMADA: {
+    bg: 'bg-[#000089]/10',
+    text: 'text-[#000089]',
+    dot: 'bg-[#000089]'
+  },
+  COMPLETADA: {
+    bg: 'bg-[#00CCA5]/10',
+    text: 'text-[#008f78]',
+    dot: 'bg-[#00CCA5]'
+  },
+  CANCELADA: {
+    bg: 'bg-red-50',
+    text: 'text-red-700',
+    dot: 'bg-red-500'
+  }
 }
 
 const getHora = () => {
@@ -20,37 +53,56 @@ const getHora = () => {
 }
 
 const formatFecha = (fecha) => new Date(fecha).toLocaleString('es-PE', {
-  day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit'
+  day: '2-digit',
+  month: '2-digit',
+  year: 'numeric',
+  hour: '2-digit',
+  minute: '2-digit'
 })
 
 const formatHora = (fecha) => new Date(fecha).toLocaleTimeString('es-PE', {
-  hour: '2-digit', minute: '2-digit'
+  hour: '2-digit',
+  minute: '2-digit'
 })
 
 const AvatarPaciente = ({ paciente }) => {
   const nombre = paciente.usuario.nombre
   const apellido = paciente.usuario.apellido
+
   return (
-    <div className="w-9 h-9 bg-indigo-50 rounded-xl flex items-center justify-center flex-shrink-0 overflow-hidden">
+    <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center overflow-hidden rounded-2xl border border-[#00CCA5]/20 bg-[#00CCA5]/10">
       {paciente.foto ? (
-        <img src={paciente.foto} alt="" className="w-full h-full object-cover"
+        <img
+          src={paciente.foto}
+          alt=""
+          className="h-full w-full object-cover"
           onError={(e) => {
             e.target.style.display = 'none'
-            e.target.parentNode.innerHTML = `<span class="text-indigo-600 text-xs font-bold">${nombre[0]}${apellido[0]}</span>`
-          }} />
+            e.target.parentNode.innerHTML = `<span class="text-[#008f78] text-xs font-black">${nombre[0]}${apellido[0]}</span>`
+          }}
+        />
       ) : (
-        <span className="text-indigo-600 text-xs font-bold">{nombre[0]}{apellido[0]}</span>
+        <span className="text-xs font-black text-[#008f78]">
+          {nombre[0]}
+          {apellido[0]}
+        </span>
       )}
     </div>
   )
 }
 
 const EmptyState = ({ mensaje }) => (
-  <div className="flex flex-col items-center justify-center py-10 gap-3">
-    <div className="w-12 h-12 bg-slate-100 rounded-2xl flex items-center justify-center">
-      <Calendar size={20} className="text-slate-400" />
+  <div className="flex flex-col items-center justify-center gap-3 px-6 py-14">
+    <div className="flex h-14 w-14 items-center justify-center rounded-3xl bg-slate-100">
+      <Calendar size={22} className="text-slate-400" />
     </div>
-    <p className="text-slate-400 text-sm">{mensaje}</p>
+
+    <div className="text-center">
+      <p className="text-sm font-black text-slate-700">{mensaje}</p>
+      <p className="mt-1 text-xs text-slate-400">
+        Cuando existan registros disponibles, aparecerán aquí.
+      </p>
+    </div>
   </div>
 )
 
@@ -70,160 +122,232 @@ export default function DoctorDashboard() {
         setLoading(false)
       }
     }
+
     fetchStats()
   }, [])
 
   const tarjetas = [
-    { label: 'Citas hoy',        value: stats?.citasHoy?.length         ?? '—', icon: Calendar,    iconBg: 'bg-blue-500'    },
-    { label: 'Pendientes',       value: stats?.resumen?.totalPendientes  ?? '—', icon: Clock,       iconBg: 'bg-yellow-500'  },
-    { label: 'Completadas',      value: stats?.resumen?.totalCompletadas ?? '—', icon: CheckCircle, iconBg: 'bg-emerald-500' },
-    { label: 'Pacientes únicos', value: stats?.resumen?.pacientesUnicos  ?? '—', icon: Users,       iconBg: 'bg-indigo-500'  },
+    {
+      label: 'Citas hoy',
+      value: stats?.citasHoy?.length ?? '—',
+      icon: Calendar,
+      iconBg: 'bg-[#000089]',
+      softBg: 'bg-[#000089]/10',
+      iconText: 'text-[#000089]',
+      trend: 'Agenda del día'
+    },
+    {
+      label: 'Pendientes',
+      value: stats?.resumen?.totalPendientes ?? '—',
+      icon: Clock,
+      iconBg: 'bg-amber-500',
+      softBg: 'bg-amber-50',
+      iconText: 'text-amber-600',
+      trend: 'Por confirmar o atender'
+    },
+    {
+      label: 'Completadas',
+      value: stats?.resumen?.totalCompletadas ?? '—',
+      icon: CheckCircle,
+      iconBg: 'bg-[#00A98A]',
+      softBg: 'bg-[#00CCA5]/10',
+      iconText: 'text-[#008f78]',
+      trend: 'Atenciones realizadas'
+    },
+    {
+      label: 'Pacientes únicos',
+      value: stats?.resumen?.pacientesUnicos ?? '—',
+      icon: Users,
+      iconBg: 'bg-[#0EA5E9]',
+      softBg: 'bg-sky-50',
+      iconText: 'text-sky-600',
+      trend: 'Pacientes atendidos'
+    }
   ]
 
   return (
     <DoctorLayout>
       <div className="page-enter">
-
         {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
+        <div className="mb-6 flex flex-col gap-4 md:mb-8 lg:flex-row lg:items-end lg:justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-slate-800 tracking-tight">
+            <h1 className="text-2xl font-black tracking-tight text-slate-950 md:text-3xl">
               {getHora()}, Dr. {user?.nombre}
             </h1>
-            <p className="text-slate-400 text-sm mt-1">Aquí está el resumen de tu agenda</p>
+
+            <p className="mt-1 text-sm text-slate-400">
+              Resumen operativo de tu agenda médica y atenciones asignadas.
+            </p>
           </div>
+
           {stats && (
-            <div className="flex items-center gap-2 bg-emerald-50 border border-emerald-100 px-4 py-2.5 rounded-2xl self-start sm:self-auto">
-              <TrendingUp size={15} className="text-emerald-600" />
-              <div>
-                <p className="text-xs text-emerald-600 font-medium">Tasa de asistencia</p>
-                <p className="text-lg font-bold text-emerald-700">{stats.resumen.tasaAsistencia}%</p>
+            <div className="rounded-3xl border border-[#00CCA5]/20 bg-[#00CCA5]/10 px-5 py-4 shadow-sm">
+              <div className="flex items-center gap-3">
+                <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-white shadow-sm">
+                  <TrendingUp size={18} className="text-[#008f78]" />
+                </div>
+
+                <div>
+                  <p className="text-xs font-black uppercase tracking-[0.12em] text-[#008f78]">
+                    Tasa de asistencia
+                  </p>
+                  <p className="text-2xl font-black leading-tight text-[#008f78]">
+                    {stats.resumen.tasaAsistencia}%
+                  </p>
+                </div>
               </div>
             </div>
           )}
         </div>
 
         {/* Tarjetas */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+        <div className="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
           {tarjetas.map((t, i) => (
-            <div key={i} className="bg-white rounded-2xl border border-slate-100 p-4 md:p-5 flex items-center gap-3 md:gap-4 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200">
-              <div className={`w-10 h-10 md:w-11 md:h-11 ${t.iconBg} rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm`}>
-                <t.icon size={17} className="text-white" />
+            <div
+              key={i}
+              className="group flex items-center gap-4 rounded-3xl border border-slate-200/70 bg-white p-5 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_18px_50px_rgba(15,23,42,0.08)]"
+            >
+              <div
+                className={`flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-2xl ${t.iconBg} shadow-lg shadow-slate-200/80`}
+              >
+                <t.icon size={20} className="text-white" />
               </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-slate-400 text-xs truncate">{t.label}</p>
-                <p className="text-xl md:text-2xl font-bold text-slate-800">{loading ? '—' : t.value}</p>
+
+              <div className="min-w-0 flex-1">
+                <p className="truncate text-xs font-bold text-slate-400">
+                  {t.label}
+                </p>
+
+                <p className="text-2xl font-black leading-tight text-slate-900">
+                  {loading ? '—' : t.value}
+                </p>
+
+                <p className="mt-0.5 text-xs text-slate-400">{t.trend}</p>
               </div>
-              <ArrowUpRight size={15} className="text-slate-300 flex-shrink-0 hidden sm:block" />
+
+              <div
+                className={`hidden h-8 w-8 flex-shrink-0 items-center justify-center rounded-xl ${t.softBg} opacity-70 transition group-hover:opacity-100 sm:flex`}
+              >
+                <ArrowUpRight size={15} className={t.iconText} />
+              </div>
             </div>
           ))}
         </div>
 
         {/* Stats del mes */}
         {stats && (
-          <div className="grid grid-cols-3 gap-3 md:gap-4 mb-6">
+          <div className="mb-6 grid grid-cols-1 gap-4 md:grid-cols-3">
             {[
-              { label: 'Citas este mes',     value: stats.mes.total,       color: 'text-slate-800'   },
-              { label: 'Completadas el mes', value: stats.mes.completadas, color: 'text-emerald-600' },
-              { label: 'Ingresos del mes',   value: `S/ ${stats.resumen.ingresosMes.toFixed(2)}`, color: 'text-blue-600' },
+              {
+                label: 'Citas este mes',
+                value: stats.mes.total,
+                icon: Activity,
+                bg: 'bg-[#000089]/10',
+                text: 'text-[#000089]'
+              },
+              {
+                label: 'Completadas el mes',
+                value: stats.mes.completadas,
+                icon: CheckCircle,
+                bg: 'bg-[#00CCA5]/10',
+                text: 'text-[#008f78]'
+              },
+              {
+                label: 'Ingresos del mes',
+                value: `S/ ${stats.resumen.ingresosMes.toFixed(2)}`,
+                icon: Wallet,
+                bg: 'bg-sky-50',
+                text: 'text-sky-600'
+              }
             ].map((s, i) => (
-              <div key={i} className="bg-white rounded-2xl border border-slate-100 px-4 py-3 md:px-5 md:py-4">
-                <p className="text-xs text-slate-400 mb-1 truncate">{s.label}</p>
-                <p className={`text-lg md:text-xl font-bold ${s.color} truncate`}>{s.value}</p>
+              <div
+                key={i}
+                className="flex items-center justify-between rounded-3xl border border-slate-200/70 bg-white px-5 py-4 shadow-sm"
+              >
+                <div className="min-w-0">
+                  <p className="truncate text-xs font-bold text-slate-400">
+                    {s.label}
+                  </p>
+                  <p className={`mt-1 truncate text-xl font-black ${s.text}`}>
+                    {s.value}
+                  </p>
+                </div>
+
+                <div className={`flex h-10 w-10 items-center justify-center rounded-2xl ${s.bg}`}>
+                  <s.icon size={17} className={s.text} />
+                </div>
               </div>
             ))}
           </div>
         )}
 
-        <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
-
+        <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
           {/* Citas de hoy */}
-          <div className="bg-white rounded-2xl border border-slate-100 overflow-hidden">
-            <div className="flex items-center justify-between px-4 md:px-6 py-4 border-b border-slate-100">
-              <div className="flex items-center gap-2">
-                <div className="w-7 h-7 bg-blue-50 rounded-lg flex items-center justify-center">
-                  <Clock size={13} className="text-blue-600" />
+          <div className="overflow-hidden rounded-[28px] border border-slate-200/80 bg-white shadow-sm">
+            <div className="flex items-center justify-between border-b border-slate-100 px-5 py-5 md:px-6">
+              <div className="flex items-center gap-3">
+                <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#000089]/10">
+                  <Clock size={18} className="text-[#000089]" />
                 </div>
-                <p className="text-sm font-semibold text-slate-700">Citas de hoy</p>
+
+                <div>
+                  <p className="text-base font-black text-slate-900">
+                    Citas de hoy
+                  </p>
+                  <p className="text-xs capitalize text-slate-400">
+                    {new Date().toLocaleDateString('es-PE', {
+                      weekday: 'long',
+                      day: 'numeric',
+                      month: 'long'
+                    })}
+                  </p>
+                </div>
               </div>
-              <span className="text-xs text-slate-400">
-                {new Date().toLocaleDateString('es-PE', { day: 'numeric', month: 'long' })}
+
+              <span className="rounded-full bg-[#000089]/10 px-3 py-1 text-xs font-black text-[#000089]">
+                {stats?.citasHoy?.length ?? 0}
               </span>
             </div>
+
             {loading ? (
-              <div className="flex items-center justify-center py-10">
-                <div className="w-6 h-6 border-2 border-emerald-500 border-t-transparent rounded-full animate-spin" />
+              <div className="flex flex-col items-center justify-center gap-3 py-16">
+                <div className="h-9 w-9 animate-spin rounded-full border-2 border-[#00CCA5] border-t-transparent" />
+                <p className="text-sm text-slate-400">Cargando citas...</p>
               </div>
             ) : stats?.citasHoy?.length === 0 ? (
               <EmptyState mensaje="Sin citas para hoy" />
             ) : (
-              <div className="divide-y divide-slate-50">
-                {stats?.citasHoy?.map(cita => (
-                  <div key={cita.id} className="flex items-center justify-between px-4 md:px-6 py-4 hover:bg-slate-50/70 transition-colors">
-                    <div className="flex items-center gap-3 min-w-0">
-                      <div className="w-10 h-10 bg-blue-50 rounded-xl flex items-center justify-center flex-shrink-0">
-                        <span className="text-blue-600 text-xs font-bold font-mono">{formatHora(cita.fecha)}</span>
-                      </div>
-                      <div className="min-w-0">
-                        <p className="font-medium text-slate-800 text-sm truncate">
-                          {cita.paciente.usuario.nombre} {cita.paciente.usuario.apellido}
-                        </p>
-                        <p className="text-xs text-slate-400 mt-0.5 truncate">{cita.servicio.nombre}</p>
-                      </div>
-                    </div>
-                    {(() => {
-                      const cfg = estadoColors[cita.estado]
-                      return (
-                        <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-medium flex-shrink-0 ml-2 ${cfg.bg} ${cfg.text}`}>
-                          <span className={`w-1.5 h-1.5 rounded-full ${cfg.dot}`} />
-                          <span className="hidden sm:inline">{cita.estado}</span>
-                        </span>
-                      )
-                    })()}
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
+              <div className="divide-y divide-slate-100">
+                {stats?.citasHoy?.map((cita) => {
+                  const cfg = estadoColors[cita.estado] || estadoColors.CONFIRMADA
 
-          {/* Próximas citas */}
-          <div className="bg-white rounded-2xl border border-slate-100 overflow-hidden">
-            <div className="flex items-center justify-between px-4 md:px-6 py-4 border-b border-slate-100">
-              <div className="flex items-center gap-2">
-                <div className="w-7 h-7 bg-emerald-50 rounded-lg flex items-center justify-center">
-                  <Calendar size={13} className="text-emerald-600" />
-                </div>
-                <p className="text-sm font-semibold text-slate-700">Próximas citas</p>
-              </div>
-              <p className="text-xs text-slate-400">
-                {stats?.proximasCitas?.length ?? 0} próxima{stats?.proximasCitas?.length !== 1 ? 's' : ''}
-              </p>
-            </div>
-            {loading ? (
-              <div className="flex items-center justify-center py-10">
-                <div className="w-6 h-6 border-2 border-emerald-500 border-t-transparent rounded-full animate-spin" />
-              </div>
-            ) : stats?.proximasCitas?.length === 0 ? (
-              <EmptyState mensaje="No hay citas próximas" />
-            ) : (
-              <div className="divide-y divide-slate-50">
-                {stats?.proximasCitas?.map(cita => {
-                  const cfg = estadoColors[cita.estado]
                   return (
-                    <div key={cita.id} className="flex items-center justify-between px-4 md:px-6 py-4 hover:bg-slate-50/70 transition-colors">
-                      <div className="flex items-center gap-3 min-w-0">
-                        <AvatarPaciente paciente={cita.paciente} />
+                    <div
+                      key={cita.id}
+                      className="flex items-center justify-between gap-4 px-5 py-4 transition hover:bg-slate-50/70 md:px-6"
+                    >
+                      <div className="flex min-w-0 items-center gap-3">
+                        <div className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-2xl bg-slate-100">
+                          <span className="font-mono text-xs font-black text-slate-700">
+                            {formatHora(cita.fecha)}
+                          </span>
+                        </div>
+
                         <div className="min-w-0">
-                          <p className="font-medium text-slate-800 text-sm truncate">
-                            {cita.paciente.usuario.nombre} {cita.paciente.usuario.apellido}
+                          <p className="truncate text-sm font-black text-slate-800">
+                            {cita.paciente.usuario.nombre}{' '}
+                            {cita.paciente.usuario.apellido}
                           </p>
-                          <p className="text-xs text-slate-400 mt-0.5 truncate">
-                            {cita.servicio.nombre} · {formatFecha(cita.fecha)}
+                          <p className="mt-0.5 truncate text-xs text-slate-400">
+                            {cita.servicio.nombre}
                           </p>
                         </div>
                       </div>
-                      <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-medium flex-shrink-0 ml-2 ${cfg.bg} ${cfg.text}`}>
-                        <span className={`w-1.5 h-1.5 rounded-full ${cfg.dot}`} />
+
+                      <span
+                        className={`inline-flex flex-shrink-0 items-center gap-2 rounded-2xl px-3 py-1.5 text-xs font-black ${cfg.bg} ${cfg.text}`}
+                      >
+                        <span className={`h-2 w-2 rounded-full ${cfg.dot}`} />
                         <span className="hidden sm:inline">{cita.estado}</span>
                       </span>
                     </div>
@@ -233,6 +357,72 @@ export default function DoctorDashboard() {
             )}
           </div>
 
+          {/* Próximas citas */}
+          <div className="overflow-hidden rounded-[28px] border border-slate-200/80 bg-white shadow-sm">
+            <div className="flex items-center justify-between border-b border-slate-100 px-5 py-5 md:px-6">
+              <div className="flex items-center gap-3">
+                <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#00CCA5]/10">
+                  <Calendar size={18} className="text-[#008f78]" />
+                </div>
+
+                <div>
+                  <p className="text-base font-black text-slate-900">
+                    Próximas citas
+                  </p>
+                  <p className="text-xs text-slate-400">
+                    Agenda médica programada
+                  </p>
+                </div>
+              </div>
+
+              <span className="rounded-full bg-[#00CCA5]/10 px-3 py-1 text-xs font-black text-[#008f78]">
+                {stats?.proximasCitas?.length ?? 0} próxima{stats?.proximasCitas?.length !== 1 ? 's' : ''}
+              </span>
+            </div>
+
+            {loading ? (
+              <div className="flex flex-col items-center justify-center gap-3 py-16">
+                <div className="h-9 w-9 animate-spin rounded-full border-2 border-[#00CCA5] border-t-transparent" />
+                <p className="text-sm text-slate-400">Cargando próximas citas...</p>
+              </div>
+            ) : stats?.proximasCitas?.length === 0 ? (
+              <EmptyState mensaje="No hay citas próximas" />
+            ) : (
+              <div className="divide-y divide-slate-100">
+                {stats?.proximasCitas?.map((cita) => {
+                  const cfg = estadoColors[cita.estado] || estadoColors.CONFIRMADA
+
+                  return (
+                    <div
+                      key={cita.id}
+                      className="flex items-center justify-between gap-4 px-5 py-4 transition hover:bg-slate-50/70 md:px-6"
+                    >
+                      <div className="flex min-w-0 items-center gap-3">
+                        <AvatarPaciente paciente={cita.paciente} />
+
+                        <div className="min-w-0">
+                          <p className="truncate text-sm font-black text-slate-800">
+                            {cita.paciente.usuario.nombre}{' '}
+                            {cita.paciente.usuario.apellido}
+                          </p>
+                          <p className="mt-0.5 truncate text-xs text-slate-400">
+                            {cita.servicio.nombre} · {formatFecha(cita.fecha)}
+                          </p>
+                        </div>
+                      </div>
+
+                      <span
+                        className={`inline-flex flex-shrink-0 items-center gap-2 rounded-2xl px-3 py-1.5 text-xs font-black ${cfg.bg} ${cfg.text}`}
+                      >
+                        <span className={`h-2 w-2 rounded-full ${cfg.dot}`} />
+                        <span className="hidden sm:inline">{cita.estado}</span>
+                      </span>
+                    </div>
+                  )
+                })}
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </DoctorLayout>

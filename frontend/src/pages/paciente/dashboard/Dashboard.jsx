@@ -7,10 +7,26 @@ import { useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
 
 const estadoColors = {
-  PENDIENTE:  { bg: 'bg-yellow-50',  text: 'text-yellow-700',  dot: 'bg-yellow-400' },
-  CONFIRMADA: { bg: 'bg-blue-50',    text: 'text-blue-700',    dot: 'bg-blue-400'   },
-  COMPLETADA: { bg: 'bg-emerald-50', text: 'text-emerald-700', dot: 'bg-emerald-400'},
-  CANCELADA:  { bg: 'bg-red-50',     text: 'text-red-700',     dot: 'bg-red-400'    },
+  PENDIENTE: {
+    bg: 'bg-amber-50',
+    text: 'text-amber-700',
+    dot: 'bg-amber-400'
+  },
+  CONFIRMADA: {
+    bg: 'bg-[#000089]/10',
+    text: 'text-[#000089]',
+    dot: 'bg-[#000089]'
+  },
+  COMPLETADA: {
+    bg: 'bg-[#00CCA5]/10',
+    text: 'text-[#008f78]',
+    dot: 'bg-[#00CCA5]'
+  },
+  CANCELADA: {
+    bg: 'bg-red-50',
+    text: 'text-red-700',
+    dot: 'bg-red-500'
+  },
 }
 
 const getHora = () => {
@@ -45,102 +61,201 @@ export default function PacienteDashboard() {
   }, [])
 
   const tarjetas = [
-    { label: 'Citas pendientes',      value: stats?.resumen?.totalPendientes  ?? '—', icon: Clock,       iconBg: 'bg-yellow-500' },
-    { label: 'Consultas completadas', value: stats?.resumen?.totalCompletadas ?? '—', icon: CheckCircle, iconBg: 'bg-emerald-500'},
-    { label: 'Total de citas',        value: stats?.resumen?.totalCitas       ?? '—', icon: Calendar,    iconBg: 'bg-blue-500'   },
-    { label: 'Doctores consultados',  value: stats?.resumen?.doctoresUnicos   ?? '—', icon: Users,       iconBg: 'bg-indigo-500' },
+    {
+      label: 'Citas pendientes',
+      value: stats?.resumen?.totalPendientes ?? '—',
+      icon: Clock,
+      iconBg: 'bg-amber-500',
+      soft: 'bg-amber-50',
+      text: 'text-amber-600',
+      sub: 'Por confirmar o atender'
+    },
+    {
+      label: 'Consultas completadas',
+      value: stats?.resumen?.totalCompletadas ?? '—',
+      icon: CheckCircle,
+      iconBg: 'bg-[#00A98A]',
+      soft: 'bg-[#00CCA5]/10',
+      text: 'text-[#008f78]',
+      sub: 'Atenciones finalizadas'
+    },
+    {
+      label: 'Total de citas',
+      value: stats?.resumen?.totalCitas ?? '—',
+      icon: Calendar,
+      iconBg: 'bg-[#000089]',
+      soft: 'bg-[#000089]/10',
+      text: 'text-[#000089]',
+      sub: 'Historial general'
+    },
+    {
+      label: 'Doctores consultados',
+      value: stats?.resumen?.doctoresUnicos ?? '—',
+      icon: Users,
+      iconBg: 'bg-[#0EA5E9]',
+      soft: 'bg-sky-50',
+      text: 'text-sky-600',
+      sub: 'Profesionales atendidos'
+    },
   ]
 
   return (
     <PacienteLayout>
       <div className="page-enter">
-
         {/* Header */}
-        <div className="flex items-center justify-between mb-6">
+        <div className="mb-8 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
           <div>
-            <h1 className="text-xl md:text-2xl font-bold text-slate-800 tracking-tight">
-              {getHora()}, {user?.nombre} 👋
+            <h1 className="text-2xl font-black tracking-tight text-slate-950 md:text-3xl">
+              {getHora()}, {user?.nombre}
             </h1>
-            <p className="text-slate-400 text-sm mt-1">Bienvenido a tu portal de salud</p>
+
+            <p className="mt-2 text-sm text-slate-400">
+              Bienvenido a tu portal de salud. Revisa tus citas, consultas y seguimiento médico.
+            </p>
           </div>
-          <button onClick={() => navigate('/paciente/citas')}
-            className="flex items-center gap-2 px-3 md:px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-sm font-medium transition-all shadow-sm hover:shadow-md flex-shrink-0">
-            <Plus size={16} />
-            <span className="hidden sm:inline">Agendar cita</span>
+
+          <button
+            onClick={() => navigate('/paciente/citas')}
+            className="flex h-11 w-fit items-center justify-center gap-2 rounded-xl bg-[#000089] px-5 text-sm font-black text-white shadow-lg shadow-[#000089]/20 transition hover:bg-[#000070] hover:ring-4 hover:ring-[#00CCA5]/15"
+          >
+            <Plus size={17} />
+            Agendar cita
           </button>
         </div>
 
         {/* Tarjetas */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+        <div className="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
           {tarjetas.map((t, i) => (
-            <div key={i} className="bg-white rounded-2xl border border-slate-100 p-4 md:p-5 flex items-center gap-3 md:gap-4 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200">
-              <div className={`w-10 h-10 md:w-11 md:h-11 ${t.iconBg} rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm`}>
-                <t.icon size={17} className="text-white" />
+            <div
+              key={i}
+              className="group rounded-3xl border border-slate-200/70 bg-white p-5 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_18px_50px_rgba(15,23,42,0.08)]"
+            >
+              <div className="mb-4 flex items-center justify-between gap-3">
+                <div className={`flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-2xl ${t.iconBg} shadow-lg shadow-slate-200/80`}>
+                  <t.icon size={20} className="text-white" />
+                </div>
+
+                <div className={`flex h-8 w-8 items-center justify-center rounded-xl ${t.soft}`}>
+                  <ArrowUpRight size={15} className={t.text} />
+                </div>
               </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-slate-400 text-xs truncate">{t.label}</p>
-                <p className="text-xl md:text-2xl font-bold text-slate-800">{loading ? '—' : t.value}</p>
-              </div>
-              <ArrowUpRight size={15} className="text-slate-300 flex-shrink-0 hidden sm:block" />
+
+              <p className="text-xs font-bold text-slate-400">
+                {t.label}
+              </p>
+
+              <p className="mt-1 text-3xl font-black leading-tight text-slate-900">
+                {loading ? '—' : t.value}
+              </p>
+
+              <p className="mt-1 truncate text-xs text-slate-400">
+                {t.sub}
+              </p>
             </div>
           ))}
         </div>
 
-        <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
-
+        <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
           {/* Próximas citas */}
-          <div className="bg-white rounded-2xl border border-slate-100 overflow-hidden">
-            <div className="flex items-center justify-between px-4 md:px-6 py-4 border-b border-slate-100">
-              <p className="text-sm font-semibold text-slate-700">Citas próximas</p>
-              <p className="text-xs text-slate-400">
+          <div className="overflow-hidden rounded-[2rem] border border-slate-200/80 bg-white shadow-sm">
+            <div className="flex flex-col gap-3 border-b border-slate-100 px-5 py-5 md:flex-row md:items-center md:justify-between md:px-6">
+              <div className="flex items-center gap-3">
+                <div className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-2xl bg-[#000089]/10">
+                  <Calendar size={18} className="text-[#000089]" />
+                </div>
+
+                <div>
+                  <p className="text-base font-black text-slate-900">
+                    Citas próximas
+                  </p>
+                  <p className="text-xs text-slate-400">
+                    Tus próximas atenciones programadas.
+                  </p>
+                </div>
+              </div>
+
+              <span className="w-fit rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-bold text-slate-500">
                 {stats?.proximasCitas?.length ?? 0} pendiente{stats?.proximasCitas?.length !== 1 ? 's' : ''}
-              </p>
+              </span>
             </div>
+
             {loading ? (
-              <div className="flex items-center justify-center py-12">
-                <div className="w-6 h-6 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
+              <div className="flex flex-col items-center justify-center gap-3 py-14">
+                <div className="h-8 w-8 animate-spin rounded-full border-2 border-[#00CCA5] border-t-transparent" />
+                <p className="text-sm text-slate-400">Cargando citas...</p>
               </div>
             ) : stats?.proximasCitas?.length === 0 ? (
-              <div className="flex flex-col items-center justify-center py-12 gap-3">
-                <div className="w-14 h-14 bg-slate-100 rounded-2xl flex items-center justify-center">
+              <div className="flex flex-col items-center justify-center gap-3 px-6 py-14">
+                <div className="flex h-14 w-14 items-center justify-center rounded-3xl bg-slate-100">
                   <Calendar size={24} className="text-slate-400" />
                 </div>
-                <p className="text-slate-500 font-medium text-sm">No tienes citas próximas</p>
-                <button onClick={() => navigate('/paciente/citas')}
-                  className="flex items-center gap-1.5 text-blue-600 text-sm font-medium hover:text-blue-700">
-                  <Plus size={14} /> Agendar una cita
+
+                <div className="text-center">
+                  <p className="text-sm font-black text-slate-700">
+                    No tienes citas próximas
+                  </p>
+                  <p className="mt-1 text-xs text-slate-400">
+                    Puedes agendar una nueva atención desde el módulo de citas.
+                  </p>
+                </div>
+
+                <button
+                  onClick={() => navigate('/paciente/citas')}
+                  className="mt-1 flex items-center gap-2 rounded-xl bg-[#000089] px-4 py-2 text-xs font-black text-white transition hover:bg-[#000070]"
+                >
+                  <Plus size={14} />
+                  Agendar una cita
                 </button>
               </div>
             ) : (
-              <div className="divide-y divide-slate-50">
+              <div className="divide-y divide-slate-100">
                 {stats.proximasCitas.map((cita, i) => {
-                  const cfg = estadoColors[cita.estado]
+                  const cfg = estadoColors[cita.estado] || estadoColors.CONFIRMADA
+
                   return (
-                    <div key={cita.id} className={`flex items-center justify-between px-4 md:px-6 py-4 hover:bg-slate-50/70 transition-colors ${i === 0 ? 'bg-blue-50/30' : ''}`}>
-                      <div className="flex items-center gap-3 min-w-0">
-                        <div className="w-9 h-9 bg-blue-50 rounded-xl flex items-center justify-center flex-shrink-0 overflow-hidden">
+                    <div
+                      key={cita.id}
+                      className={`flex items-center justify-between gap-4 px-5 py-4 transition-colors hover:bg-slate-50/70 md:px-6 ${
+                        i === 0 ? 'bg-[#00CCA5]/5' : ''
+                      }`}
+                    >
+                      <div className="flex min-w-0 items-center gap-3">
+                        <div className="flex h-11 w-11 flex-shrink-0 items-center justify-center overflow-hidden rounded-2xl border border-[#00CCA5]/20 bg-[#00CCA5]/10">
                           {cita.doctor.foto ? (
-                            <img src={cita.doctor.foto} className="w-full h-full object-cover" alt="" />
+                            <img
+                              src={cita.doctor.foto}
+                              className="h-full w-full object-cover"
+                              alt=""
+                            />
                           ) : (
-                            <span className="text-blue-600 text-xs font-bold">
-                              {cita.doctor.usuario.nombre[0]}{cita.doctor.usuario.apellido[0]}
+                            <span className="text-xs font-black text-[#008f78]">
+                              {cita.doctor.usuario.nombre[0]}
+                              {cita.doctor.usuario.apellido[0]}
                             </span>
                           )}
                         </div>
+
                         <div className="min-w-0">
-                          <div className="flex items-center gap-2 flex-wrap">
-                            <p className="font-medium text-slate-800 text-sm truncate">
+                          <div className="flex flex-wrap items-center gap-2">
+                            <p className="truncate text-sm font-black text-slate-800">
                               Dr. {cita.doctor.usuario.nombre} {cita.doctor.usuario.apellido}
                             </p>
+
                             {i === 0 && (
-                              <span className="px-2 py-0.5 bg-blue-100 text-blue-600 text-xs font-semibold rounded-full flex-shrink-0">Próxima</span>
+                              <span className="rounded-full bg-[#00CCA5]/10 px-2.5 py-1 text-[10px] font-black text-[#008f78]">
+                                Próxima
+                              </span>
                             )}
                           </div>
-                          <p className="text-xs text-slate-400 mt-0.5 truncate">{cita.servicio.nombre} · {formatFecha(cita.fecha)}</p>
+
+                          <p className="mt-0.5 truncate text-xs font-medium text-slate-400">
+                            {cita.servicio.nombre} · {formatFecha(cita.fecha)}
+                          </p>
                         </div>
                       </div>
-                      <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-medium flex-shrink-0 ml-2 ${cfg.bg} ${cfg.text}`}>
-                        <span className={`w-1.5 h-1.5 rounded-full ${cfg.dot}`} />
+
+                      <span className={`inline-flex flex-shrink-0 items-center gap-2 rounded-2xl px-3 py-1.5 text-xs font-black ${cfg.bg} ${cfg.text}`}>
+                        <span className={`h-2 w-2 rounded-full ${cfg.dot}`} />
                         <span className="hidden sm:inline">{cita.estado}</span>
                       </span>
                     </div>
@@ -151,41 +266,75 @@ export default function PacienteDashboard() {
           </div>
 
           {/* Últimas consultas */}
-          <div className="bg-white rounded-2xl border border-slate-100 overflow-hidden">
-            <div className="flex items-center justify-between px-4 md:px-6 py-4 border-b border-slate-100">
-              <p className="text-sm font-semibold text-slate-700">Últimas consultas</p>
-              <p className="text-xs text-slate-400">{stats?.resumen?.totalCompletadas ?? 0} completadas</p>
+          <div className="overflow-hidden rounded-[2rem] border border-slate-200/80 bg-white shadow-sm">
+            <div className="flex flex-col gap-3 border-b border-slate-100 px-5 py-5 md:flex-row md:items-center md:justify-between md:px-6">
+              <div className="flex items-center gap-3">
+                <div className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-2xl bg-[#00CCA5]/10">
+                  <CheckCircle size={18} className="text-[#008f78]" />
+                </div>
+
+                <div>
+                  <p className="text-base font-black text-slate-900">
+                    Últimas consultas
+                  </p>
+                  <p className="text-xs text-slate-400">
+                    Atenciones completadas recientemente.
+                  </p>
+                </div>
+              </div>
+
+              <span className="w-fit rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-bold text-slate-500">
+                {stats?.resumen?.totalCompletadas ?? 0} completadas
+              </span>
             </div>
+
             {loading ? (
-              <div className="flex items-center justify-center py-12">
-                <div className="w-6 h-6 border-2 border-emerald-500 border-t-transparent rounded-full animate-spin" />
+              <div className="flex flex-col items-center justify-center gap-3 py-14">
+                <div className="h-8 w-8 animate-spin rounded-full border-2 border-[#00CCA5] border-t-transparent" />
+                <p className="text-sm text-slate-400">Cargando consultas...</p>
               </div>
             ) : stats?.ultimasCompletadas?.length === 0 ? (
-              <div className="flex flex-col items-center justify-center py-12 gap-3">
-                <div className="w-14 h-14 bg-slate-100 rounded-2xl flex items-center justify-center">
+              <div className="flex flex-col items-center justify-center gap-3 px-6 py-14">
+                <div className="flex h-14 w-14 items-center justify-center rounded-3xl bg-slate-100">
                   <CheckCircle size={24} className="text-slate-400" />
                 </div>
-                <p className="text-slate-500 font-medium text-sm">Sin consultas completadas</p>
+
+                <div className="text-center">
+                  <p className="text-sm font-black text-slate-700">
+                    Sin consultas completadas
+                  </p>
+                  <p className="mt-1 text-xs text-slate-400">
+                    Cuando finalice una atención, aparecerá en esta sección.
+                  </p>
+                </div>
               </div>
             ) : (
-              <div className="divide-y divide-slate-50">
+              <div className="divide-y divide-slate-100">
                 {stats.ultimasCompletadas.map(cita => (
-                  <div key={cita.id} className="flex items-center justify-between px-4 md:px-6 py-4 hover:bg-slate-50/70 transition-colors">
-                    <div className="flex items-center gap-3 min-w-0">
-                      <div className="w-9 h-9 bg-emerald-50 rounded-xl flex items-center justify-center flex-shrink-0">
-                        <span className="text-emerald-600 text-xs font-bold">
-                          {cita.doctor.usuario.nombre[0]}{cita.doctor.usuario.apellido[0]}
+                  <div
+                    key={cita.id}
+                    className="flex items-center justify-between gap-4 px-5 py-4 transition-colors hover:bg-slate-50/70 md:px-6"
+                  >
+                    <div className="flex min-w-0 items-center gap-3">
+                      <div className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-2xl border border-[#00CCA5]/20 bg-[#00CCA5]/10">
+                        <span className="text-xs font-black text-[#008f78]">
+                          {cita.doctor.usuario.nombre[0]}
+                          {cita.doctor.usuario.apellido[0]}
                         </span>
                       </div>
+
                       <div className="min-w-0">
-                        <p className="font-medium text-slate-800 text-sm truncate">
+                        <p className="truncate text-sm font-black text-slate-800">
                           Dr. {cita.doctor.usuario.nombre} {cita.doctor.usuario.apellido}
                         </p>
-                        <p className="text-xs text-slate-400 mt-0.5 truncate">{cita.servicio.nombre} · {formatFecha(cita.fecha)}</p>
+                        <p className="mt-0.5 truncate text-xs font-medium text-slate-400">
+                          {cita.servicio.nombre} · {formatFecha(cita.fecha)}
+                        </p>
                       </div>
                     </div>
+
                     {cita.nota && (
-                      <span className="px-2.5 py-1 bg-emerald-50 text-emerald-600 text-xs font-medium rounded-lg flex-shrink-0 ml-2">
+                      <span className="flex-shrink-0 rounded-2xl bg-[#00CCA5]/10 px-3 py-1.5 text-xs font-black text-[#008f78]">
                         Con nota
                       </span>
                     )}
@@ -194,7 +343,6 @@ export default function PacienteDashboard() {
               </div>
             )}
           </div>
-
         </div>
       </div>
     </PacienteLayout>

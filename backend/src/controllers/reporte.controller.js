@@ -323,15 +323,29 @@ const reporteRendimientoDoctor = async (req, res) => {
 module.exports = { reportePacientes, reporteCitas, reportePagosPeriodo, reporteRendimientoDoctor }
 
 // ─── Resumen individual de Cita (desde ModalVerCita) ─────────────────────────
+// ─── Resumen individual de Cita (desde ModalVerCita) ─────────────────────────
 const reporteCitaIndividual = async (req, res) => {
   try {
     const { id } = req.params
+
     const [cita, clinica] = await Promise.all([
       prisma.cita.findUnique({
         where: { id: parseInt(id) },
         include: {
-          doctor:   { include: { usuario: { select: { nombre: true, apellido: true, email: true, telefono: true } } } },
-          paciente: { include: { usuario: { select: { nombre: true, apellido: true, email: true, telefono: true } } } },
+          doctor: {
+            include: {
+              usuario: {
+                select: { nombre: true, apellido: true, email: true, telefono: true }
+              }
+            }
+          },
+          paciente: {
+            include: {
+              usuario: {
+                select: { nombre: true, apellido: true, email: true, telefono: true }
+              }
+            }
+          },
           servicio: true,
           nota: true,
           pago: true
@@ -342,79 +356,250 @@ const reporteCitaIndividual = async (req, res) => {
 
     if (!cita) return res.status(404).json({ message: 'Cita no encontrada' })
 
-    const doc = new PDFDocument({ margin: 50 })
+    const doc = new PDFDocument({ margin: 45, size: 'A4' })
+
     res.setHeader('Content-Type', 'application/pdf')
     res.setHeader('Content-Disposition', `attachment; filename=cita-${id}.pdf`)
     doc.pipe(res)
 
-    await agregarHeaderClinica(doc, clinica)
-
-    // Título
-    doc.fontSize(13).fillColor('#1e293b').text('Resumen de Cita', { align: 'center' })
-    doc.fontSize(9).fillColor('#94a3b8').text(`Generado: ${new Date().toLocaleString('es-PE')}`, { align: 'center' })
-    doc.moveDown()
-
-    // Badge de estado
-    const estadoColors = { PENDIENTE: '#f59e0b', CONFIRMADA: '#3b82f6', COMPLETADA: '#10b981', CANCELADA: '#ef4444' }
-    const colorEstado = estadoColors[cita.estado] || '#64748b'
-    doc.rect(50, doc.y, 500, 28).fill('#f8fafc')
-    const badgeY = doc.y + 8
-    doc.circle(65, badgeY + 6, 5).fill(colorEstado)
-    doc.fillColor('#1e293b').fontSize(11).text(`Cita #${cita.id} — ${cita.estado}`, 80, badgeY)
-    doc.y = badgeY + 28
-    doc.moveDown(0.5)
-
-    // Sección: Información general
-    const seccionTitulo = (titulo) => {
-      doc.rect(50, doc.y, 500, 20).fill('#1a73e8')
-      doc.fillColor('white').fontSize(9).text(titulo, 56, doc.y - 14)
-      doc.y += 6
-      doc.moveDown(0.3)
+    const COLORS = {
+      primary: '#000089',
+      accent: '#00CCA5',
+      accentDark: '#008f78',
+      text: '#1e293b',
+      muted: '#64748b',
+      light: '#f8fafc',
+      border: '#e2e8f0'
     }
 
-    const fila = (label, value) => {
-      const y = doc.y
-      doc.fillColor('#94a3b8').fontSize(8).text(label, 56, y)
-      doc.fillColor('#1e293b').fontSize(9).text(value || '—', 200, y)
-      doc.y = y + 18
+    const estadoColors = {
+      PENDIENTE: '#f59e0b',
+      CONFIRMADA: COLORS.primary,
+      COMPLETADA: COLORS.accentDark,
+      CANCELADA: '#ef4444'
     }
 
-    seccionTitulo('INFORMACIÓN DE LA CITA')
-    fila('Fecha y hora', new Date(cita.fecha).toLocaleString('es-PE', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }))
-    fila('Servicio', `${cita.servicio.nombre} (${cita.servicio.duracion} min)`)
-    fila('Precio', `S/ ${cita.servicio.precio}`)
-    fila('Motivo', cita.motivo || 'No especificado')
-    doc.moveDown(0.5)
+    const pageLeft = 45
+    const pageRight = 550
+    const pageWidth = 505
+    let y = 38
 
-    seccionTitulo('PACIENTE')
-    fila('Nombre', `${cita.paciente.usuario.nombre} ${cita.paciente.usuario.apellido}`)
-    fila('Email', cita.paciente.usuario.email)
-    fila('Teléfono', cita.paciente.usuario.telefono || '—')
-    doc.moveDown(0.5)
+    const logoPath = clinica?.logo ? path.join(process.cwd(), clinica.logo) : null
 
-    seccionTitulo('DOCTOR')
-    fila('Nombre', `Dr. ${cita.doctor.usuario.nombre} ${cita.doctor.usuario.apellido}`)
-    fila('Email', cita.doctor.usuario.email)
-    fila('Teléfono', cita.doctor.usuario.telefono || '—')
-    doc.moveDown(0.5)
+    // Header institucional
+    if (logoPath && fs.existsSync(logoPath)) {
+      try {
+        doc.image(logoPath, pageLeft, y, { fit: [120, 45] })
+      } catch {
+        doc.fontSize(17).fillColor(COLORS.primary).text(clinica?.nombre || 'LuminaMedic', pageLeft, y)
+      }
+    } else {
+      doc.fontSize(17).fillColor(COLORS.primary).text(clinica?.nombre || 'LuminaMedic', pageLeft, y)
+    }
 
-    // Pago si existe
+    doc
+      .fontSize(8.5)
+      .fillColor(COLORS.muted)
+      .text(clinica?.direccion || '', pageLeft, 78, { width: 290 })
+      .text(`${clinica?.telefono || ''} · ${clinica?.email || ''}`, pageLeft, 92, { width: 290 })
+
+    doc
+      .fontSize(18)
+      .fillColor(COLORS.text)
+      .text('Resumen de Cita', 330, 40, { width: 220, align: 'right' })
+
+    doc
+      .fontSize(8.5)
+      .fillColor(COLORS.muted)
+      .text(`Generado: ${new Date().toLocaleString('es-PE')}`, 330, 64, {
+        width: 220,
+        align: 'right'
+      })
+
+    const colorEstado = estadoColors[cita.estado] || COLORS.muted
+
+    doc
+      .fontSize(10)
+      .fillColor(colorEstado)
+      .text(`Cita #${cita.id} — ${cita.estado}`, 330, 88, {
+        width: 220,
+        align: 'right'
+      })
+
+    y = 120
+
+    doc
+      .moveTo(pageLeft, y)
+      .lineTo(pageRight, y)
+      .strokeColor(COLORS.primary)
+      .lineWidth(1.2)
+      .stroke()
+
+    y += 18
+
+    const formatFecha = (fecha) =>
+      new Date(fecha).toLocaleString('es-PE', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      })
+
+    const formatFechaCorta = (fecha) =>
+      new Date(fecha).toLocaleDateString('es-PE', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric'
+      })
+
+    const section = (title) => {
+      doc
+        .rect(pageLeft, y, pageWidth, 20)
+        .fill(COLORS.primary)
+
+      doc
+        .fontSize(8.5)
+        .fillColor('white')
+        .text(title, pageLeft + 10, y + 6)
+
+      y += 28
+    }
+
+    const row = (label, value, x = pageLeft, labelWidth = 120, valueWidth = 350) => {
+      doc
+        .fontSize(8)
+        .fillColor(COLORS.muted)
+        .text(label, x, y, { width: labelWidth })
+
+      doc
+        .fontSize(9)
+        .fillColor(COLORS.text)
+        .text(value || '—', x + labelWidth, y, {
+          width: valueWidth,
+          lineGap: 1
+        })
+
+      y += 16
+    }
+
+    const twoColRow = (label1, value1, label2, value2) => {
+      doc
+        .fontSize(8)
+        .fillColor(COLORS.muted)
+        .text(label1, pageLeft, y, { width: 80 })
+
+      doc
+        .fontSize(9)
+        .fillColor(COLORS.text)
+        .text(value1 || '—', pageLeft + 80, y, { width: 160 })
+
+      doc
+        .fontSize(8)
+        .fillColor(COLORS.muted)
+        .text(label2, 315, y, { width: 80 })
+
+      doc
+        .fontSize(9)
+        .fillColor(COLORS.text)
+        .text(value2 || '—', 395, y, { width: 150 })
+
+      y += 16
+    }
+
+    const paragraphRow = (label, value, maxHeight = 34) => {
+      doc
+        .fontSize(8)
+        .fillColor(COLORS.muted)
+        .text(label, pageLeft, y, { width: 120 })
+
+      doc
+        .fontSize(9)
+        .fillColor(COLORS.text)
+        .text(value || '—', pageLeft + 120, y, {
+          width: 370,
+          height: maxHeight,
+          ellipsis: true,
+          lineGap: 1
+        })
+
+      y += maxHeight + 4
+    }
+
+    // Información de cita
+    section('INFORMACIÓN DE LA CITA')
+    row('Fecha y hora', formatFecha(cita.fecha))
+    row('Servicio', `${cita.servicio.nombre} (${cita.servicio.duracion} min)`)
+    row('Precio', `S/ ${Number(cita.servicio.precio || 0).toFixed(2)}`)
+    paragraphRow('Motivo', cita.motivo || 'No especificado', 24)
+
+    y += 6
+
+    // Paciente y doctor en dos columnas
+    section('PACIENTE Y DOCTOR')
+    twoColRow(
+      'Paciente',
+      `${cita.paciente.usuario.nombre} ${cita.paciente.usuario.apellido}`,
+      'Doctor',
+      `Dr. ${cita.doctor.usuario.nombre} ${cita.doctor.usuario.apellido}`
+    )
+    twoColRow(
+      'Email',
+      cita.paciente.usuario.email || '—',
+      'Email',
+      cita.doctor.usuario.email || '—'
+    )
+    twoColRow(
+      'Teléfono',
+      cita.paciente.usuario.telefono || '—',
+      'Teléfono',
+      cita.doctor.usuario.telefono || '—'
+    )
+
+    y += 6
+
+    // Pago
     if (cita.pago) {
-      seccionTitulo('PAGO')
-      fila('Monto', `S/ ${cita.pago.monto.toFixed(2)}`)
-      fila('Método', cita.pago.metodo)
-      fila('Fecha de pago', new Date(cita.pago.createdAt).toLocaleDateString('es-PE'))
-      doc.moveDown(0.5)
+      section('PAGO')
+      twoColRow(
+        'Monto',
+        `S/ ${Number(cita.pago.monto || 0).toFixed(2)}`,
+        'Método',
+        cita.pago.metodo || '—'
+      )
+      row('Fecha de pago', formatFechaCorta(cita.pago.createdAt))
+      y += 6
     }
 
-    // Nota clínica si existe
+    // Nota clínica
+    section('NOTA CLÍNICA')
+
     if (cita.nota) {
-      seccionTitulo('NOTA CLÍNICA')
-      if (cita.nota.diagnostico) fila('Diagnóstico', cita.nota.diagnostico)
-      if (cita.nota.tratamiento)  fila('Tratamiento', cita.nota.tratamiento)
-      if (cita.nota.receta)       fila('Receta', cita.nota.receta)
-      if (cita.nota.observacion)  fila('Observaciones', cita.nota.observacion)
+      paragraphRow('Diagnóstico', cita.nota.diagnostico || '—', 28)
+      paragraphRow('Tratamiento', cita.nota.tratamiento || '—', 32)
+      paragraphRow('Receta', cita.nota.receta || '—', 32)
+      paragraphRow('Observaciones', cita.nota.observacion || '—', 36)
+    } else {
+      row('Estado', 'Esta cita aún no tiene una nota clínica registrada.')
     }
+
+    // Footer
+    doc
+      .moveTo(pageLeft, 770)
+      .lineTo(pageRight, 770)
+      .strokeColor(COLORS.border)
+      .lineWidth(1)
+      .stroke()
+
+    doc
+      .fontSize(7.5)
+      .fillColor(COLORS.muted)
+      .text(
+        'Documento generado automáticamente por LuminaMedic · Sistema de Gestión Clínica',
+        pageLeft,
+        780,
+        { width: pageWidth, align: 'center' }
+      )
 
     doc.end()
   } catch (error) {

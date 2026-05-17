@@ -7,7 +7,7 @@ const loginLimiter = rateLimit({
   standardHeaders: true,
   legacyHeaders: false
 })
-
+  
 const forgotLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 5,

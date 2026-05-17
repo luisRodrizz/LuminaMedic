@@ -1,40 +1,58 @@
+import { ChevronLeft, ChevronRight } from 'lucide-react'
+
 export default function Pagination({ meta, onPageChange }) {
   if (!meta || meta.totalPages <= 1) return null
 
   const pages = Array.from({ length: meta.totalPages }, (_, i) => i + 1)
 
+  const start = (meta.page - 1) * meta.limit + 1
+  const end = Math.min(meta.page * meta.limit, meta.total)
+
   return (
-    <div className="flex items-center justify-between mt-4 px-2">
-      <p className="text-sm text-gray-500">
-        Mostrando {((meta.page - 1) * meta.limit) + 1} - {Math.min(meta.page * meta.limit, meta.total)} de {meta.total} registros
+    <div className="flex flex-col gap-4 px-5 py-4 md:flex-row md:items-center md:justify-between md:px-6">
+      <p className="text-sm font-medium text-slate-400">
+        Mostrando{' '}
+        <span className="font-black text-slate-700">{start}</span>
+        {' '}—{' '}
+        <span className="font-black text-slate-700">{end}</span>
+        {' '}de{' '}
+        <span className="font-black text-slate-700">{meta.total}</span>
+        {' '}registros
       </p>
-      <div className="flex gap-1">
+
+      <div className="flex items-center gap-1.5">
         <button
           onClick={() => onPageChange(meta.page - 1)}
           disabled={meta.page === 1}
-          className="px-3 py-1 text-sm border border-gray-300 rounded-lg disabled:opacity-40 hover:bg-gray-50"
+          className="flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-400 transition hover:bg-slate-50 hover:text-slate-700 disabled:cursor-not-allowed disabled:opacity-40"
+          title="Página anterior"
         >
-          ←
+          <ChevronLeft size={16} />
         </button>
-        {pages.map(p => (
-          <button
-            key={p}
-            onClick={() => onPageChange(p)}
-            className={`px-3 py-1 text-sm border rounded-lg ${
-              p === meta.page
-                ? 'bg-blue-600 text-white border-blue-600'
-                : 'border-gray-300 hover:bg-gray-50'
-            }`}
-          >
-            {p}
-          </button>
-        ))}
+
+        <div className="flex items-center gap-1">
+          {pages.map((p) => (
+            <button
+              key={p}
+              onClick={() => onPageChange(p)}
+              className={`flex h-9 min-w-9 items-center justify-center rounded-xl px-3 text-sm font-black transition ${
+                p === meta.page
+                  ? 'bg-[#000089] text-white shadow-lg shadow-[#000089]/20'
+                  : 'border border-slate-200 bg-white text-slate-500 hover:bg-slate-50 hover:text-[#000089]'
+              }`}
+            >
+              {p}
+            </button>
+          ))}
+        </div>
+
         <button
           onClick={() => onPageChange(meta.page + 1)}
           disabled={meta.page === meta.totalPages}
-          className="px-3 py-1 text-sm border border-gray-300 rounded-lg disabled:opacity-40 hover:bg-gray-50"
+          className="flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-400 transition hover:bg-slate-50 hover:text-slate-700 disabled:cursor-not-allowed disabled:opacity-40"
+          title="Página siguiente"
         >
-          →
+          <ChevronRight size={16} />
         </button>
       </div>
     </div>

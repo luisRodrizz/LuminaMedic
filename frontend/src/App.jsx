@@ -4,6 +4,8 @@ import { useAuth } from './context/AuthContext'
 //fallback
 import NotFound from './pages/error404/NotFound'
 
+import Landing from './pages/landing/Landing'
+
 import Login from './pages/auth/Login'
 import Register from './pages/auth/Register'
 import ForgotPassword from './pages/auth/ForgotPassword'
@@ -50,6 +52,13 @@ function App() {
   return (
     <Routes>
       {/* Rutas públicas */}
+
+      {/* Landing Page */}
+
+      <Route path="/" element={<Landing />} />
+
+      {/* Login / Registro */}
+
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="/forgot-password" element={<ForgotPassword />} />
@@ -86,8 +95,6 @@ function App() {
       <Route path="/paciente/perfil"    element={<PrivateRoute roles={['PACIENTE']}><PacientePerfil /></PrivateRoute>} />
       <Route path="/paciente/notificaciones" element={<PrivateRoute roles={['PACIENTE']}><NotificacionesPaciente /></PrivateRoute>} />
       <Route path="/paciente/estadisticas" element={<PrivateRoute roles={['PACIENTE']}><MisEstadisticasPaciente /></PrivateRoute>} />
-
-      <Route path="/" element={<Navigate to="/login" replace />} />
 
       {/* Fallback */}
       <Route path="*" element={<NotFound />} />

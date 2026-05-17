@@ -10,10 +10,26 @@ import ModalVerCita from './ModalVerCita'
 import api from '../../../services/api'
 
 const estadoColors = {
-  PENDIENTE:  { bg: 'bg-yellow-50',  text: 'text-yellow-700',  dot: 'bg-yellow-400'  },
-  CONFIRMADA: { bg: 'bg-blue-50',    text: 'text-blue-700',    dot: 'bg-blue-400'    },
-  COMPLETADA: { bg: 'bg-emerald-50', text: 'text-emerald-700', dot: 'bg-emerald-400' },
-  CANCELADA:  { bg: 'bg-red-50',     text: 'text-red-700',     dot: 'bg-red-400'     },
+  PENDIENTE: {
+    bg: 'bg-amber-50',
+    text: 'text-amber-700',
+    dot: 'bg-amber-400'
+  },
+  CONFIRMADA: {
+    bg: 'bg-[#000089]/10',
+    text: 'text-[#000089]',
+    dot: 'bg-[#000089]'
+  },
+  COMPLETADA: {
+    bg: 'bg-[#00CCA5]/10',
+    text: 'text-[#008f78]',
+    dot: 'bg-[#00CCA5]'
+  },
+  CANCELADA: {
+    bg: 'bg-red-50',
+    text: 'text-red-700',
+    dot: 'bg-red-500'
+  }
 }
 
 export default function Citas() {
@@ -66,39 +82,53 @@ export default function Citas() {
   return (
     <AdminLayout>
       <div className="page-enter">
-
         {/* Header */}
-        <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-cyan-50 rounded-xl flex items-center justify-center">
-              <Calendar size={20} className="text-cyan-600" />
-            </div>
-            <div>
-              <h1 className="text-2xl font-bold text-slate-800 tracking-tight">Citas</h1>
-              <p className="text-slate-400 text-sm mt-0.5">Gestión de citas médicas</p>
-            </div>
+        <div className="mb-8 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+          <div>
+            <h1 className="text-2xl font-black tracking-tight text-slate-950 md:text-3xl">
+              Citas
+            </h1>
+
+            <p className="mt-2 text-sm text-slate-400">
+              Administra la agenda médica, estados de atención y reservas registradas.
+            </p>
           </div>
-          <div className="flex items-center gap-2">
-            <button onClick={exportarPDF}
-              className="flex items-center gap-2 border border-slate-200 text-slate-600 hover:bg-slate-50 px-3 md:px-4 py-2.5 rounded-xl text-sm font-medium transition-all">
+
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+            <button
+              onClick={exportarPDF}
+              className="flex h-11 items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-4 text-sm font-black text-slate-600 shadow-sm transition hover:border-[#00CCA5]/30 hover:bg-slate-50 hover:text-[#000089]"
+            >
               <FileDown size={16} />
-              <span className="hidden sm:inline">Exportar PDF</span>
+              Exportar PDF
             </button>
-            <button onClick={() => setModalCrear(true)}
-              className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-3 md:px-4 py-2.5 rounded-xl text-sm font-medium transition-all shadow-sm hover:shadow-md">
+
+            <button
+              onClick={() => setModalCrear(true)}
+              className="flex h-11 items-center justify-center gap-2 rounded-xl bg-[#000089] px-4 text-sm font-black text-white shadow-lg shadow-[#000089]/20 transition hover:bg-[#000070] hover:ring-4 hover:ring-[#00CCA5]/15"
+            >
               <Plus size={16} />
-              <span className="hidden sm:inline">Nueva Cita</span>
+              Nueva Cita
             </button>
           </div>
         </div>
 
-        <div className="bg-white rounded-2xl border border-slate-100 overflow-hidden">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 px-4 md:px-6 py-4 border-b border-slate-100">
-            <div className="flex items-center gap-2">
-              <Filter size={15} className="text-slate-400 flex-shrink-0" />
-              <select value={filtroEstado}
-                onChange={(e) => { setFiltroEstado(e.target.value); setPage(1) }}
-                className="py-2 px-3 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400 bg-slate-50 text-slate-600 w-full sm:w-auto">
+        {/* Tabla */}
+        <div className="overflow-hidden rounded-[2rem] border border-slate-200/80 bg-white shadow-sm">
+          <div className="flex flex-col gap-4 border-b border-slate-100 px-5 py-5 md:flex-row md:items-center md:justify-between md:px-6">
+            <div className="flex w-full flex-col gap-3 sm:flex-row sm:items-center">
+              <div className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-2xl bg-[#00CCA5]/10">
+                <Filter size={17} className="text-[#008f78]" />
+              </div>
+
+              <select
+                value={filtroEstado}
+                onChange={(e) => {
+                  setFiltroEstado(e.target.value)
+                  setPage(1)
+                }}
+                className="h-11 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 text-sm font-medium text-slate-600 outline-none transition focus:border-[#00CCA5] focus:bg-white focus:ring-4 focus:ring-[#00CCA5]/15 sm:w-72"
+              >
                 <option value="">Todos los estados</option>
                 <option value="PENDIENTE">Pendiente</option>
                 <option value="CONFIRMADA">Confirmada</option>
@@ -106,72 +136,151 @@ export default function Citas() {
                 <option value="CANCELADA">Cancelada</option>
               </select>
             </div>
-            <p className="text-xs text-slate-400">
-              {meta ? `${meta.total} cita${meta.total !== 1 ? 's' : ''} registrada${meta.total !== 1 ? 's' : ''}` : ''}
-            </p>
+
+            <div className="flex items-center justify-end">
+              {meta && (
+                <div className="inline-flex items-center gap-2 rounded-2xl border border-slate-200 bg-slate-50 px-3.5 py-2">
+                  <span className="h-2 w-2 rounded-full bg-[#00CCA5]" />
+                  <span className="text-xs font-bold text-slate-500">
+                    {meta.total} cita{meta.total !== 1 ? 's' : ''} registrada{meta.total !== 1 ? 's' : ''}
+                  </span>
+                </div>
+              )}
+            </div>
           </div>
 
           {loading ? (
-            <div className="flex flex-col items-center justify-center py-16 gap-3">
-              <div className="w-8 h-8 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
-              <p className="text-slate-400 text-sm">Cargando citas...</p>
+            <div className="flex flex-col items-center justify-center gap-3 py-16">
+              <div className="h-9 w-9 animate-spin rounded-full border-2 border-[#00CCA5] border-t-transparent" />
+              <p className="text-sm text-slate-400">Cargando citas...</p>
             </div>
           ) : citas.length === 0 ? (
-            <div className="flex flex-col items-center justify-center py-16 gap-3">
-              <div className="w-14 h-14 bg-slate-100 rounded-2xl flex items-center justify-center">
+            <div className="flex flex-col items-center justify-center gap-3 px-6 py-16">
+              <div className="flex h-14 w-14 items-center justify-center rounded-3xl bg-slate-100">
                 <Calendar size={24} className="text-slate-400" />
               </div>
-              <p className="text-slate-500 font-medium">No hay citas registradas</p>
-              <p className="text-slate-400 text-sm">Crea la primera cita con el botón de arriba</p>
+
+              <div className="text-center">
+                <p className="text-sm font-black text-slate-700">
+                  No hay citas registradas
+                </p>
+                <p className="mt-1 text-xs text-slate-400">
+                  Crea la primera cita médica desde el botón superior.
+                </p>
+              </div>
             </div>
           ) : (
             <div className="overflow-x-auto">
-              <table className="w-full min-w-[600px]">
+              <table className="w-full min-w-[860px]">
                 <thead>
-                  <tr className="bg-slate-50 border-b border-slate-100">
-                    <th className="px-4 md:px-6 py-3.5 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Fecha</th>
-                    <th className="px-4 md:px-6 py-3.5 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Paciente</th>
-                    <th className="hidden md:table-cell px-6 py-3.5 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Doctor</th>
-                    <th className="hidden sm:table-cell px-4 md:px-6 py-3.5 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Servicio</th>
-                    <th className="px-4 md:px-6 py-3.5 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Estado</th>
-                    <th className="px-4 md:px-6 py-3.5 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Acciones</th>
+                  <tr className="border-b border-slate-100 bg-slate-50/80">
+                    <th className="px-6 py-4 text-left text-[11px] font-black uppercase tracking-[0.14em] text-slate-400">
+                      Fecha
+                    </th>
+                    <th className="px-6 py-4 text-left text-[11px] font-black uppercase tracking-[0.14em] text-slate-400">
+                      Paciente
+                    </th>
+                    <th className="px-6 py-4 text-left text-[11px] font-black uppercase tracking-[0.14em] text-slate-400">
+                      Doctor
+                    </th>
+                    <th className="px-6 py-4 text-left text-[11px] font-black uppercase tracking-[0.14em] text-slate-400">
+                      Servicio
+                    </th>
+                    <th className="px-6 py-4 text-left text-[11px] font-black uppercase tracking-[0.14em] text-slate-400">
+                      Estado
+                    </th>
+                    <th className="px-6 py-4 text-right text-[11px] font-black uppercase tracking-[0.14em] text-slate-400">
+                      Acciones
+                    </th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-50">
+
+                <tbody className="divide-y divide-slate-100">
                   {citas.map((cita) => {
-                    const cfg = estadoColors[cita.estado]
+                    const cfg = estadoColors[cita.estado] || estadoColors.CONFIRMADA
+
                     return (
-                      <tr key={cita.id} className="hover:bg-slate-50/70 transition-colors">
-                        <td className="px-4 md:px-6 py-4 text-slate-600 text-sm whitespace-nowrap">
-                          {formatFecha(cita.fecha)}
+                      <tr
+                        key={cita.id}
+                        className="transition-colors hover:bg-slate-50/70"
+                      >
+                        <td className="px-6 py-4">
+                          <div className="inline-flex rounded-2xl bg-slate-100 px-3 py-1.5">
+                            <span className="whitespace-nowrap font-mono text-sm font-black text-slate-700">
+                              {formatFecha(cita.fecha)}
+                            </span>
+                          </div>
                         </td>
-                        <td className="px-4 md:px-6 py-4">
-                          <span className="text-sm font-medium text-slate-800 truncate block max-w-[140px] md:max-w-none">
-                            {cita.paciente.usuario.nombre} {cita.paciente.usuario.apellido}
-                          </span>
+
+                        <td className="px-6 py-4">
+                          <div className="flex items-center gap-3">
+                            <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-2xl bg-[#00CCA5]/10">
+                              <span className="text-xs font-black text-[#008f78]">
+                                {cita.paciente.usuario.nombre[0]}
+                                {cita.paciente.usuario.apellido[0]}
+                              </span>
+                            </div>
+
+                            <div className="min-w-0">
+                              <p className="truncate text-sm font-black text-slate-800">
+                                {cita.paciente.usuario.nombre}{' '}
+                                {cita.paciente.usuario.apellido}
+                              </p>
+                              <p className="text-xs text-slate-400">
+                                Paciente
+                              </p>
+                            </div>
+                          </div>
                         </td>
-                        <td className="hidden md:table-cell px-6 py-4 text-slate-500 text-sm">
-                          Dr. {cita.doctor.usuario.nombre} {cita.doctor.usuario.apellido}
+
+                        <td className="px-6 py-4">
+                          <div className="min-w-0">
+                            <p className="truncate text-sm font-bold text-slate-700">
+                              Dr. {cita.doctor.usuario.nombre}{' '}
+                              {cita.doctor.usuario.apellido}
+                            </p>
+                            <p className="text-xs text-slate-400">
+                              Médico asignado
+                            </p>
+                          </div>
                         </td>
-                        <td className="hidden sm:table-cell px-4 md:px-6 py-4">
-                          <span className="px-2.5 py-1 bg-slate-100 text-slate-600 rounded-lg text-xs font-medium">
+
+                        <td className="px-6 py-4">
+                          <span className="inline-flex rounded-2xl border border-slate-200 bg-slate-50 px-3 py-1.5 text-xs font-bold text-slate-600">
                             {cita.servicio.nombre}
                           </span>
                         </td>
-                        <td className="px-4 md:px-6 py-4">
-                          <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-medium ${cfg.bg} ${cfg.text}`}>
-                            <span className={`w-1.5 h-1.5 rounded-full ${cfg.dot}`} />
-                            <span className="hidden sm:inline">{cita.estado}</span>
+
+                        <td className="px-6 py-4">
+                          <span
+                            className={`inline-flex items-center gap-2 rounded-2xl px-3 py-1.5 text-xs font-black ${cfg.bg} ${cfg.text}`}
+                          >
+                            <span className={`h-2 w-2 rounded-full ${cfg.dot}`} />
+                            {cita.estado}
                           </span>
                         </td>
-                        <td className="px-4 md:px-6 py-4">
-                          <div className="flex items-center gap-1.5">
-                            <button onClick={() => { setCitaSeleccionada(cita); setModalVer(true) }}
-                              className="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all" title="Ver detalle">
+
+                        <td className="px-6 py-4">
+                          <div className="flex items-center justify-end gap-2">
+                            <button
+                              onClick={() => {
+                                setCitaSeleccionada(cita)
+                                setModalVer(true)
+                              }}
+                              className="flex h-9 w-9 items-center justify-center rounded-xl text-slate-400 transition hover:bg-[#00CCA5]/10 hover:text-[#008f78]"
+                              title="Ver detalle"
+                            >
                               <Eye size={15} />
                             </button>
-                            <button onClick={() => { setCitaSeleccionada(cita); setModalEditar(true) }}
-                              className="p-2 text-slate-400 hover:text-amber-600 hover:bg-amber-50 rounded-lg transition-all" title="Editar estado">
+
+                            <button
+                              onClick={() => {
+                                setCitaSeleccionada(cita)
+                                setModalEditar(true)
+                              }}
+                              className="flex h-9 w-9 items-center justify-center rounded-xl text-slate-400 transition hover:bg-amber-50 hover:text-amber-600"
+                              title="Editar estado"
+                            >
                               <Pencil size={15} />
                             </button>
                           </div>
@@ -183,6 +292,7 @@ export default function Citas() {
               </table>
             </div>
           )}
+
           <div className="border-t border-slate-100">
             <Pagination meta={meta} onPageChange={(p) => setPage(p)} />
           </div>
@@ -190,23 +300,35 @@ export default function Citas() {
 
         <AnimatePresence>
           {modalCrear && (
-            <ModalCrearCita onClose={() => setModalCrear(false)} onSuccess={() => {
-              fetchCitas(page, filtroEstado)
-              toast.success('Cita creada correctamente')
-            }} />
+            <ModalCrearCita
+              onClose={() => setModalCrear(false)}
+              onSuccess={() => {
+                fetchCitas(page, filtroEstado)
+                toast.success('Cita creada correctamente')
+              }}
+            />
           )}
         </AnimatePresence>
+
         <AnimatePresence>
           {modalEditar && citaSeleccionada && (
-            <ModalEditarCita cita={citaSeleccionada} onClose={() => setModalEditar(false)} onSuccess={() => {
-              fetchCitas(page, filtroEstado)
-              toast.success('Estado de cita actualizado')
-            }} />
+            <ModalEditarCita
+              cita={citaSeleccionada}
+              onClose={() => setModalEditar(false)}
+              onSuccess={() => {
+                fetchCitas(page, filtroEstado)
+                toast.success('Estado de cita actualizado')
+              }}
+            />
           )}
         </AnimatePresence>
+
         <AnimatePresence>
           {modalVer && citaSeleccionada && (
-            <ModalVerCita citaId={citaSeleccionada.id} onClose={() => setModalVer(false)} />
+            <ModalVerCita
+              citaId={citaSeleccionada.id}
+              onClose={() => setModalVer(false)}
+            />
           )}
         </AnimatePresence>
       </div>

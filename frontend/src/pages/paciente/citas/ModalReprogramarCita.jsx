@@ -14,19 +14,32 @@ export default function ModalReprogramarCita({ cita, onClose, onSuccess }) {
 
   const now = new Date()
   const hoy = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`
-  const inputClass = "w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400 bg-slate-50 transition-all"
+
+  const inputClass = 'w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-medium text-slate-700 outline-none transition placeholder:text-slate-400 focus:border-[#00CCA5] focus:bg-white focus:ring-4 focus:ring-[#00CCA5]/15'
 
   // Cargar slots cuando cambia la fecha
   useEffect(() => {
-    if (!fecha) { setSlots([]); setSlotSeleccionado(''); setSinHorario(false); return }
-    if (fecha < hoy) { setSlots([]); setSlotSeleccionado(''); return }
+    if (!fecha) {
+      setSlots([])
+      setSlotSeleccionado('')
+      setSinHorario(false)
+      return
+    }
+
+    if (fecha < hoy) {
+      setSlots([])
+      setSlotSeleccionado('')
+      return
+    }
 
     const fetchSlots = async () => {
       setLoadingSlots(true)
       setSinHorario(false)
       setSlotSeleccionado('')
+
       try {
         const res = await api.get(`/horarios/slots?doctorId=${cita.doctorId}&fecha=${fecha}&duracion=${cita.servicio.duracion}`)
+
         if (res.data.slots.length === 0) {
           setSinHorario(true)
           setSlots([])
@@ -40,6 +53,7 @@ export default function ModalReprogramarCita({ cita, onClose, onSuccess }) {
         setLoadingSlots(false)
       }
     }
+
     fetchSlots()
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fecha])
@@ -47,9 +61,11 @@ export default function ModalReprogramarCita({ cita, onClose, onSuccess }) {
   const handleSubmit = async (e) => {
     e.preventDefault()
     setError('')
+
     if (!slotSeleccionado) return setError('Selecciona un horario disponible')
 
     setSaving(true)
+
     try {
       const [year, month, day] = fecha.split('-').map(Number)
       const [hours, minutes] = slotSeleccionado.split(':').map(Number)
@@ -75,104 +91,152 @@ export default function ModalReprogramarCita({ cita, onClose, onSuccess }) {
 
   return (
     <motion.div
-      initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
       transition={{ duration: 0.2 }}
-      className="fixed inset-0 bg-slate-900/40 flex items-center justify-center z-50 px-4"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/70 px-4 backdrop-blur-sm"
     >
       <motion.div
-        initial={{ opacity: 0, scale: 0.95, y: 12 }}
+        initial={{ opacity: 0, scale: 0.96, y: 18 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
-        exit={{ opacity: 0, scale: 0.95, y: 12 }}
+        exit={{ opacity: 0, scale: 0.96, y: 18 }}
         transition={{ duration: 0.2, ease: 'easeOut' }}
-        className="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden"
+        className="flex max-h-[90vh] w-full max-w-lg flex-col overflow-hidden rounded-[2rem] border border-slate-200 bg-white shadow-2xl"
       >
+        <div className="h-1.5 w-full flex-shrink-0 bg-gradient-to-r from-[#000089] via-[#0069C9] to-[#00CCA5]" />
+
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-5 border-b border-slate-100">
+        <div className="flex flex-shrink-0 items-center justify-between border-b border-slate-100 px-6 py-5">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 bg-violet-50 rounded-xl flex items-center justify-center">
-              <RefreshCw size={18} className="text-violet-600" />
+            <div className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-2xl bg-[#000089]/10">
+              <RefreshCw size={19} className="text-[#000089]" />
             </div>
+
             <div>
-              <h2 className="text-base font-semibold text-slate-800">Reprogramar Cita</h2>
-              <p className="text-xs text-slate-400">Selecciona una nueva fecha y horario</p>
+              <h2 className="text-base font-black text-slate-900">
+                Reprogramar Cita
+              </h2>
+              <p className="text-xs font-medium text-slate-400">
+                Selecciona una nueva fecha y horario disponible.
+              </p>
             </div>
           </div>
-          <button onClick={onClose}
-            className="w-8 h-8 flex items-center justify-center rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-all">
+
+          <button
+            onClick={onClose}
+            type="button"
+            className="flex h-9 w-9 items-center justify-center rounded-xl text-slate-400 transition hover:bg-slate-100 hover:text-slate-700"
+          >
             <X size={18} />
           </button>
         </div>
 
         {/* Body */}
-        <div className="px-6 py-5">
-
+        <div className="flex-1 overflow-y-auto px-6 py-5">
           {/* Info cita actual */}
-          <div className="bg-slate-50 border border-slate-100 rounded-xl p-4 mb-5">
-            <p className="text-xs font-semibold text-slate-500 mb-2">Cita actual</p>
-            <p className="text-sm font-medium text-slate-800">
+          <div className="mb-5 rounded-3xl border border-slate-200 bg-gradient-to-br from-slate-50 to-white p-4">
+            <div className="mb-3 flex items-center gap-2">
+              <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-[#00CCA5]/10">
+                <Calendar size={15} className="text-[#008f78]" />
+              </div>
+
+              <p className="text-xs font-black uppercase tracking-[0.12em] text-slate-400">
+                Cita actual
+              </p>
+            </div>
+
+            <p className="text-sm font-black text-slate-800">
               Dr. {cita.doctor.usuario.nombre} {cita.doctor.usuario.apellido}
             </p>
-            <p className="text-xs text-slate-400 mt-0.5">
+
+            <p className="mt-1 text-xs font-medium text-slate-400">
               {cita.servicio.nombre} · {formatFechaActual(cita.fecha)}
             </p>
           </div>
 
           <AnimatePresence>
             {error && (
-              <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }}
-                className="flex items-center gap-2 bg-red-50 border border-red-100 text-red-600 text-sm px-4 py-3 rounded-xl mb-4">
-                <span className="w-1.5 h-1.5 bg-red-500 rounded-full flex-shrink-0" />{error}
+              <motion.div
+                initial={{ opacity: 0, y: -8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -8 }}
+                className="mb-5 flex items-start gap-3 rounded-2xl border border-red-100 bg-red-50 px-4 py-3 text-sm font-medium text-red-700"
+              >
+                <AlertCircle size={16} className="mt-0.5 flex-shrink-0 text-red-500" />
+                <span>{error}</span>
               </motion.div>
             )}
           </AnimatePresence>
 
           <form onSubmit={handleSubmit} className="space-y-4">
-
             {/* Nueva fecha */}
             <div>
-              <label className="block text-xs font-semibold text-slate-600 mb-1.5">
+              <label className="mb-1.5 block text-xs font-black uppercase tracking-[0.08em] text-slate-500">
                 Nueva fecha <span className="text-red-400">*</span>
               </label>
-              <input type="date" value={fecha} min={hoy}
-                onChange={e => { setFecha(e.target.value); setSlotSeleccionado('') }}
-                required className={inputClass} />
+
+              <input
+                type="date"
+                value={fecha}
+                min={hoy}
+                onChange={e => {
+                  setFecha(e.target.value)
+                  setSlotSeleccionado('')
+                }}
+                required
+                className={inputClass}
+              />
             </div>
 
             {/* Slots */}
             <AnimatePresence>
               {fecha && (
-                <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }}>
-                  <label className="block text-xs font-semibold text-slate-600 mb-2">
+                <motion.div
+                  initial={{ opacity: 0, y: -8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -8 }}
+                >
+                  <label className="mb-2 block text-xs font-black uppercase tracking-[0.08em] text-slate-500">
                     Horario disponible
-                    <span className="ml-2 text-slate-400 font-normal">({cita.servicio.duracion} min por cita)</span>
+                    <span className="ml-2 normal-case tracking-normal text-slate-400">
+                      ({cita.servicio.duracion} min por cita)
+                    </span>
                   </label>
 
                   {loadingSlots ? (
-                    <div className="flex items-center gap-2 py-3">
-                      <div className="w-4 h-4 border-2 border-violet-500 border-t-transparent rounded-full animate-spin flex-shrink-0" />
-                      <span className="text-sm text-slate-400">Cargando horarios...</span>
+                    <div className="flex items-center gap-3 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3">
+                      <div className="h-5 w-5 flex-shrink-0 animate-spin rounded-full border-2 border-[#00CCA5] border-t-transparent" />
+                      <span className="text-sm font-medium text-slate-400">
+                        Cargando horarios disponibles...
+                      </span>
                     </div>
                   ) : sinHorario ? (
-                    <div className="flex items-center gap-2 px-4 py-3 bg-amber-50 border border-amber-100 rounded-xl">
-                      <AlertCircle size={14} className="text-amber-500 flex-shrink-0" />
-                      <p className="text-xs text-amber-700">
+                    <div className="flex items-start gap-3 rounded-2xl border border-amber-100 bg-amber-50 px-4 py-3">
+                      <AlertCircle size={16} className="mt-0.5 flex-shrink-0 text-amber-500" />
+                      <p className="text-xs font-bold text-amber-700">
                         Dr. {cita.doctor.usuario.nombre} no atiende este día. Elige otra fecha.
                       </p>
                     </div>
                   ) : (
-                    <div className="grid grid-cols-4 gap-2">
+                    <div className="grid grid-cols-3 gap-2 sm:grid-cols-4">
                       {slots.map(slot => (
-                        <button key={slot.hora} type="button"
+                        <button
+                          key={slot.hora}
+                          type="button"
                           disabled={slot.ocupado}
-                          onClick={() => { if (!slot.ocupado) setSlotSeleccionado(slot.hora) }}
-                          className={`flex items-center justify-center gap-1 py-2 rounded-xl text-xs font-medium transition-all border ${
+                          onClick={() => {
+                            if (!slot.ocupado) setSlotSeleccionado(slot.hora)
+                          }}
+                          className={`flex items-center justify-center gap-1.5 rounded-2xl border px-2 py-2.5 text-xs font-black transition-all ${
                             slot.ocupado
-                              ? 'bg-slate-50 text-slate-300 border-slate-100 cursor-not-allowed line-through'
+                              ? 'cursor-not-allowed border-slate-100 bg-slate-50 text-slate-300 line-through'
                               : slotSeleccionado === slot.hora
-                                ? 'bg-violet-600 text-white border-violet-600 shadow-sm'
-                                : 'bg-white text-slate-600 border-slate-200 hover:border-violet-300 hover:bg-violet-50'
-                          }`}>
-                          <Clock size={10} />
+                                ? 'border-[#000089] bg-[#000089] text-white shadow-lg shadow-[#000089]/20'
+                                : 'border-slate-200 bg-white text-slate-600 hover:border-[#00CCA5]/50 hover:bg-[#00CCA5]/10 hover:text-[#008f78]'
+                          }`}
+                        >
+                          <Clock size={11} />
                           {slot.hora}
                         </button>
                       ))}
@@ -182,16 +246,23 @@ export default function ModalReprogramarCita({ cita, onClose, onSuccess }) {
               )}
             </AnimatePresence>
 
-            <div className="flex gap-3 pt-1">
-              <button type="button" onClick={onClose}
-                className="flex-1 px-4 py-2.5 border border-slate-200 text-slate-600 rounded-xl text-sm font-medium hover:bg-slate-50 transition-all">
+            <div className="flex flex-col-reverse gap-3 pt-2 sm:flex-row">
+              <button
+                type="button"
+                onClick={onClose}
+                className="flex h-11 flex-1 items-center justify-center rounded-xl border border-slate-200 bg-white px-4 text-sm font-black text-slate-500 transition hover:bg-slate-50 hover:text-slate-700"
+              >
                 Cancelar
               </button>
-              <button type="submit" disabled={saving || !slotSeleccionado}
-                className="flex-1 px-4 py-2.5 bg-violet-600 hover:bg-violet-700 disabled:opacity-50 disabled:cursor-not-allowed text-white rounded-xl text-sm font-medium transition-all shadow-sm hover:shadow-md">
+
+              <button
+                type="submit"
+                disabled={saving || !slotSeleccionado}
+                className="flex h-11 flex-1 items-center justify-center rounded-xl bg-[#000089] px-4 text-sm font-black text-white shadow-lg shadow-[#000089]/20 transition hover:bg-[#000070] disabled:cursor-not-allowed disabled:opacity-50"
+              >
                 {saving ? (
                   <span className="flex items-center justify-center gap-2">
-                    <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                    <span className="h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white" />
                     Reprogramando...
                   </span>
                 ) : 'Confirmar nueva fecha'}

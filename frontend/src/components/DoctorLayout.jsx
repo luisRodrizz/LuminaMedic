@@ -9,124 +9,229 @@ import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import api from '../services/api'
 
-const MENU = [
-  { path: '/doctor/dashboard',      icon: LayoutDashboard, label: 'Dashboard'       },
-  { path: '/doctor/citas',          icon: Calendar,        label: 'Mis Citas'       },
-  { path: '/doctor/pacientes',      icon: Users,           label: 'Mis Pacientes'   },
-  { path: '/doctor/perfil',         icon: UserCircle,      label: 'Mi Perfil'       },
-  { path: '/doctor/agenda',         icon: CalendarDays,    label: 'Agenda'          },
-  { path: '/doctor/horarios',       icon: Clock,           label: 'Mis Horarios'    },
-  { path: '/doctor/estadisticas',   icon: TrendingUp,      label: 'Estadísticas'    },
-  { path: '/doctor/notificaciones', icon: Bell,            label: 'Notificaciones', badge: true },
+const BRAND = {
+  name: 'LuminaMedic',
+  subtitle: 'Panel Médico',
+  symbol: '/branding/luminamedic-symbol.png',
+  full: '/branding/luminamedic-full.png',
+  wordmark: '/branding/luminamedic-wordmark.png'
+}
+
+const MENU_SECTIONS = [
+  {
+    title: 'Vista general',
+    items: [
+      { path: '/doctor/dashboard', icon: LayoutDashboard, label: 'Dashboard' }
+    ]
+  },
+  {
+    title: 'Atención médica',
+    items: [
+      { path: '/doctor/citas', icon: Calendar, label: 'Mis Citas' },
+      { path: '/doctor/pacientes', icon: Users, label: 'Mis Pacientes' },
+      { path: '/doctor/agenda', icon: CalendarDays, label: 'Agenda' },
+      { path: '/doctor/horarios', icon: Clock, label: 'Mis Horarios' }
+    ]
+  },
+  {
+    title: 'Seguimiento',
+    items: [
+      { path: '/doctor/estadisticas', icon: TrendingUp, label: 'Estadísticas' },
+      { path: '/doctor/notificaciones', icon: Bell, label: 'Notificaciones', badge: true }
+    ]
+  },
+  {
+    title: 'Configuración',
+    items: [
+      { path: '/doctor/perfil', icon: UserCircle, label: 'Mi Perfil' }
+    ]
+  }
 ]
-function SidebarContent({ collapsed, isOverlay, noLeidas, onToggle, onClose, onNavClick, user, clinica, fotoPerfil, onLogout }) {
+
+function SidebarContent({
+  collapsed,
+  isOverlay,
+  noLeidas,
+  onToggle,
+  onClose,
+  onNavClick,
+  user,
+  fotoPerfil,
+  onLogout
+}) {
+  const expanded = !collapsed || isOverlay
+
   return (
     <>
-      {/* Logo */}
-      <div className="flex items-center justify-between px-3 py-4 border-b border-white/10">
-        <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-lg overflow-hidden bg-blue-500 flex items-center justify-center flex-shrink-0">
-            {clinica?.logo ? (
-              <img src={clinica.logo} alt={clinica.nombre || 'Clínica'} className="w-full h-full object-cover" />
-            ) : (
-              <Stethoscope size={16} className="text-white" />
-            )}
-          </div>
-
-          {(!collapsed || isOverlay) && (
-            <div>
-              <p className="text-white font-semibold text-sm leading-none">
-                {clinica?.nombre || 'MediCare'}
-              </p>
-              <p className="text-slate-400 text-xs mt-0.5">Panel Médico</p>
+      {/* Brand */}
+      <div className="relative border-b border-slate-200 px-6 py-6">
+        <div className="flex items-center justify-center">
+          {expanded ? (
+            <img
+              src={BRAND.full}
+              alt={BRAND.name}
+              className="h-12 w-auto max-w-[220px] object-contain"
+            />
+          ) : (
+            <div className="flex h-11 w-11 items-center justify-center rounded-2xl border border-slate-200 bg-white shadow-sm">
+              <img
+                src={BRAND.symbol}
+                alt={BRAND.name}
+                className="h-8 w-8 object-contain"
+              />
             </div>
           )}
         </div>
-        {isOverlay ? (
-          <button onClick={onClose} className="text-slate-400 hover:text-white transition-colors p-1.5 rounded-lg hover:bg-white/10">
-            <X size={17} />
+
+        {isOverlay && (
+          <button
+            onClick={onClose}
+            className="absolute right-4 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-xl text-slate-400 transition hover:bg-slate-100 hover:text-slate-700"
+            title="Cerrar menú"
+          >
+            <X size={18} />
           </button>
-        ) : (
-          !collapsed && (
-            <button onClick={onToggle} className="text-slate-400 hover:text-white transition-colors p-1.5 rounded-lg hover:bg-white/10">
-              <PanelLeftClose size={17} />
-            </button>
-          )
         )}
       </div>
 
       {/* Nav */}
-      <nav className="flex-1 py-4 px-2 space-y-0.5 overflow-y-auto">
-        {(!collapsed || isOverlay) && (
-          <p className="text-slate-500 text-xs font-medium uppercase tracking-wider px-3 mb-2">Menú</p>
-        )}
-        {MENU.map((item) => (
-          <NavLink
-            key={item.path}
-            to={item.path}
-            title={item.label}
-            onClick={onNavClick}
-            className={({ isActive }) =>
-              `flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-150 group relative ${
-                isActive ? 'bg-blue-500/20 text-blue-400 border border-blue-500/30' : 'text-slate-400 hover:bg-white/5 hover:text-slate-200'
-              } ${collapsed && !isOverlay ? 'justify-center' : ''}`
-            }
-          >
-            {({ isActive }) => (
-              <>
-                <div className="relative flex-shrink-0">
-                  <item.icon size={18} className={isActive ? 'text-blue-400' : 'text-slate-400 group-hover:text-slate-200'} />
-                  {item.badge && noLeidas > 0 && collapsed && !isOverlay && (
-                    <span className="absolute -top-1.5 -right-1.5 w-4 h-4 bg-red-500 rounded-full text-white text-[9px] font-bold flex items-center justify-center">
-                      {noLeidas > 99 ? '99+' : noLeidas}
-                    </span>
-                  )}
-                </div>
-                {(!collapsed || isOverlay) && (
-                  <>
-                    <span className="text-sm font-medium flex-1">{item.label}</span>
-                    {item.badge && noLeidas > 0 && (
-                      <span className="ml-auto px-1.5 py-0.5 bg-red-500 text-white text-[10px] font-bold rounded-md min-w-[20px] text-center">
-                        {noLeidas > 99 ? '99+' : noLeidas}
-                      </span>
+      <nav className="flex-1 overflow-y-auto px-3 py-5">
+        <div className="space-y-6">
+          {MENU_SECTIONS.map((section) => (
+            <div key={section.title}>
+              {expanded && (
+                <p className="mb-2 px-2 text-[10px] font-black uppercase tracking-[0.18em] text-slate-400">
+                  {section.title}
+                </p>
+              )}
+
+              <div className="space-y-1">
+                {section.items.map((item) => (
+                  <NavLink
+                    key={item.path}
+                    to={item.path}
+                    title={item.label}
+                    onClick={onNavClick}
+                    className={({ isActive }) =>
+                      [
+                        'group relative flex items-center gap-3 rounded-2xl px-3 py-2.5 text-sm transition-all duration-150',
+                        collapsed && !isOverlay ? 'justify-center' : '',
+                        isActive
+                          ? 'border border-[#00CCA5]/30 bg-[#00CCA5]/10 text-[#000089] shadow-sm'
+                          : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900'
+                      ].join(' ')
+                    }
+                  >
+                    {({ isActive }) => (
+                      <>
+                        {isActive && expanded && (
+                          <span className="absolute left-0 top-1/2 h-6 w-1 -translate-y-1/2 rounded-r-full bg-[#00CCA5]" />
+                        )}
+
+                        <div className="relative flex-shrink-0">
+                          <item.icon
+                            size={18}
+                            className={
+                              isActive
+                                ? 'text-[#00a98a]'
+                                : 'text-slate-500 transition group-hover:text-slate-800'
+                            }
+                          />
+
+                          {item.badge && noLeidas > 0 && collapsed && !isOverlay && (
+                            <span className="absolute -right-2 -top-2 flex h-5 min-w-5 items-center justify-center rounded-full bg-red-500 px-1 text-[10px] font-black text-white">
+                              {noLeidas > 99 ? '99+' : noLeidas}
+                            </span>
+                          )}
+                        </div>
+
+                        {expanded && (
+                          <>
+                            <span className="flex-1 font-bold">{item.label}</span>
+
+                            {item.badge && noLeidas > 0 && (
+                              <span className="ml-auto flex h-5 min-w-5 items-center justify-center rounded-full bg-red-500 px-1.5 text-[10px] font-black text-white">
+                                {noLeidas > 99 ? '99+' : noLeidas}
+                              </span>
+                            )}
+                          </>
+                        )}
+                      </>
                     )}
-                  </>
-                )}
-              </>
-            )}
-          </NavLink>
-        ))}
+                  </NavLink>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+
         {collapsed && !isOverlay && (
-          <button onClick={onToggle} className="w-full flex justify-center px-3 py-2.5 rounded-lg text-slate-500 hover:text-white hover:bg-white/5 transition-all mt-2">
+          <button
+            onClick={onToggle}
+            className="mt-4 flex w-full justify-center rounded-2xl border border-slate-200 px-3 py-2.5 text-slate-500 transition hover:bg-slate-100 hover:text-slate-800"
+            title="Expandir menú"
+          >
             <PanelLeftOpen size={18} />
           </button>
         )}
       </nav>
 
       {/* User */}
-      <div className={`p-3 border-t border-white/10 ${collapsed && !isOverlay ? 'flex justify-center' : ''}`}>
-        {(!collapsed || isOverlay) ? (
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg overflow-hidden bg-blue-500/20 border border-blue-500/30 flex items-center justify-center flex-shrink-0">
-              {fotoPerfil ? (
-                <img src={fotoPerfil} alt={`${user?.nombre} ${user?.apellido}`} className="w-full h-full object-cover" />
-              ) : (
-                <span className="text-blue-400 text-xs font-bold">
-                  {user?.nombre?.[0]}{user?.apellido?.[0]}
-                </span>
-              )}
+      <div className={`border-t border-slate-200 p-3 ${collapsed && !isOverlay ? 'flex justify-center' : ''}`}>
+        {expanded ? (
+          <div className="rounded-3xl border border-slate-200 bg-gradient-to-br from-slate-50 to-white p-3 shadow-sm">
+            <div className="mb-3 flex items-center justify-between">
+              <span className="text-[10px] font-black uppercase tracking-[0.16em] text-slate-400">
+                Sesión médica
+              </span>
+
+              <span className="flex items-center gap-1 rounded-full bg-[#00CCA5]/10 px-2 py-1 text-[10px] font-black text-[#008f78]">
+                <span className="h-1.5 w-1.5 rounded-full bg-[#00CCA5]" />
+                Online
+              </span>
             </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-white text-xs font-semibold truncate">Dr. {user?.nombre} {user?.apellido}</p>
-              <p className="text-slate-500 text-xs">Doctor</p>
+
+            <div className="flex items-center gap-3">
+              <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center overflow-hidden rounded-2xl border border-[#00CCA5]/20 bg-[#00CCA5]/10">
+                {fotoPerfil ? (
+                  <img
+                    src={fotoPerfil}
+                    alt={`${user?.nombre} ${user?.apellido}`}
+                    className="h-full w-full object-cover"
+                  />
+                ) : (
+                  <span className="text-xs font-black text-[#008f78]">
+                    {user?.nombre?.[0]}
+                    {user?.apellido?.[0]}
+                  </span>
+                )}
+              </div>
+
+              <div className="min-w-0 flex-1">
+                <p className="truncate text-xs font-black text-slate-900">
+                  Dr. {user?.nombre} {user?.apellido}
+                </p>
+                <p className="mt-0.5 truncate text-[11px] font-bold uppercase text-slate-400">
+                  Doctor
+                </p>
+              </div>
+
+              <button
+                onClick={onLogout}
+                title="Cerrar sesión"
+                className="rounded-xl p-2 text-slate-400 transition hover:bg-red-50 hover:text-red-500"
+              >
+                <LogOut size={16} />
+              </button>
             </div>
-            <button onClick={onLogout} title="Cerrar sesión" className="text-slate-500 hover:text-red-400 transition-colors">
-              <LogOut size={16} />
-            </button>
           </div>
         ) : (
-          <button onClick={onLogout} title="Cerrar sesión" className="text-slate-500 hover:text-red-400 transition-colors">
-            <LogOut size={16} />
+          <button
+            onClick={onLogout}
+            title="Cerrar sesión"
+            className="rounded-2xl p-2 text-slate-500 transition hover:bg-red-50 hover:text-red-500"
+          >
+            <LogOut size={18} />
           </button>
         )}
       </div>
@@ -206,6 +311,7 @@ export default function DoctorLayout({ children }) {
   }, [])
 
   const handleLogout = () => { logout(); navigate('/login') }
+
   const toggleCollapsed = () => {
     const next = !collapsed
     setCollapsed(next)
@@ -225,31 +331,38 @@ export default function DoctorLayout({ children }) {
   }
 
   return (
-    <div className="flex min-h-screen bg-slate-50" style={{ fontFamily: "'DM Sans', sans-serif" }}>
-
-      {/* Sidebar desktop (md+) */}
+    <div
+      className="flex min-h-screen bg-[#F8FBFC]"
+      style={{ fontFamily: "'DM Sans', sans-serif" }}
+    >
+      {/* Sidebar desktop */}
       <aside
-        className={`hidden md:flex flex-col flex-shrink-0 transition-all duration-300 ${collapsed ? 'w-16' : 'w-64'}`}
-        style={{ background: 'linear-gradient(180deg, #0f172a 0%, #1e293b 100%)' }}
+        className={`hidden flex-shrink-0 flex-col border-r border-slate-200 bg-white transition-all duration-300 md:flex ${
+          collapsed ? 'w-[72px]' : 'w-72'
+        }`}
       >
         <SidebarContent {...sidebarProps} />
       </aside>
 
-      {/* Sidebar móvil overlay (< md) */}
+      {/* Sidebar móvil overlay */}
       <AnimatePresence>
         {mobileOpen && (
           <>
             <motion.div
-              initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
               transition={{ duration: 0.2 }}
-              className="fixed inset-0 bg-slate-900/60 z-40 md:hidden"
+              className="fixed inset-0 z-40 bg-slate-950/70 backdrop-blur-sm md:hidden"
               onClick={() => setMobileOpen(false)}
             />
+
             <motion.aside
-              initial={{ x: -288 }} animate={{ x: 0 }} exit={{ x: -288 }}
+              initial={{ x: -304 }}
+              animate={{ x: 0 }}
+              exit={{ x: -304 }}
               transition={{ duration: 0.25, ease: 'easeOut' }}
-              className="fixed top-0 left-0 h-full w-72 flex flex-col z-50 md:hidden"
-              style={{ background: 'linear-gradient(180deg, #0f172a 0%, #1e293b 100%)' }}
+              className="fixed left-0 top-0 z-50 flex h-full w-80 flex-col border-r border-slate-200 bg-white md:hidden"
             >
               <SidebarContent {...sidebarProps} isOverlay />
             </motion.aside>
@@ -258,34 +371,72 @@ export default function DoctorLayout({ children }) {
       </AnimatePresence>
 
       {/* Main */}
-      <div className="flex-1 flex flex-col min-w-0">
-        <header className="bg-white border-b border-slate-200 px-4 md:px-6 py-3 flex items-center justify-between">
+      <div className="flex min-w-0 flex-1 flex-col">
+        <header className="sticky top-0 z-30 flex items-center justify-between border-b border-slate-200/80 bg-white/90 px-4 py-3 backdrop-blur-xl md:px-6">
           <div className="flex items-center gap-3">
-            <button onClick={() => setMobileOpen(true)} className="md:hidden p-2 rounded-lg text-slate-500 hover:bg-slate-100 transition-all">
+            <button
+              onClick={() => setMobileOpen(true)}
+              className="rounded-xl p-2 text-slate-500 transition hover:bg-slate-100 md:hidden"
+              title="Abrir menú"
+            >
               <Menu size={20} />
             </button>
+
+            <button
+              onClick={toggleCollapsed}
+              className="hidden rounded-xl border border-slate-200 bg-white p-2 text-slate-500 transition hover:border-[#00CCA5]/40 hover:bg-slate-50 hover:text-[#000089] md:flex"
+              title={collapsed ? 'Expandir menú' : 'Contraer menú'}
+            >
+              {collapsed ? <PanelLeftOpen size={18} /> : <PanelLeftClose size={18} />}
+            </button>
+
             <div>
-              <h2 className="text-slate-800 font-semibold text-sm">Panel Médico</h2>
-              <p className="text-slate-400 text-xs hidden sm:block">Bienvenido, Dr. {user?.nombre}</p>
+              <h2 className="text-sm font-black text-slate-900">
+                Panel Médico
+              </h2>
+              <p className="hidden text-xs text-slate-400 sm:block">
+                Bienvenido, Dr. {user?.nombre} · Gestión de atención médica
+              </p>
             </div>
           </div>
+
           <div className="flex items-center gap-2 md:gap-3">
             {noLeidas > 0 && (
-              <div className="flex items-center gap-1.5 bg-red-50 border border-red-100 px-2.5 py-1.5 rounded-xl">
+              <div className="flex items-center gap-1.5 rounded-2xl border border-red-100 bg-red-50 px-3 py-1.5">
                 <Bell size={13} className="text-red-500" />
-                <span className="text-xs text-red-600 font-medium hidden sm:inline">
+                <span className="hidden text-xs font-bold text-red-600 sm:inline">
                   {noLeidas} notificación{noLeidas !== 1 ? 'es' : ''} sin leer
                 </span>
-                <span className="text-xs text-red-600 font-bold sm:hidden">{noLeidas}</span>
+                <span className="text-xs font-black text-red-600 sm:hidden">
+                  {noLeidas}
+                </span>
               </div>
             )}
-            <div className="hidden sm:flex items-center gap-2">
-              <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-              <span className="text-xs text-slate-500">En línea</span>
+
+            <div className="hidden items-center gap-2 rounded-2xl border border-[#00CCA5]/20 bg-[#00CCA5]/10 px-3 py-1.5 sm:flex">
+              <div className="h-2 w-2 rounded-full bg-[#00CCA5] shadow-sm shadow-[#00CCA5]/40" />
+              <span className="text-xs font-bold text-[#008f78]">
+                En línea
+              </span>
+            </div>
+
+            <div className="hidden h-8 w-8 items-center justify-center overflow-hidden rounded-2xl border border-slate-200 bg-slate-100 md:flex">
+              {fotoPerfil ? (
+                <img
+                  src={fotoPerfil}
+                  alt={`${user?.nombre} ${user?.apellido}`}
+                  className="h-full w-full object-cover"
+                />
+              ) : (
+                <Stethoscope size={15} className="text-slate-500" />
+              )}
             </div>
           </div>
         </header>
-        <main className="flex-1 overflow-auto p-4 md:p-6">{children}</main>
+
+        <main className="flex-1 overflow-auto p-4 md:p-6">
+          {children}
+        </main>
       </div>
     </div>
   )

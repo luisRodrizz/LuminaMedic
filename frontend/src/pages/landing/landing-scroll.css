@@ -1,0 +1,27 @@
+html.landing-scroll {
+  scroll-behavior: auto;
+}
+
+html.landing-scroll,
+body.landing-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: #00CCA5 #F1F5F9;
+}
+
+body.landing-scroll::-webkit-scrollbar {
+  width: 10px;
+}
+
+body.landing-scroll::-webkit-scrollbar-track {
+  background: #F1F5F9;
+}
+
+body.landing-scroll::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #000089 0%, #00CCA5 100%);
+  border-radius: 999px;
+  border: 2px solid #F1F5F9;
+}
+
+body.landing-scroll::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #00006f 0%, #008f78 100%);
+}

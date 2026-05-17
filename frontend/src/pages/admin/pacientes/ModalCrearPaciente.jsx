@@ -1,23 +1,46 @@
 import { useState } from 'react'
-import { X, Users, Search, Loader2, CheckCircle, AlertCircle, Eye, EyeOff, ArrowRight, ArrowLeft, UserCheck } from 'lucide-react'
+import {
+  X,
+  Users,
+  Search,
+  Loader2,
+  CheckCircle,
+  AlertCircle,
+  Eye,
+  EyeOff,
+  ArrowRight,
+  ArrowLeft,
+  UserCheck,
+  UserRound,
+  IdCard,
+  Mail,
+  Lock,
+  Phone,
+  CalendarDays,
+  MapPin,
+  VenusAndMars,
+  Save
+} from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import zxcvbn from 'zxcvbn'
 import api from '../../../services/api'
 
 const fortalezaConfig = [
-  { label: 'Muy débil',  color: 'bg-red-500',    text: 'text-red-500'    },
-  { label: 'Débil',      color: 'bg-orange-500',  text: 'text-orange-500' },
-  { label: 'Aceptable',  color: 'bg-yellow-500',  text: 'text-yellow-500' },
-  { label: 'Fuerte',     color: 'bg-blue-500',    text: 'text-blue-500'   },
-  { label: 'Muy fuerte', color: 'bg-emerald-500', text: 'text-emerald-500'},
+  { label: 'Muy débil', color: 'bg-red-500', text: 'text-red-500' },
+  { label: 'Débil', color: 'bg-orange-500', text: 'text-orange-500' },
+  { label: 'Aceptable', color: 'bg-yellow-500', text: 'text-yellow-500' },
+  { label: 'Fuerte', color: 'bg-[#000089]', text: 'text-[#000089]' },
+  { label: 'Muy fuerte', color: 'bg-[#00CCA5]', text: 'text-[#008f78]' }
 ]
 
 const STEPS = ['Identidad', 'Cuenta y datos']
 
 const calcularEdad = (fechaNac) => {
   if (!fechaNac) return null
+
   const fecha = new Date(fechaNac)
   const hoy = new Date()
+
   return hoy.getFullYear() - fecha.getFullYear() -
     (hoy < new Date(hoy.getFullYear(), fecha.getMonth(), fecha.getDate()) ? 1 : 0)
 }
@@ -25,11 +48,24 @@ const calcularEdad = (fechaNac) => {
 export default function ModalCrearPaciente({ onClose, onSuccess }) {
   const [step, setStep] = useState(1)
   const [form, setForm] = useState({
-    nombre: '', apellido: '', email: '', password: '', confirmar: '',
-    telefono: '', fechaNac: '', genero: '', direccion: '', alergias: '',
-    tipoDocumento: 'DNI', numeroDocumento: '', fuenteNombre: 'MANUAL',
-    tutorNombre: '', tutorDni: '', tutorTelefono: ''
+    nombre: '',
+    apellido: '',
+    email: '',
+    password: '',
+    confirmar: '',
+    telefono: '',
+    fechaNac: '',
+    genero: '',
+    direccion: '',
+    alergias: '',
+    tipoDocumento: 'DNI',
+    numeroDocumento: '',
+    fuenteNombre: 'MANUAL',
+    tutorNombre: '',
+    tutorDni: '',
+    tutorTelefono: ''
   })
+
   const [error, setError] = useState('')
   const [buscando, setBuscando] = useState(false)
   const [estadoVerificacion, setEstadoVerificacion] = useState(null)
@@ -37,7 +73,8 @@ export default function ModalCrearPaciente({ onClose, onSuccess }) {
   const [showConfirmar, setShowConfirmar] = useState(false)
   const [loading, setLoading] = useState(false)
 
-  const inputClass = "w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-400 bg-slate-50 transition-all"
+  const inputClass =
+    'w-full h-12 rounded-xl border border-slate-200 bg-slate-50 px-4 text-sm text-slate-800 placeholder:text-slate-400 outline-none transition focus:border-[#00CCA5] focus:bg-white focus:ring-4 focus:ring-[#00CCA5]/15'
 
   const scorePassword = form.password ? zxcvbn(form.password) : null
   const score = scorePassword?.score ?? -1
@@ -47,31 +84,47 @@ export default function ModalCrearPaciente({ onClose, onSuccess }) {
 
   const handleChange = (e) => {
     const { name, value } = e.target
+
     if (name === 'tipoDocumento') {
       setEstadoVerificacion(null)
       setError('')
-      setForm(prev => ({ ...prev, tipoDocumento: value, numeroDocumento: '', nombre: '', apellido: '', fuenteNombre: 'MANUAL' }))
+      setForm((prev) => ({
+        ...prev,
+        tipoDocumento: value,
+        numeroDocumento: '',
+        nombre: '',
+        apellido: '',
+        fuenteNombre: 'MANUAL'
+      }))
       return
     }
+
     if (name === 'numeroDocumento') setEstadoVerificacion(null)
-    setForm(prev => ({ ...prev, [name]: value }))
+
+    setForm((prev) => ({ ...prev, [name]: value }))
   }
 
   const buscarDocumento = async () => {
-    if (form.numeroDocumento.length !== 8) return setError('El DNI debe tener 8 dígitos')
+    if (form.numeroDocumento.length !== 8) {
+      return setError('El DNI debe tener 8 dígitos')
+    }
+
     setError('')
     setBuscando(true)
+
     try {
       const res = await api.get(`/pacientes/documento/${form.numeroDocumento}`)
-      setForm(prev => ({
+
+      setForm((prev) => ({
         ...prev,
         nombre: res.data.nombres,
         apellido: `${res.data.apellido_paterno} ${res.data.apellido_materno}`,
         fuenteNombre: 'RENIEC_API'
       }))
+
       setEstadoVerificacion('verificado')
     } catch {
-      setForm(prev => ({ ...prev, fuenteNombre: 'MANUAL' }))
+      setForm((prev) => ({ ...prev, fuenteNombre: 'MANUAL' }))
       setEstadoVerificacion('manual')
     } finally {
       setBuscando(false)
@@ -81,28 +134,53 @@ export default function ModalCrearPaciente({ onClose, onSuccess }) {
   const handleNextStep = (e) => {
     e.preventDefault()
     setError('')
+
     if (!form.numeroDocumento) return setError('El número de documento es requerido')
-    if (form.tipoDocumento === 'DNI' && form.numeroDocumento.length !== 8) return setError('El DNI debe tener 8 dígitos')
+    if (form.tipoDocumento === 'DNI' && form.numeroDocumento.length !== 8) {
+      return setError('El DNI debe tener 8 dígitos')
+    }
     if (!form.nombre.trim()) return setError('El nombre es requerido')
     if (!form.apellido.trim()) return setError('El apellido es requerido')
+
     setStep(2)
   }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
     setError('')
-    if (form.password.length < 8) return setError('La contraseña debe tener al menos 8 caracteres')
-    if (score < 2) return setError('La contraseña es muy débil. Usa letras, números y símbolos.')
-    if (form.password !== form.confirmar) return setError('Las contraseñas no coinciden')
-    if (esMenor) {
-      if (!form.tutorNombre.trim()) return setError('El nombre del tutor es requerido para menores de edad')
-      if (!/^\d{8}$/.test(form.tutorDni)) return setError('El DNI del tutor debe tener 8 dígitos')
-      if (!form.tutorTelefono.trim()) return setError('El teléfono del tutor es requerido')
+
+    if (form.password.length < 8) {
+      return setError('La contraseña debe tener al menos 8 caracteres')
     }
+
+    if (score < 2) {
+      return setError('La contraseña es muy débil. Usa letras, números y símbolos.')
+    }
+
+    if (form.password !== form.confirmar) {
+      return setError('Las contraseñas no coinciden')
+    }
+
+    if (esMenor) {
+      if (!form.tutorNombre.trim()) {
+        return setError('El nombre del tutor es requerido para menores de edad')
+      }
+
+      if (!/^\d{8}$/.test(form.tutorDni)) {
+        return setError('El DNI del tutor debe tener 8 dígitos')
+      }
+
+      if (!form.tutorTelefono.trim()) {
+        return setError('El teléfono del tutor es requerido')
+      }
+    }
+
     try {
       setLoading(true)
       const { confirmar: _, ...data } = form
+
       await api.post('/pacientes', data)
+
       onSuccess()
       onClose()
     } catch (err) {
@@ -115,263 +193,642 @@ export default function ModalCrearPaciente({ onClose, onSuccess }) {
   const esDNI = form.tipoDocumento === 'DNI'
 
   return (
-    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
       transition={{ duration: 0.2 }}
-      className="fixed inset-0 bg-slate-900/40 flex items-center justify-center z-50 px-4">
+      className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/50 px-4 backdrop-blur-sm"
+    >
       <motion.div
-        initial={{ opacity: 0, scale: 0.95, y: 12 }} animate={{ opacity: 1, scale: 1, y: 0 }}
-        exit={{ opacity: 0, scale: 0.95, y: 12 }} transition={{ duration: 0.2, ease: 'easeOut' }}
-        className="bg-white rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden">
-
+        initial={{ opacity: 0, scale: 0.96, y: 16 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        exit={{ opacity: 0, scale: 0.96, y: 16 }}
+        transition={{ duration: 0.2, ease: 'easeOut' }}
+        className="flex max-h-[92vh] w-full max-w-2xl flex-col overflow-hidden rounded-[2rem] border border-white/70 bg-white shadow-2xl shadow-slate-950/20"
+      >
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-5 border-b border-slate-100">
-          <div className="flex items-center gap-3">
-            <div className="w-9 h-9 bg-indigo-50 rounded-xl flex items-center justify-center">
-              <Users size={18} className="text-indigo-600" />
-            </div>
-            <div>
-              <h2 className="text-base font-semibold text-slate-800">Nuevo Paciente</h2>
-              <div className="flex items-center gap-2 mt-0.5">
-                {STEPS.map((label, i) => {
-                  const num = i + 1
-                  const activo = step === num
-                  const completado = step > num
-                  return (
-                    <div key={i} className="flex items-center gap-1.5">
-                      <div className={`flex items-center gap-1 text-xs font-medium transition-all ${
-                        activo ? 'text-indigo-600' : completado ? 'text-emerald-500' : 'text-slate-300'
-                      }`}>
-                        {completado ? <CheckCircle size={11} /> : (
-                          <span className={`w-4 h-4 rounded-full flex items-center justify-center text-[9px] font-bold ${
-                            activo ? 'bg-indigo-600 text-white' : 'bg-slate-200 text-slate-400'
-                          }`}>{num}</span>
-                        )}
-                        {label}
-                      </div>
-                      {i < STEPS.length - 1 && <div className="w-3 h-px bg-slate-200" />}
-                    </div>
-                  )
-                })}
+        <div className="relative flex-shrink-0 border-b border-slate-100 px-6 py-6">
+          <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-[#000089] via-[#00A98A] to-[#00CCA5]" />
+
+          <div className="flex items-start justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#00CCA5]/10">
+                <Users size={21} className="text-[#008f78]" />
+              </div>
+
+              <div>
+                <h2 className="text-lg font-black text-slate-950">
+                  Nuevo Paciente
+                </h2>
+                <p className="mt-0.5 text-xs text-slate-400">
+                  Registra los datos de identidad, cuenta y contacto del paciente.
+                </p>
               </div>
             </div>
+
+            <button
+              onClick={onClose}
+              type="button"
+              className="flex h-9 w-9 items-center justify-center rounded-xl text-slate-400 transition hover:bg-slate-100 hover:text-slate-700"
+            >
+              <X size={18} />
+            </button>
           </div>
-          <button onClick={onClose}
-            className="w-8 h-8 flex items-center justify-center rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-all">
-            <X size={18} />
-          </button>
+
+          {/* Steps */}
+          <div className="mt-5 grid grid-cols-2 gap-2">
+            {STEPS.map((label, i) => {
+              const num = i + 1
+              const activo = step === num
+              const completado = step > num
+
+              return (
+                <div
+                  key={label}
+                  className={`flex items-center gap-3 rounded-2xl border px-3 py-2.5 transition ${
+                    activo
+                      ? 'border-[#000089]/20 bg-[#000089]/10'
+                      : completado
+                        ? 'border-[#00CCA5]/20 bg-[#00CCA5]/10'
+                        : 'border-slate-200 bg-slate-50'
+                  }`}
+                >
+                  <div
+                    className={`flex h-7 w-7 items-center justify-center rounded-xl text-xs font-black ${
+                      completado
+                        ? 'bg-[#00CCA5] text-white'
+                        : activo
+                          ? 'bg-[#000089] text-white'
+                          : 'bg-slate-200 text-slate-400'
+                    }`}
+                  >
+                    {completado ? <CheckCircle size={15} /> : num}
+                  </div>
+
+                  <span
+                    className={`text-xs font-black ${
+                      activo
+                        ? 'text-[#000089]'
+                        : completado
+                          ? 'text-[#008f78]'
+                          : 'text-slate-400'
+                    }`}
+                  >
+                    {label}
+                  </span>
+                </div>
+              )
+            })}
+          </div>
         </div>
 
         {/* Body */}
-        <div className="px-6 py-5">
+        <div className="flex-1 overflow-y-auto px-6 py-6">
           <AnimatePresence>
             {error && (
-              <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }}
-                className="flex items-center gap-2 bg-red-50 border border-red-100 text-red-600 text-sm px-4 py-3 rounded-xl mb-4">
-                <span className="w-1.5 h-1.5 bg-red-500 rounded-full flex-shrink-0" />{error}
+              <motion.div
+                initial={{ opacity: 0, y: -8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -8 }}
+                className="mb-5 flex items-start gap-3 rounded-2xl border border-red-100 bg-red-50 px-4 py-3 text-sm text-red-600"
+              >
+                <span className="mt-1.5 h-2 w-2 flex-shrink-0 rounded-full bg-red-500" />
+                <span>{error}</span>
               </motion.div>
             )}
           </AnimatePresence>
 
           <AnimatePresence mode="wait">
-
             {/* PASO 1 */}
             {step === 1 && (
-              <motion.form key="step1"
-                initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}
-                transition={{ duration: 0.2 }} onSubmit={handleNextStep} className="space-y-4">
-
+              <motion.form
+                key="step1"
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -20 }}
+                transition={{ duration: 0.2 }}
+                onSubmit={handleNextStep}
+                className="space-y-5"
+              >
                 <div>
-                  <label className="block text-xs font-semibold text-slate-600 mb-1.5">
+                  <label className="mb-2 block text-xs font-black text-slate-700">
                     Documento de identidad <span className="text-red-400">*</span>
                   </label>
-                  <div className="flex gap-2">
-                    <select name="tipoDocumento" value={form.tipoDocumento} onChange={handleChange}
-                      className="px-3 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-400 bg-slate-50 transition-all">
+
+                  <div className="grid grid-cols-1 gap-2 sm:grid-cols-[130px_1fr_auto]">
+                    <select
+                      name="tipoDocumento"
+                      value={form.tipoDocumento}
+                      onChange={handleChange}
+                      className={inputClass}
+                    >
                       <option value="DNI">DNI</option>
                       <option value="CE">Carné Ext.</option>
                       <option value="PASAPORTE">Pasaporte</option>
                     </select>
-                    <div className="relative flex-1">
-                      <input name="numeroDocumento" value={form.numeroDocumento} onChange={handleChange}
-                        maxLength={esDNI ? 8 : 12} placeholder={esDNI ? '12345678' : 'Número de documento'}
-                        className={`${inputClass} ${estadoVerificacion === 'verificado' ? 'border-emerald-300 bg-emerald-50/30' : ''}`} />
+
+                    <div className="relative">
+                      <IdCard
+                        size={17}
+                        className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
+                      />
+
+                      <input
+                        name="numeroDocumento"
+                        value={form.numeroDocumento}
+                        onChange={handleChange}
+                        maxLength={esDNI ? 8 : 12}
+                        placeholder={esDNI ? '12345678' : 'Número de documento'}
+                        className={`${inputClass} pl-11 ${
+                          estadoVerificacion === 'verificado'
+                            ? 'border-[#00CCA5] bg-[#00CCA5]/5'
+                            : ''
+                        }`}
+                      />
                     </div>
+
                     {esDNI && (
-                      <button type="button" onClick={buscarDocumento}
+                      <button
+                        type="button"
+                        onClick={buscarDocumento}
                         disabled={buscando || form.numeroDocumento.length !== 8}
-                        className="flex items-center gap-2 px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed text-white rounded-xl text-sm font-medium transition-all whitespace-nowrap">
-                        {buscando ? <Loader2 size={15} className="animate-spin" /> : <Search size={15} />}
+                        className="flex h-12 items-center justify-center gap-2 rounded-xl bg-[#000089] px-4 text-sm font-black text-white shadow-lg shadow-[#000089]/20 transition hover:bg-[#000070] hover:ring-4 hover:ring-[#00CCA5]/15 disabled:cursor-not-allowed disabled:opacity-50"
+                      >
+                        {buscando ? (
+                          <Loader2 size={16} className="animate-spin" />
+                        ) : (
+                          <Search size={16} />
+                        )}
                         Buscar
                       </button>
                     )}
                   </div>
+
                   <AnimatePresence>
                     {estadoVerificacion === 'verificado' && (
-                      <motion.div initial={{ opacity: 0, y: -4 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
-                        className="flex items-center gap-2 mt-2 px-3 py-2 bg-emerald-50 border border-emerald-100 rounded-xl">
-                        <CheckCircle size={14} className="text-emerald-500 flex-shrink-0" />
-                        <p className="text-xs text-emerald-700">Datos encontrados y precargados.</p>
+                      <motion.div
+                        initial={{ opacity: 0, y: -4 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0 }}
+                        className="mt-3 flex items-start gap-3 rounded-2xl border border-[#00CCA5]/20 bg-[#00CCA5]/10 px-4 py-3"
+                      >
+                        <CheckCircle
+                          size={15}
+                          className="mt-0.5 flex-shrink-0 text-[#008f78]"
+                        />
+                        <p className="text-xs font-bold leading-5 text-[#008f78]">
+                          Datos encontrados y precargados.
+                        </p>
                       </motion.div>
                     )}
+
                     {estadoVerificacion === 'manual' && (
-                      <motion.div initial={{ opacity: 0, y: -4 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
-                        className="flex items-center gap-2 mt-2 px-3 py-2 bg-amber-50 border border-amber-100 rounded-xl">
-                        <AlertCircle size={14} className="text-amber-500 flex-shrink-0" />
-                        <p className="text-xs text-amber-700">No se encontraron datos. Completa manualmente.</p>
+                      <motion.div
+                        initial={{ opacity: 0, y: -4 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0 }}
+                        className="mt-3 flex items-start gap-3 rounded-2xl border border-amber-100 bg-amber-50 px-4 py-3"
+                      >
+                        <AlertCircle
+                          size={15}
+                          className="mt-0.5 flex-shrink-0 text-amber-500"
+                        />
+                        <p className="text-xs font-bold leading-5 text-amber-700">
+                          No se encontraron datos. Completa manualmente.
+                        </p>
                       </motion.div>
                     )}
                   </AnimatePresence>
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                   <div>
-                    <label className="block text-xs font-semibold text-slate-600 mb-1.5">Nombre <span className="text-red-400">*</span></label>
-                    <input name="nombre" value={form.nombre} onChange={handleChange}
-                      placeholder="Nombre del paciente" className={inputClass} />
+                    <label className="mb-2 block text-xs font-black text-slate-700">
+                      Nombre <span className="text-red-400">*</span>
+                    </label>
+
+                    <div className="relative">
+                      <UserRound
+                        size={17}
+                        className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
+                      />
+
+                      <input
+                        name="nombre"
+                        value={form.nombre}
+                        onChange={handleChange}
+                        placeholder="Nombre del paciente"
+                        className={`${inputClass} pl-11`}
+                      />
+                    </div>
                   </div>
+
                   <div>
-                    <label className="block text-xs font-semibold text-slate-600 mb-1.5">Apellido <span className="text-red-400">*</span></label>
-                    <input name="apellido" value={form.apellido} onChange={handleChange}
-                      placeholder="Apellido del paciente" className={inputClass} />
+                    <label className="mb-2 block text-xs font-black text-slate-700">
+                      Apellido <span className="text-red-400">*</span>
+                    </label>
+
+                    <div className="relative">
+                      <UserRound
+                        size={17}
+                        className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
+                      />
+
+                      <input
+                        name="apellido"
+                        value={form.apellido}
+                        onChange={handleChange}
+                        placeholder="Apellido del paciente"
+                        className={`${inputClass} pl-11`}
+                      />
+                    </div>
                   </div>
                 </div>
 
-                <button type="submit"
-                  className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-sm font-medium transition-all shadow-sm hover:shadow-md">
-                  Continuar <ArrowRight size={15} />
+                <div className="rounded-2xl border border-[#00CCA5]/20 bg-[#00CCA5]/10 px-4 py-3">
+                  <p className="text-xs leading-5 text-[#008f78]">
+                    Si el documento es DNI, puedes buscar los datos automáticamente.
+                    Para otros documentos, completa los nombres manualmente.
+                  </p>
+                </div>
+
+                <button
+                  type="submit"
+                  className="flex h-11 w-full items-center justify-center gap-2 rounded-xl bg-[#000089] px-4 text-sm font-black text-white shadow-lg shadow-[#000089]/20 transition hover:bg-[#000070] hover:ring-4 hover:ring-[#00CCA5]/15"
+                >
+                  Continuar
+                  <ArrowRight size={16} />
                 </button>
               </motion.form>
             )}
 
             {/* PASO 2 */}
             {step === 2 && (
-              <motion.form key="step2"
-                initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}
-                transition={{ duration: 0.2 }} onSubmit={handleSubmit} className="space-y-4">
-
+              <motion.form
+                key="step2"
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -20 }}
+                transition={{ duration: 0.2 }}
+                onSubmit={handleSubmit}
+                className="space-y-5"
+              >
                 <div>
-                  <label className="block text-xs font-semibold text-slate-600 mb-1.5">Correo electrónico <span className="text-red-400">*</span></label>
-                  <input name="email" type="email" value={form.email} onChange={handleChange} required
-                    placeholder="paciente@email.com" className={inputClass} />
+                  <label className="mb-2 block text-xs font-black text-slate-700">
+                    Correo electrónico <span className="text-red-400">*</span>
+                  </label>
+
+                  <div className="relative">
+                    <Mail
+                      size={17}
+                      className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
+                    />
+
+                    <input
+                      name="email"
+                      type="email"
+                      value={form.email}
+                      onChange={handleChange}
+                      required
+                      placeholder="paciente@email.com"
+                      className={`${inputClass} pl-11`}
+                    />
+                  </div>
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-slate-600 mb-1.5">Contraseña <span className="text-red-400">*</span></label>
+                  <label className="mb-2 block text-xs font-black text-slate-700">
+                    Contraseña <span className="text-red-400">*</span>
+                  </label>
+
                   <div className="relative">
-                    <input name="password" type={showPassword ? 'text' : 'password'}
-                      value={form.password} onChange={handleChange} required minLength={8}
-                      placeholder="Mínimo 8 caracteres" className={`${inputClass} pr-10`} />
-                    <button type="button" onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors">
-                      {showPassword ? <EyeOff size={15} /> : <Eye size={15} />}
+                    <Lock
+                      size={17}
+                      className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
+                    />
+
+                    <input
+                      name="password"
+                      type={showPassword ? 'text' : 'password'}
+                      value={form.password}
+                      onChange={handleChange}
+                      required
+                      minLength={8}
+                      placeholder="Mínimo 8 caracteres"
+                      className={`${inputClass} pl-11 pr-11`}
+                    />
+
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 transition hover:text-slate-600"
+                    >
+                      {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                     </button>
                   </div>
+
                   {form.password && (
-                    <div className="mt-2">
-                      <div className="flex gap-1 mb-1">
-                        {[0,1,2,3,4].map(i => (
-                          <div key={i} className={`h-1.5 flex-1 rounded-full transition-all duration-300 ${
-                            i <= score ? fortalezaConfig[score].color : 'bg-slate-200'
-                          }`} />
+                    <div className="mt-3">
+                      <div className="mb-1.5 flex gap-1">
+                        {[0, 1, 2, 3, 4].map((i) => (
+                          <div
+                            key={i}
+                            className={`h-1.5 flex-1 rounded-full transition-all duration-300 ${
+                              i <= score ? fortalezaConfig[score].color : 'bg-slate-200'
+                            }`}
+                          />
                         ))}
                       </div>
-                      <p className={`text-xs font-medium ${cfgFortaleza.text}`}>{cfgFortaleza.label}</p>
+
+                      <p className={`text-xs font-bold ${cfgFortaleza.text}`}>
+                        {cfgFortaleza.label}
+                      </p>
                     </div>
                   )}
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-slate-600 mb-1.5">Confirmar contraseña <span className="text-red-400">*</span></label>
+                  <label className="mb-2 block text-xs font-black text-slate-700">
+                    Confirmar contraseña <span className="text-red-400">*</span>
+                  </label>
+
                   <div className="relative">
-                    <input name="confirmar" type={showConfirmar ? 'text' : 'password'}
-                      value={form.confirmar} onChange={handleChange} required
-                      placeholder="Repite la contraseña" className={`${inputClass} pr-10`} />
-                    <button type="button" onClick={() => setShowConfirmar(!showConfirmar)}
-                      className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors">
-                      {showConfirmar ? <EyeOff size={15} /> : <Eye size={15} />}
+                    <Lock
+                      size={17}
+                      className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
+                    />
+
+                    <input
+                      name="confirmar"
+                      type={showConfirmar ? 'text' : 'password'}
+                      value={form.confirmar}
+                      onChange={handleChange}
+                      required
+                      placeholder="Repite la contraseña"
+                      className={`${inputClass} pl-11 pr-11`}
+                    />
+
+                    <button
+                      type="button"
+                      onClick={() => setShowConfirmar(!showConfirmar)}
+                      className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 transition hover:text-slate-600"
+                    >
+                      {showConfirmar ? <EyeOff size={16} /> : <Eye size={16} />}
                     </button>
                   </div>
+
                   {form.confirmar && (
-                    <p className={`text-xs mt-1.5 ${form.password === form.confirmar ? 'text-emerald-500' : 'text-red-400'}`}>
-                      {form.password === form.confirmar ? '✓ Las contraseñas coinciden' : '✗ Las contraseñas no coinciden'}
+                    <p
+                      className={`mt-2 text-xs font-bold ${
+                        form.password === form.confirmar
+                          ? 'text-[#008f78]'
+                          : 'text-red-500'
+                      }`}
+                    >
+                      {form.password === form.confirmar
+                        ? '✓ Las contraseñas coinciden'
+                        : '✗ Las contraseñas no coinciden'}
                     </p>
                   )}
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                   <div>
-                    <label className="block text-xs font-semibold text-slate-600 mb-1.5">
-                      Teléfono <span className="text-slate-400 font-normal">(opcional)</span>
+                    <label className="mb-2 block text-xs font-black text-slate-700">
+                      Teléfono{' '}
+                      <span className="font-medium text-slate-400">(opcional)</span>
                     </label>
-                    <input name="telefono" value={form.telefono} onChange={handleChange}
-                      placeholder="+51 999 999 999" className={inputClass} />
+
+                    <div className="relative">
+                      <Phone
+                        size={17}
+                        className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
+                      />
+
+                      <input
+                        name="telefono"
+                        value={form.telefono}
+                        onChange={handleChange}
+                        placeholder="+51 999 999 999"
+                        className={`${inputClass} pl-11`}
+                      />
+                    </div>
                   </div>
+
                   <div>
-                    <label className="block text-xs font-semibold text-slate-600 mb-1.5">Fecha de nacimiento</label>
-                    <input name="fechaNac" type="date" value={form.fechaNac} onChange={handleChange}
-                      max={new Date().toISOString().split('T')[0]} className={inputClass} />
+                    <label className="mb-2 block text-xs font-black text-slate-700">
+                      Fecha de nacimiento
+                    </label>
+
+                    <div className="relative">
+                      <CalendarDays
+                        size={17}
+                        className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
+                      />
+
+                      <input
+                        name="fechaNac"
+                        type="date"
+                        value={form.fechaNac}
+                        onChange={handleChange}
+                        max={new Date().toISOString().split('T')[0]}
+                        className={`${inputClass} pl-11`}
+                      />
+                    </div>
                   </div>
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-xs font-semibold text-slate-600 mb-1.5">Género</label>
-                    <select name="genero" value={form.genero} onChange={handleChange} className={inputClass}>
-                      <option value="">Seleccionar</option>
-                      <option value="Masculino">Masculino</option>
-                      <option value="Femenino">Femenino</option>
-                      <option value="Otro">Otro</option>
-                    </select>
+                {edad !== null && (
+                  <div
+                    className={`rounded-2xl border px-4 py-3 ${
+                      esMenor
+                        ? 'border-amber-200 bg-amber-50'
+                        : 'border-[#00CCA5]/20 bg-[#00CCA5]/10'
+                    }`}
+                  >
+                    <p
+                      className={`text-xs font-bold leading-5 ${
+                        esMenor ? 'text-amber-700' : 'text-[#008f78]'
+                      }`}
+                    >
+                      Edad calculada: {edad} año{edad !== 1 ? 's' : ''}
+                      {esMenor ? ' · Se requieren datos del tutor.' : ''}
+                    </p>
                   </div>
+                )}
+
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                   <div>
-                    <label className="block text-xs font-semibold text-slate-600 mb-1.5">
-                      Dirección <span className="text-slate-400 font-normal">(opcional)</span>
+                    <label className="mb-2 block text-xs font-black text-slate-700">
+                      Género
                     </label>
-                    <input name="direccion" value={form.direccion} onChange={handleChange}
-                      placeholder="Av. Principal 123" className={inputClass} />
+
+                    <div className="relative">
+                      <VenusAndMars
+                        size={17}
+                        className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
+                      />
+
+                      <select
+                        name="genero"
+                        value={form.genero}
+                        onChange={handleChange}
+                        className={`${inputClass} pl-11`}
+                      >
+                        <option value="">Seleccionar</option>
+                        <option value="Masculino">Masculino</option>
+                        <option value="Femenino">Femenino</option>
+                        <option value="Otro">Otro</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="mb-2 block text-xs font-black text-slate-700">
+                      Dirección{' '}
+                      <span className="font-medium text-slate-400">(opcional)</span>
+                    </label>
+
+                    <div className="relative">
+                      <MapPin
+                        size={17}
+                        className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
+                      />
+
+                      <input
+                        name="direccion"
+                        value={form.direccion}
+                        onChange={handleChange}
+                        placeholder="Av. Principal 123"
+                        className={`${inputClass} pl-11`}
+                      />
+                    </div>
                   </div>
                 </div>
 
                 {/* Sección tutor — solo si es menor */}
                 <AnimatePresence>
                   {esMenor && (
-                    <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }}
-                      className="border border-amber-200 bg-amber-50 rounded-xl p-4 space-y-3">
-                      <div className="flex items-center gap-2">
-                        <UserCheck size={15} className="text-amber-600 flex-shrink-0" />
-                        <p className="text-xs font-semibold text-amber-700">
-                          Paciente menor de edad — Datos del tutor/padre requeridos
-                        </p>
-                      </div>
-                      <div>
-                        <label className="block text-xs font-semibold text-slate-600 mb-1.5">Nombre del tutor <span className="text-red-400">*</span></label>
-                        <input name="tutorNombre" value={form.tutorNombre} onChange={handleChange}
-                          placeholder="Nombre completo del tutor" className={inputClass} />
-                      </div>
-                      <div className="grid grid-cols-2 gap-3">
-                        <div>
-                          <label className="block text-xs font-semibold text-slate-600 mb-1.5">DNI del tutor <span className="text-red-400">*</span></label>
-                          <input name="tutorDni" value={form.tutorDni} onChange={handleChange}
-                            maxLength={8} placeholder="12345678" className={inputClass} />
+                    <motion.div
+                      initial={{ opacity: 0, y: -8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -8 }}
+                      className="space-y-4 rounded-3xl border border-amber-200 bg-amber-50 p-5"
+                    >
+                      <div className="flex items-start gap-3">
+                        <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-2xl bg-white">
+                          <UserCheck size={18} className="text-amber-600" />
                         </div>
+
                         <div>
-                          <label className="block text-xs font-semibold text-slate-600 mb-1.5">Teléfono del tutor <span className="text-red-400">*</span></label>
-                          <input name="tutorTelefono" value={form.tutorTelefono} onChange={handleChange}
-                            placeholder="999 999 999" className={inputClass} />
+                          <p className="text-sm font-black text-amber-800">
+                            Paciente menor de edad
+                          </p>
+                          <p className="mt-0.5 text-xs leading-5 text-amber-700">
+                            Los datos del tutor o padre son requeridos para completar el registro.
+                          </p>
+                        </div>
+                      </div>
+
+                      <div>
+                        <label className="mb-2 block text-xs font-black text-slate-700">
+                          Nombre del tutor <span className="text-red-400">*</span>
+                        </label>
+
+                        <div className="relative">
+                          <UserRound
+                            size={17}
+                            className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
+                          />
+
+                          <input
+                            name="tutorNombre"
+                            value={form.tutorNombre}
+                            onChange={handleChange}
+                            placeholder="Nombre completo del tutor"
+                            className={`${inputClass} bg-white pl-11`}
+                          />
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                        <div>
+                          <label className="mb-2 block text-xs font-black text-slate-700">
+                            DNI del tutor <span className="text-red-400">*</span>
+                          </label>
+
+                          <div className="relative">
+                            <IdCard
+                              size={17}
+                              className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
+                            />
+
+                            <input
+                              name="tutorDni"
+                              value={form.tutorDni}
+                              onChange={handleChange}
+                              maxLength={8}
+                              placeholder="12345678"
+                              className={`${inputClass} bg-white pl-11`}
+                            />
+                          </div>
+                        </div>
+
+                        <div>
+                          <label className="mb-2 block text-xs font-black text-slate-700">
+                            Teléfono del tutor <span className="text-red-400">*</span>
+                          </label>
+
+                          <div className="relative">
+                            <Phone
+                              size={17}
+                              className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
+                            />
+
+                            <input
+                              name="tutorTelefono"
+                              value={form.tutorTelefono}
+                              onChange={handleChange}
+                              placeholder="999 999 999"
+                              className={`${inputClass} bg-white pl-11`}
+                            />
+                          </div>
                         </div>
                       </div>
                     </motion.div>
                   )}
                 </AnimatePresence>
 
-                <div className="flex gap-3 pt-1">
-                  <button type="button" onClick={() => { setStep(1); setError('') }}
-                    className="flex items-center gap-2 px-4 py-2.5 border border-slate-200 text-slate-600 rounded-xl text-sm font-medium hover:bg-slate-50 transition-all">
-                    <ArrowLeft size={15} /> Atrás
+                <div className="flex flex-col-reverse gap-3 pt-1 sm:flex-row">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setStep(1)
+                      setError('')
+                    }}
+                    className="flex h-11 items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-4 text-sm font-black text-slate-600 transition hover:bg-slate-50 hover:text-slate-900 sm:w-auto"
+                  >
+                    <ArrowLeft size={16} />
+                    Atrás
                   </button>
-                  <button type="submit" disabled={loading}
-                    className="flex-1 px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-sm font-medium transition-all shadow-sm hover:shadow-md disabled:opacity-60 disabled:cursor-not-allowed">
-                    {loading ? 'Guardando...' : 'Guardar Paciente'}
+
+                  <button
+                    type="submit"
+                    disabled={loading}
+                    className="flex h-11 flex-1 items-center justify-center gap-2 rounded-xl bg-[#000089] px-4 text-sm font-black text-white shadow-lg shadow-[#000089]/20 transition hover:bg-[#000070] hover:ring-4 hover:ring-[#00CCA5]/15 disabled:cursor-not-allowed disabled:opacity-60"
+                  >
+                    {loading ? (
+                      <>
+                        <span className="h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white" />
+                        Guardando...
+                      </>
+                    ) : (
+                      <>
+                        <Save size={16} />
+                        Guardar Paciente
+                      </>
+                    )}
                   </button>
                 </div>
               </motion.form>

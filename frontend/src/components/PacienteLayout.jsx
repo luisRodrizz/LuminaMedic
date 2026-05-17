@@ -9,123 +9,229 @@ import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import api from '../services/api'
 
-const MENU = [
-  { path: '/paciente/dashboard',      icon: LayoutDashboard, label: 'Inicio'          },
-  { path: '/paciente/citas',          icon: Calendar,        label: 'Mis Citas'       },
-  { path: '/paciente/historial',      icon: ClipboardList,   label: 'Historial'       },
-  { path: '/paciente/perfil',         icon: UserCircle,      label: 'Mi Perfil'       },
-  { path: '/paciente/estadisticas',   icon: TrendingUp,      label: 'Estadísticas'    },
-  { path: '/paciente/notificaciones', icon: Bell,            label: 'Notificaciones', badge: true },
+const BRAND = {
+  name: 'LuminaMedic',
+  subtitle: 'Portal del Paciente',
+  symbol: '/branding/luminamedic-symbol.png',
+  full: '/branding/luminamedic-full.png',
+  wordmark: '/branding/luminamedic-wordmark.png'
+}
+
+const MENU_SECTIONS = [
+  {
+    title: 'Vista general',
+    items: [
+      { path: '/paciente/dashboard', icon: LayoutDashboard, label: 'Inicio' }
+    ]
+  },
+  {
+    title: 'Atención médica',
+    items: [
+      { path: '/paciente/citas', icon: Calendar, label: 'Mis Citas' },
+      { path: '/paciente/historial', icon: ClipboardList, label: 'Historial' }
+    ]
+  },
+  {
+    title: 'Seguimiento',
+    items: [
+      { path: '/paciente/estadisticas', icon: TrendingUp, label: 'Estadísticas' },
+      { path: '/paciente/notificaciones', icon: Bell, label: 'Notificaciones', badge: true }
+    ]
+  },
+  {
+    title: 'Configuración',
+    items: [
+      { path: '/paciente/perfil', icon: UserCircle, label: 'Mi Perfil' }
+    ]
+  }
 ]
 
-function SidebarContent({ collapsed, isOverlay, noLeidas, onToggle, onClose, onNavClick, user, clinica, fotoPerfil, onLogout }) {
+function SidebarContent({
+  collapsed,
+  isOverlay,
+  noLeidas,
+  onToggle,
+  onClose,
+  onNavClick,
+  user,
+  clinica,
+  fotoPerfil,
+  onLogout
+}) {
+  const compact = collapsed && !isOverlay
+
   return (
     <>
-      {/* Logo */}
-      <div className="flex items-center justify-between px-3 py-4 border-b border-white/10">
-        <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-lg overflow-hidden bg-blue-500 flex items-center justify-center flex-shrink-0">
-            {clinica?.logo ? (
-              <img src={clinica.logo} alt={clinica.nombre || 'Clínica'} className="w-full h-full object-cover" />
-            ) : (
-              <Stethoscope size={16} className="text-white" />
-            )}
-          </div>
-
-          {(!collapsed || isOverlay) && (
-            <div>
-              <p className="text-white font-semibold text-sm leading-none">
-                {clinica?.nombre || 'MediCare'}
-              </p>
-              <p className="text-slate-400 text-xs mt-0.5">Mi Portal</p>
+      {/* Brand */}
+      <div className="relative border-b border-slate-200 px-6 py-6">
+        <div className="flex items-center justify-center">
+          {!compact ? (
+            <img
+              src={BRAND.full}
+              alt={BRAND.name}
+              className="h-12 w-auto max-w-[220px] object-contain"
+              onError={(e) => {
+                e.target.style.display = 'none'
+                e.target.parentNode.innerHTML = `<p class="truncate text-xl font-black leading-none text-slate-900">${BRAND.name}</p>`
+              }}
+            />
+          ) : (
+            <div className="flex h-11 w-11 items-center justify-center rounded-2xl border border-slate-200 bg-white shadow-sm">
+              <img
+                src={BRAND.symbol}
+                alt={BRAND.name}
+                className="h-8 w-8 object-contain"
+                onError={(e) => {
+                  e.target.style.display = 'none'
+                  e.target.parentNode.innerHTML = '<span class="text-[#008f78]"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 2v20"/><path d="M2 11h20"/></svg></span>'
+                }}
+              />
             </div>
           )}
         </div>
-        {isOverlay ? (
-          <button onClick={onClose} className="text-slate-400 hover:text-white transition-colors p-1.5 rounded-lg hover:bg-white/10">
-            <X size={17} />
+
+        {isOverlay && (
+          <button
+            onClick={onClose}
+            className="absolute right-4 top-4 flex h-9 w-9 items-center justify-center rounded-xl text-slate-400 transition hover:bg-slate-100 hover:text-slate-700"
+          >
+            <X size={18} />
           </button>
-        ) : (
-          !collapsed && (
-            <button onClick={onToggle} className="text-slate-400 hover:text-white transition-colors p-1.5 rounded-lg hover:bg-white/10">
-              <PanelLeftClose size={17} />
-            </button>
-          )
         )}
       </div>
 
       {/* Nav */}
-      <nav className="flex-1 py-4 px-2 space-y-0.5 overflow-y-auto">
-        {(!collapsed || isOverlay) && (
-          <p className="text-slate-500 text-xs font-medium uppercase tracking-wider px-3 mb-2">Menú</p>
-        )}
-        {MENU.map((item) => (
-          <NavLink
-            key={item.path}
-            to={item.path}
-            title={item.label}
-            onClick={onNavClick}
-            className={({ isActive }) =>
-              `flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-150 group relative ${
-                isActive ? 'bg-blue-500/20 text-blue-400 border border-blue-500/30' : 'text-slate-400 hover:bg-white/5 hover:text-slate-200'
-              } ${collapsed && !isOverlay ? 'justify-center' : ''}`
-            }
-          >
-            {({ isActive }) => (
-              <>
-                <div className="relative flex-shrink-0">
-                  <item.icon size={18} className={isActive ? 'text-blue-400' : 'text-slate-400 group-hover:text-slate-200'} />
-                  {item.badge && noLeidas > 0 && collapsed && !isOverlay && (
-                    <span className="absolute -top-1.5 -right-1.5 w-4 h-4 bg-red-500 rounded-full text-white text-[9px] font-bold flex items-center justify-center">
-                      {noLeidas > 99 ? '99+' : noLeidas}
-                    </span>
-                  )}
-                </div>
-                {(!collapsed || isOverlay) && (
-                  <>
-                    <span className="text-sm font-medium flex-1">{item.label}</span>
-                    {item.badge && noLeidas > 0 && (
-                      <span className="ml-auto px-1.5 py-0.5 bg-red-500 text-white text-[10px] font-bold rounded-md min-w-[20px] text-center">
-                        {noLeidas > 99 ? '99+' : noLeidas}
-                      </span>
-                    )}
-                  </>
-                )}
-              </>
+      <nav className="flex-1 space-y-5 overflow-y-auto px-2 py-4">
+        {MENU_SECTIONS.map((section) => (
+          <div key={section.title}>
+            {!compact && (
+              <p className="mb-2 px-3 text-[11px] font-black uppercase tracking-[0.14em] text-slate-400">
+                {section.title}
+              </p>
             )}
-          </NavLink>
+
+            <div className="space-y-1">
+              {section.items.map((item) => (
+                <NavLink
+                  key={item.path}
+                  to={item.path}
+                  title={item.label}
+                  onClick={onNavClick}
+                  className={({ isActive }) =>
+                    `group relative flex items-center gap-3 rounded-2xl px-3 py-2.5 transition-all duration-150 ${
+                      isActive
+                        ? 'border border-[#00CCA5]/30 bg-[#00CCA5]/10 text-[#000089]'
+                        : 'text-slate-500 hover:bg-slate-50 hover:text-slate-800'
+                    } ${compact ? 'justify-center' : ''}`
+                  }
+                >
+                  {({ isActive }) => (
+                    <>
+                      {isActive && !compact && (
+                        <span className="absolute left-0 top-1/2 h-7 w-1 -translate-y-1/2 rounded-r-full bg-[#00CCA5]" />
+                      )}
+
+                      <div className="relative flex-shrink-0">
+                        <item.icon
+                          size={18}
+                          className={isActive ? 'text-[#000089]' : 'text-slate-400 group-hover:text-slate-700'}
+                        />
+
+                        {item.badge && noLeidas > 0 && compact && (
+                          <span className="absolute -right-2 -top-2 flex h-5 min-w-5 items-center justify-center rounded-full bg-red-500 px-1 text-[10px] font-black text-white ring-2 ring-white">
+                            {noLeidas > 99 ? '99+' : noLeidas}
+                          </span>
+                        )}
+                      </div>
+
+                      {!compact && (
+                        <>
+                          <span className="flex-1 text-sm font-black">
+                            {item.label}
+                          </span>
+
+                          {item.badge && noLeidas > 0 && (
+                            <span className="ml-auto flex min-w-6 items-center justify-center rounded-full bg-red-500 px-2 py-0.5 text-[10px] font-black text-white">
+                              {noLeidas > 99 ? '99+' : noLeidas}
+                            </span>
+                          )}
+                        </>
+                      )}
+                    </>
+                  )}
+                </NavLink>
+              ))}
+            </div>
+          </div>
         ))}
-        {collapsed && !isOverlay && (
-          <button onClick={onToggle} className="w-full flex justify-center px-3 py-2.5 rounded-lg text-slate-500 hover:text-white hover:bg-white/5 transition-all mt-2">
+
+        {compact && (
+          <button
+            onClick={onToggle}
+            className="flex w-full justify-center rounded-2xl px-3 py-2.5 text-slate-400 transition hover:bg-slate-50 hover:text-slate-700"
+          >
             <PanelLeftOpen size={18} />
           </button>
         )}
       </nav>
 
       {/* User */}
-      <div className={`p-3 border-t border-white/10 ${collapsed && !isOverlay ? 'flex justify-center' : ''}`}>
-        {(!collapsed || isOverlay) ? (
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg overflow-hidden bg-blue-500/20 border border-blue-500/30 flex items-center justify-center flex-shrink-0">
-              {fotoPerfil ? (
-                <img src={fotoPerfil} alt={`${user?.nombre} ${user?.apellido}`} className="w-full h-full object-cover" />
-              ) : (
-                <span className="text-blue-400 text-xs font-bold">
-                  {user?.nombre?.[0]}{user?.apellido?.[0]}
+      <div className={`border-t border-slate-200 p-3 ${compact ? 'flex justify-center' : ''}`}>
+        {!compact ? (
+          <div className="rounded-3xl border border-slate-200 bg-slate-50 p-3">
+            <div className="mb-3 flex items-center justify-between">
+              <p className="text-[11px] font-black uppercase tracking-[0.14em] text-slate-400">
+                Sesión paciente
+              </p>
+
+              <div className="flex items-center gap-1.5 rounded-full bg-[#00CCA5]/10 px-2.5 py-1">
+                <span className="h-1.5 w-1.5 rounded-full bg-[#00CCA5]" />
+                <span className="text-[10px] font-black text-[#008f78]">
+                  Online
                 </span>
-              )}
+              </div>
             </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-white text-xs font-semibold truncate">{user?.nombre} {user?.apellido}</p>
-              <p className="text-slate-500 text-xs">Paciente</p>
+
+            <div className="mb-3 flex items-center gap-3">
+              <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center overflow-hidden rounded-2xl border border-[#00CCA5]/20 bg-[#00CCA5]/10">
+                {fotoPerfil ? (
+                  <img
+                    src={fotoPerfil}
+                    alt={`${user?.nombre} ${user?.apellido}`}
+                    className="h-full w-full object-cover"
+                  />
+                ) : (
+                  <span className="text-xs font-black text-[#008f78]">
+                    {user?.nombre?.[0]}{user?.apellido?.[0]}
+                  </span>
+                )}
+              </div>
+
+              <div className="min-w-0 flex-1">
+                <p className="truncate text-sm font-black text-slate-900">
+                  {user?.nombre} {user?.apellido}
+                </p>
+                <p className="mt-0.5 text-xs font-black uppercase tracking-[0.08em] text-slate-400">
+                  Paciente
+                </p>
+              </div>
+
+              <button
+                onClick={onLogout}
+                title="Cerrar sesión"
+                className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-xl text-slate-400 transition hover:bg-red-50 hover:text-red-600"
+              >
+                <LogOut size={16} />
+              </button>
             </div>
-            <button onClick={onLogout} title="Cerrar sesión" className="text-slate-500 hover:text-red-400 transition-colors">
-              <LogOut size={16} />
-            </button>
           </div>
         ) : (
-          <button onClick={onLogout} title="Cerrar sesión" className="text-slate-500 hover:text-red-400 transition-colors">
-            <LogOut size={16} />
+          <button
+            onClick={onLogout}
+            title="Cerrar sesión"
+            className="flex h-10 w-10 items-center justify-center rounded-2xl text-slate-400 transition hover:bg-red-50 hover:text-red-600"
+          >
+            <LogOut size={17} />
           </button>
         )}
       </div>
@@ -220,31 +326,38 @@ export default function PacienteLayout({ children }) {
   }
 
   return (
-    <div className="flex min-h-screen bg-slate-50" style={{ fontFamily: "'DM Sans', sans-serif" }}>
-
-      {/* Sidebar desktop (md+) */}
+    <div
+      className="flex min-h-screen bg-[#F8FBFC]"
+      style={{ fontFamily: "'DM Sans', sans-serif" }}
+    >
+      {/* Sidebar desktop */}
       <aside
-        className={`hidden md:flex flex-col flex-shrink-0 transition-all duration-300 ${collapsed ? 'w-16' : 'w-64'}`}
-        style={{ background: 'linear-gradient(180deg, #0f172a 0%, #1e293b 100%)' }}
+        className={`hidden flex-shrink-0 flex-col border-r border-slate-200 bg-white transition-all duration-300 md:flex ${
+          collapsed ? 'w-[72px]' : 'w-72'
+        }`}
       >
         <SidebarContent {...sidebarProps} />
       </aside>
 
-      {/* Sidebar móvil overlay (< md) */}
+      {/* Sidebar móvil overlay */}
       <AnimatePresence>
         {mobileOpen && (
           <>
             <motion.div
-              initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
               transition={{ duration: 0.2 }}
-              className="fixed inset-0 bg-slate-900/60 z-40 md:hidden"
+              className="fixed inset-0 z-40 bg-slate-950/60 backdrop-blur-sm md:hidden"
               onClick={() => setMobileOpen(false)}
             />
+
             <motion.aside
-              initial={{ x: -288 }} animate={{ x: 0 }} exit={{ x: -288 }}
+              initial={{ x: -288 }}
+              animate={{ x: 0 }}
+              exit={{ x: -288 }}
               transition={{ duration: 0.25, ease: 'easeOut' }}
-              className="fixed top-0 left-0 h-full w-72 flex flex-col z-50 md:hidden"
-              style={{ background: 'linear-gradient(180deg, #0f172a 0%, #1e293b 100%)' }}
+              className="fixed left-0 top-0 z-50 flex h-full w-72 flex-col border-r border-slate-200 bg-white md:hidden"
             >
               <SidebarContent {...sidebarProps} isOverlay />
             </motion.aside>
@@ -253,34 +366,59 @@ export default function PacienteLayout({ children }) {
       </AnimatePresence>
 
       {/* Main */}
-      <div className="flex-1 flex flex-col min-w-0">
-        <header className="bg-white border-b border-slate-200 px-4 md:px-6 py-3 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <button onClick={() => setMobileOpen(true)} className="md:hidden p-2 rounded-lg text-slate-500 hover:bg-slate-100 transition-all">
+      <div className="flex min-w-0 flex-1 flex-col">
+        <header className="sticky top-0 z-30 flex items-center justify-between border-b border-slate-200 bg-white/90 px-4 py-3 backdrop-blur-xl md:px-6">
+          <div className="flex min-w-0 items-center gap-3">
+            <button
+              onClick={() => setMobileOpen(true)}
+              className="flex h-10 w-10 items-center justify-center rounded-xl text-slate-500 transition hover:bg-slate-100 hover:text-slate-700 md:hidden"
+            >
               <Menu size={20} />
             </button>
-            <div>
-              <h2 className="text-slate-800 font-semibold text-sm">Portal del Paciente</h2>
-              <p className="text-slate-400 text-xs hidden sm:block">Bienvenido, {user?.nombre}</p>
+
+            <button
+              onClick={toggleCollapsed}
+              className="hidden h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-400 shadow-sm transition hover:bg-slate-50 hover:text-slate-700 md:flex"
+              title={collapsed ? 'Expandir menú' : 'Contraer menú'}
+            >
+              {collapsed ? <PanelLeftOpen size={18} /> : <PanelLeftClose size={18} />}
+            </button>
+
+            <div className="min-w-0">
+              <h2 className="truncate text-sm font-black text-slate-900">
+                Portal del Paciente
+              </h2>
+              <p className="hidden text-xs font-medium text-slate-400 sm:block">
+                Bienvenido, {user?.nombre}
+              </p>
             </div>
           </div>
+
           <div className="flex items-center gap-2 md:gap-3">
             {noLeidas > 0 && (
-              <div className="flex items-center gap-1.5 bg-red-50 border border-red-100 px-2.5 py-1.5 rounded-xl">
-                <Bell size={13} className="text-red-500" />
-                <span className="text-xs text-red-600 font-medium hidden sm:inline">
-                  {noLeidas} cita{noLeidas !== 1 ? 's' : ''} pendiente{noLeidas !== 1 ? 's' : ''}
+              <div className="flex items-center gap-2 rounded-2xl border border-red-100 bg-red-50 px-3 py-2">
+                <Bell size={14} className="text-red-500" />
+                <span className="hidden text-xs font-black text-red-600 sm:inline">
+                  {noLeidas} notificación{noLeidas !== 1 ? 'es' : ''}
                 </span>
-                <span className="text-xs text-red-600 font-bold sm:hidden">{noLeidas}</span>
+                <span className="text-xs font-black text-red-600 sm:hidden">
+                  {noLeidas}
+                </span>
               </div>
             )}
-            <div className="hidden sm:flex items-center gap-2">
-              <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-              <span className="text-xs text-slate-500">En línea</span>
+
+            <div className="hidden items-center gap-2 rounded-2xl border border-[#00CCA5]/20 bg-[#00CCA5]/10 px-3 py-2 sm:flex">
+              <div className="h-2 w-2 animate-pulse rounded-full bg-[#00CCA5]" />
+              <span className="text-xs font-black text-[#008f78]">
+                En línea
+              </span>
             </div>
           </div>
         </header>
-        <main className="flex-1 overflow-auto p-4 md:p-6">{children}</main>
+
+        <main className="flex-1 overflow-auto p-4 md:p-6">
+          {children}
+        </main>
       </div>
     </div>
   )
