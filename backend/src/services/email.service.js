@@ -11,20 +11,21 @@ const BRAND_BG = '#f8fbfc'
 // En producción Render debe tener FRONTEND_URL=https://sistema-clinico-cyan.vercel.app
 const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:5173'
 
+const EMAIL_FROM = process.env.EMAIL_FROM || `"${BRAND_NAME}" <${process.env.SMTP_USER}>`
+
 console.log('EMAIL_USER existe:', Boolean(process.env.EMAIL_USER))
 console.log('EMAIL_PASS existe:', Boolean(process.env.EMAIL_PASS))
 console.log('FRONTEND_URL:', FRONTEND_URL)
 
 // ─── Transporter ─────────────────────────────────────────────────────────────
 const transporter = nodemailer.createTransport({
-  host: 'smtp.gmail.com',
-  port: 587,
+  host: process.env.SMTP_HOST,
+  port: Number(process.env.SMTP_PORT || 587),
   secure: false,
   requireTLS: true,
-  family: 4,
   auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS
+    user: process.env.SMTP_USER,
+    pass: process.env.SMTP_PASS
   },
   connectionTimeout: 10000,
   greetingTimeout: 10000,
@@ -187,7 +188,7 @@ const enviarEmailCitaCreada = async ({
   `
 
   await enviarConReintentos({
-    from: `"${BRAND_NAME}" <${process.env.EMAIL_USER}>`,
+    from: EMAIL_FROM,
     to: pacienteEmail,
     subject: `Cita confirmada — ${BRAND_NAME}`,
     html: htmlWrapper(contenido, BRAND_PRIMARY)
@@ -280,7 +281,7 @@ const enviarEmailCambioEstado = async ({
   `
 
   await enviarConReintentos({
-    from: `"${BRAND_NAME}" <${process.env.EMAIL_USER}>`,
+    from: EMAIL_FROM,
     to: pacienteEmail,
     subject: `Cita ${info.texto.toLowerCase()} — ${BRAND_NAME}`,
     html: htmlWrapper(contenido, info.header)
@@ -322,7 +323,7 @@ const enviarEmailRecuperacion = async ({ email, nombre, token }) => {
   `
 
   await enviarConReintentos({
-    from: `"${BRAND_NAME}" <${process.env.EMAIL_USER}>`,
+    from: EMAIL_FROM,
     to: email,
     subject: `Restablece tu contraseña — ${BRAND_NAME}`,
     html: htmlWrapper(contenido, BRAND_PRIMARY)
@@ -374,7 +375,7 @@ const enviarEmailRecordatorio = async ({
   `
 
   await enviarConReintentos({
-    from: `"${clinicaNombre}" <${process.env.EMAIL_USER}>`,
+    from: EMAIL_FROM,
     to: pacienteEmail,
     subject: `Recordatorio — Tienes una cita mañana — ${clinicaNombre}`,
     html: htmlWrapper(contenido, BRAND_PRIMARY)
@@ -422,7 +423,7 @@ const enviarEmailRecordatorioDoctor = async ({
   `
 
   await enviarConReintentos({
-    from: `"${clinicaNombre}" <${process.env.EMAIL_USER}>`,
+    from: EMAIL_FROM,
     to: doctorEmail,
     subject: `Recordatorio — Cita mañana con ${pacienteNombre} — ${clinicaNombre}`,
     html: htmlWrapper(contenido, BRAND_PRIMARY)
